@@ -2,8 +2,9 @@
 let setLikeBtn = document.querySelector("#setLike");
 let removeLikeBtn = document.querySelector("#removeLike");
 let collectionId = document.querySelector("#collectionId").value;
+let liked = false;
 
-const customImageurl = "/images/like.png";
+const likeImageurl = "/images/like.png";
 const defaultImageurl = "/images/unlike.png";
 
 loadInfo();
@@ -26,20 +27,18 @@ function loadInfo() {
             console.log(data.likesCount);
 
             if (data.liked) {
-                imgLike.src = customImageurl;
-                setLikeBtn.disabled = true;
-                removeLikeBtn.disabled = false;
+                liked = true;
+                imgLike.src = likeImageurl;
             }
             else {
+                liked = false;
                 imgLike.src = defaultImageurl;
-                setLikeBtn.disabled = false;
-                removeLikeBtn.disabled = true;
             }
         })
 
 }
 
-setLikeBtn.onclick = () => {
+function setLike() {
 
     const formData = new FormData();
     formData.append("collectionId", collectionId);
@@ -55,7 +54,7 @@ setLikeBtn.onclick = () => {
         })
 
 }
-removeLikeBtn.onclick = () => {
+function removeLike() {
 
     const formData = new FormData();
     formData.append("collectionId", collectionId);
@@ -75,6 +74,12 @@ removeLikeBtn.onclick = () => {
 
 document.querySelector("#imgA").onclick = () => {
 
-
+    console.log(liked);
+    if (liked) {
+        removeLike();
+    }
+    else {
+        setLike();
+    }
 
 }

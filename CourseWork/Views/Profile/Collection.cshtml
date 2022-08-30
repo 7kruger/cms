@@ -9,26 +9,14 @@
 		<img class="collection-image" src="~/images/imgnotfound2.jpg" onError="this.src='/images/imgnotfound.jpg'" />
 
 		<div class="row">
-			<div class="col-12 d-flex justify-content-center">
-				<div>
-					<a id="imgA" href="#">
-						<img class="like" src="~/images/unlike.png" id="like" alt="" loading="lazy" />
-					</a>
-					
-				</div>
-				<div>
-					<h1 id="likesCount"></h1>
-				</div>
+			<div class="col-6 d-flex justify-content-end">
+				<a id="imgA" href="#">
+					<img class="like" src="~/images/unlike.png" id="like" alt="" loading="lazy" />
+				</a>
 			</div>
-
-			@if (User.Identity.IsAuthenticated)
-			{
-				<div class="col-12 d-flex justify-content-center">
-					<input class="col-6 btn btn-outline-danger mr-1" type="submit" id="setLike" value="Поставить лайк" />
-					<input class="col-6 btn btn-outline-danger ml-1" type="submit" id="removeLike" value="Убрать лайк" disabled />
-				</div>
-
-			}
+			<div class="col-6 d-flex justify-content-start">
+				<h1 id="likesCount"></h1>
+			</div>
 		</div>
 
 

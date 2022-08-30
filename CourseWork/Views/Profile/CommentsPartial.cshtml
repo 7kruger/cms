@@ -1,11 +1,11 @@
 ﻿@if (User.Identity.IsAuthenticated)
 {
 	<div class="container overflow-hidden text-center comment">
-		<div class="row gy-5">
+		<div class="row">
 			<div class="col-8">
 				<input class="form-control" type="text" placeholder="Оставить коментарий" id="comment">
 			</div>
-			<div>
+			<div class="col-4">
 				<input class="btn btn-outline-primary" type="submit" value="Отправить" id="sendComment">
 			</div>
 		</div>

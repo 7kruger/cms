@@ -1,0 +1,100 @@
+﻿@model CourseWork.Models.Entities.Collection;
+@{
+	ViewData["Title"] = "Collection";
+}
+
+
+<div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 text-center">
+		<img class="collection-image" src="~/images/imgnotfound2.jpg" onError="this.src='/images/imgnotfound.jpg'" />
+
+		<div class="row">
+			<div class="col-12 d-flex justify-content-center">
+				<div>
+					<a id="imgA" href="#">
+						<img class="like" src="~/images/unlike.png" id="like" alt="" loading="lazy" />
+					</a>
+					
+				</div>
+				<div>
+					<h1 id="likesCount"></h1>
+				</div>
+			</div>
+
+			@if (User.Identity.IsAuthenticated)
+			{
+				<div class="col-12 d-flex justify-content-center">
+					<input class="col-6 btn btn-outline-danger mr-1" type="submit" id="setLike" value="Поставить лайк" />
+					<input class="col-6 btn btn-outline-danger ml-1" type="submit" id="removeLike" value="Убрать лайк" disabled />
+				</div>
+
+			}
+		</div>
+
+
+
+
+		@* Редактирование *@
+
+		@*@if (Model.Author == User.Identity.Name || User.IsInRole("admin"))
+			{
+			<div class="text-center">
+			<a class="btn btn-outline-info" href="/Profile/EditCollection/@Model.Id">Редактиовать</a>
+			</div>
+			}*@
+	</div>
+	<div class="col-xs-12 col-sm-12 col-md-6 col-lg-8 col-md-offset-6">
+		<input type="hidden" id="collectionId" value="@Model.Id" />
+		<h5>@Model.Date</h5>
+		<h1>@Model.Name</h1>
+		<h2>О коллекции</h2>
+		<p>Автор: @Model.Author</p>
+		<p>Описание: @Model.Description</p>
+		<p>Тема: @Model.Theme</p>
+	</div>
+
+
+	<div class="container">
+		<h3 class="text-center">Айтемы</h3>
+		<div style="overflow: auto; height: 300px">
+			@if (Model.Items.Count == 0)
+			{
+				<h4 class="text-center">Коллекция пуста</h4>
+			}
+			else
+			{
+				<table class="table">
+					<thead class="table-light">
+						<tr>
+							<th scope="col"><p>Название</p></th>
+							<th scope="col"><p>Автор</p></th>
+							<th scope="col"><p>Содержание</p></th>
+						</tr>
+					</thead>
+					<tbody>
+						@foreach (var item in Model.Items)
+						{
+							<tr>
+								<td><p>@item.Name</p></td>
+								<td><p>@item.Author</p></td>
+								<td><p>@item.Content</p></td>
+							</tr>
+						}
+					</tbody>
+				</table>
+			}
+		</div>
+	</div>
+</div>
+
+<div class="container">
+	@await Html.PartialAsync("CommentsPartial")
+</div>
+
+@section Scripts {
+<script src="~/js/comments.js"></script>
+<script src="~/js/likes.js"></script>
+}
+
+
+

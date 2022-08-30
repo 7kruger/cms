@@ -1,0 +1,17 @@
+﻿@model List<CourseWork.Models.Entities.Collection>
+@{
+    ViewData["Title"] = "Мои коллекции";
+}
+
+<h1 class="text-center">Список моих коллекций</h1>
+<div class="list-group">
+    @if(Model.Count == 0)
+    {
+        <h1 class="text-center">Вы пока не создали ни одну коллекцию</h1>
+    }
+    @foreach(var collection in Model)
+    {
+        <p class="collections"><a class="list-group-item list-group-item-action list-group-item-light" href="/Profile/Collection/@collection.Id">@collection.Name</a></p>
+    }
+</div>
+

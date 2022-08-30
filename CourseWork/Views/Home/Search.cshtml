@@ -1,0 +1,36 @@
+﻿@using CourseWork.Models.Entities
+@{
+    ViewData["Title"] = "Search";
+}
+@model List<Collection>
+
+
+<div>
+	<form class="text-center d-flex" role="search" asp-action="Search" asp-controller="Home">
+        <input class="form-control me-2 m-2" type="search" placeholder="Поиск" aria-label="Search" name="value">
+        <button class="btn btn-outline-primary m-2" type="submit">Search</button>
+      </form>
+</div>
+
+<h1 class="text-center">Результат поиска</h1>
+@if(Model.Count == 0)
+{
+	<h5 class="text-center">Ничего не найдено</h5>
+}
+else
+{
+	@foreach (var col in Model)
+	{
+		<div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+			<div class="card item">
+				<img src="~/images/imgnotfound2.jpg" onError="this.src='/images/imgnotfound.jpg'" class="card-img-top" alt="">
+				<div class="card-body">
+					<h5 class="card-title">@col.Name</h5>
+					<p class="card-text">@col.Description.Substring(0, Math.Min(col.Description.Length, 100))</p>
+					<a href="/Profile/Collection/@col.Id" class="btn btn-primary stretched-link">Посмотреть коллекцию</a>
+				</div>
+			</div>
+		</div>
+	}
+}
+

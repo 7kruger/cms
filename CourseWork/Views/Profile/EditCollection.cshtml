@@ -72,8 +72,11 @@
 			<p>Нет доступных айтемов <a class="link-info" href="/Profile/CreateItem">Создать</a></p>
 		}
 
-		<button class="btn btn-outline-primary">Изменить</button>
-		<a href="/Home/Index">test</a>
+		<div class="d-flex justify-content-center">
+			<button class="btn btn-outline-primary ml-2">Изменить</button>
+			<a class="btn btn-outline-danger ml-3" href="/Profile/DeleteCollection/@Model.Id">Удалить</a>
+		</div>
+		
 	</form>
 </div>
 

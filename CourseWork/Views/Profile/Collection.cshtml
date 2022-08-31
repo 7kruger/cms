@@ -31,16 +31,12 @@
 		</div>
 
 
-
-
-		@* Редактирование *@
-
-		@*@if (Model.Author == User.Identity.Name || User.IsInRole("admin"))
-			{
-			<div class="text-center">
-			<a class="btn btn-outline-info" href="/Profile/EditCollection/@Model.Id">Редактиовать</a>
-			</div>
-			}*@
+		@if (Model.Author == User.Identity.Name || User.IsInRole("admin"))
+		{
+				<div class="text-center">
+				<a class="btn btn-outline-info" href="/Profile/EditCollection/@Model.Id">Редактиовать</a>
+				</div>
+		}
 	</div>
 	<div class="col-xs-12 col-sm-12 col-md-6 col-lg-8 col-md-offset-6">
 		<input type="hidden" id="collectionId" value="@Model.Id" />

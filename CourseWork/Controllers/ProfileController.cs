@@ -22,8 +22,10 @@ namespace CourseWork.Controllers
         {
             var createdCollectionsCount = db.Collections.Where(c => c.Author == User.Identity.Name).Count();
             var createdItemsCount = db.Items.Where(c => c.Author == User.Identity.Name).Count();
+            var likesCount = db.Likes.Where(l => l.UserName == User.Identity.Name).Count();
             ViewData["CollectionsCount"] = createdCollectionsCount;
             ViewData["ItemsCount"] = createdItemsCount;
+            ViewData["LikesCount"] = likesCount;
             return View();
         }
 
@@ -76,7 +78,8 @@ namespace CourseWork.Controllers
 
         public async Task<ActionResult> MyCollections()
         {
-            return View(await db.Collections.Where(c => c.Author == User.Identity.Name).ToListAsync());
+            var collections = await db.Collections.Where(c => c.Author == User.Identity.Name).ToListAsync();
+            return View(collections.OrderByDescending(c => c.Date).ToList());
         }
 
         [HttpGet]
@@ -148,6 +151,22 @@ namespace CourseWork.Controllers
             return View();
         }
 
+        [HttpGet]
+        public async Task<ActionResult> DeleteCollection(string collectionId)
+        {
+            var collection = await db.Collections.FirstOrDefaultAsync(c => c.Id == collectionId);
+            if (collection.Author != GetCurrentUser() || !User.IsInRole("admin"))
+            {
+                return NotFound();
+            }
+
+            db.Collections.Remove(collection);
+            await db.SaveChangesAsync();
+            return Redirect($"/Profile/Collection?collectionId={collectionId}");
+        }
+
         #endregion
+
+        private string GetCurrentUser() => User.Identity.Name;
     }
 }

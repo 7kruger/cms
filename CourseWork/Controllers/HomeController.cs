@@ -25,8 +25,7 @@ namespace CourseWork.Controllers
         public async Task<ActionResult> Index()
         {
             var collections = await db.Collections.ToListAsync();
-            collections.OrderBy(c => c.Date);
-            return View(collections);
+            return View(collections.OrderByDescending(c => c.Date).ToList());
         }
 
         public async Task<ActionResult> Search(string value)

@@ -16,7 +16,7 @@
 				<img src="~/images/imgnotfound2.jpg" onError="this.src='/images/imgnotfound.jpg'" class="card-img-top" alt="">
 				<div class="card-body">
 					<h5 class="card-title">@col.Name</h5>
-					<p class="card-text">@col.Description.Substring(0, Math.Min(col.Description.Length, 100))</p>
+					<p class="card-text">@col.Description.Substring(0, Math.Min(col.Description.Length, 50))</p>
 					<a href="/Profile/EditCollection/@col.Id" class="btn btn-primary stretched-link">Редактировать</a>
 				</div>
 			</div>

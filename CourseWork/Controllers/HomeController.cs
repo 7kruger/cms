@@ -42,7 +42,7 @@ namespace CourseWork.Controllers
 
         public async Task<ActionResult> LoadLikesInfo(string collectionId)
         {
-            var currentUserInfo = await db.Likes.FirstOrDefaultAsync(l => l.CollectionId == collectionId && l.UserName == User.Identity.Name);
+            var currentUserInfo = await db.Likes.FirstOrDefaultAsync(l => l.CollectionId == collectionId && l.UserName == GetCurrentUser());
             var liked = currentUserInfo == null ? false : true;
             string json = "";
             var count = db.Likes.Where(l => l.CollectionId == collectionId).Count();
@@ -61,7 +61,7 @@ namespace CourseWork.Controllers
             var like = new Like
             {
                 CollectionId = collectionId,
-                UserName = User.Identity.Name
+                UserName = GetCurrentUser()
             };
             await db.Likes.AddAsync(like);
             await db.SaveChangesAsync();
@@ -72,7 +72,7 @@ namespace CourseWork.Controllers
         [HttpPost]
         public async Task<ActionResult> RemoveLike(string collectionId)
         {
-            var like = await db.Likes.FirstOrDefaultAsync(l => l.CollectionId == collectionId && l.UserName == User.Identity.Name);
+            var like = await db.Likes.FirstOrDefaultAsync(l => l.CollectionId == collectionId && l.UserName == GetCurrentUser());
             db.Likes.Remove(like);
             await db.SaveChangesAsync();
 
@@ -85,7 +85,7 @@ namespace CourseWork.Controllers
             Comment comment = new Comment
             {
                 CollectionId = collectionId,
-                UserName = User.Identity.Name,
+                UserName = GetCurrentUser(),
                 Content = content,
                 Date = DateTime.Now
             };
@@ -95,6 +95,8 @@ namespace CourseWork.Controllers
 
             return Ok();
         }
+
+        private string GetCurrentUser() => User.Identity.Name;
 
     }
 }

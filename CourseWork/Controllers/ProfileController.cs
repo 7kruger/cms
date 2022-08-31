@@ -20,9 +20,9 @@ namespace CourseWork.Controllers
         }
         public ActionResult Index()
         {
-            var createdCollectionsCount = db.Collections.Where(c => c.Author == User.Identity.Name).Count();
-            var createdItemsCount = db.Items.Where(c => c.Author == User.Identity.Name).Count();
-            var likesCount = db.Likes.Where(l => l.UserName == User.Identity.Name).Count();
+            var createdCollectionsCount = db.Collections.Where(c => c.Author == GetCurrentUser()).Count();
+            var createdItemsCount = db.Items.Where(c => c.Author == GetCurrentUser()).Count();
+            var likesCount = db.Likes.Where(l => l.UserName == GetCurrentUser()).Count();
             ViewData["CollectionsCount"] = createdCollectionsCount;
             ViewData["ItemsCount"] = createdItemsCount;
             ViewData["LikesCount"] = likesCount;
@@ -33,7 +33,7 @@ namespace CourseWork.Controllers
 
         public async Task<ActionResult> MyItems()
         {
-            return View(await db.Items.Where(c => c.Author == User.Identity.Name).ToListAsync());
+            return View(await db.Items.Where(c => c.Author == GetCurrentUser()).ToListAsync());
         }
 
         [HttpGet]
@@ -78,7 +78,7 @@ namespace CourseWork.Controllers
 
         public async Task<ActionResult> MyCollections()
         {
-            var collections = await db.Collections.Where(c => c.Author == User.Identity.Name).ToListAsync();
+            var collections = await db.Collections.Where(c => c.Author == GetCurrentUser()).ToListAsync();
             return View(collections.OrderByDescending(c => c.Date).ToList());
         }
 
@@ -99,7 +99,7 @@ namespace CourseWork.Controllers
             {
                 Id = Guid.NewGuid().ToString(),
                 Name = model.Name,
-                Author = User.Identity.Name,
+                Author = GetCurrentUser(),
                 Description = model.Description,
                 Theme = model.Theme,
                 Date = DateTime.Now,

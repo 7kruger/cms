@@ -10,13 +10,12 @@ namespace CourseWork.Models.ViewModels
     {
         [HiddenInput(DisplayValue = false)]
         public string Id { get; set; }
-        [HiddenInput(DisplayValue = false)]
-        public string Author { get; set; }
         [Required]
         public string Name { get; set; }
         public string Description { get; set; }
         [Required]
         public Theme Theme { get; set; }
+        public string ImgRef { get; set; }
         public List<Item> Items { get; set; }
     }
 }

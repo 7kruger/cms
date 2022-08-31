@@ -117,9 +117,13 @@ textarea {
 }
 
 .like {
-    height: 50px;
-    width: 50px
+    height: 45px;
+    width: 45px
 }
+
+    .like:hover {
+        -webkit-transform: scale(1)
+    }
 
 .like-disabled {
     pointer-events: none;

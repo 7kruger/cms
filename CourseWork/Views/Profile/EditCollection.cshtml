@@ -1,72 +1,81 @@
-﻿@model CourseWork.Models.ViewModels.EditCollectionViewModel
+﻿@using CourseWork.Models.Entities
 @{
 	ViewData["Title"] = "Редактирование коллекции";
 }
+@model CourseWork.Models.ViewModels.EditCollectionViewModel
 
 <h1 class="text-center">Редактирование коллекции</h1>
-<div class="container text-center custom-group-form">
-	<input type="hidden" id="collectionId" value="@Model.Id" />
+<div class="container text-center">
+	<form asp-action="EditCollection" asp-controller="Profile" method="post">
+		<div class="container text-center custom-group-form">
+			<input type="hidden" id="collectionId" value="@Model.Id" />
 
-	<div class="form-group">
-		<label asp-for="Name">Название коллекции</label><br />
-		<input class="form-control" asp-for="Name" />
-		<span asp-validation-for="Name" />
-	</div>
+			<div class="form-group">
+				<label asp-for="Name">Название коллекции</label><br />
+				<input class="form-control" asp-for="Name" placeholder="Название коллекции" />
+				<span asp-validation-for="Name" />
+			</div>
 
-	<div class="form-group">
-		<label asp-for="Description">Описание коллекции</label><br />
-		<textarea class="form-control" asp-for="Description"></textarea>
-		<span asp-validation-for="Description" />
-	</div>
+			<div class="form-group">
+				<label asp-for="Description">Описание коллекции</label><br />
+				<textarea class="form-control" asp-for="Description"></textarea>
+				<span asp-validation-for="Description" />
+			</div>
 
-	<div class="form-group">
-		<label asp-for="Theme">Тема коллекции</label><br />
-		<select class="form-control" asp-for="Theme">
-			<option value="Books">Books</option>
-			<option value="Signs">Signs</option>
-			<option value="Silverware">Silverware</option>
-			<option value="Pictures">Pictures</option>
-			<option value="Coins">Coins</option>
-		</select>
-		<span asp-validation-for="Theme" />
-	</div><br><br>
+			<div class="form-group">
+				<label asp-for="Theme">Тема коллекции</label><br />
+				<select class="form-control" asp-for="Theme">
+					<option value="Books">Books</option>
+					<option value="Signs">Signs</option>
+					<option value="Silverware">Silverware</option>
+					<option value="Pictures">Pictures</option>
+					<option value="Coins">Coins</option>
+					<option value="Other">Other</option>
+				</select>
+				<span asp-validation-for="Theme" />
+			</div><br><br>
+		</div>
+
+		@if (Model.Items.Count() != 0)
+		{
+			<div style="overflow: auto;">
+				<table class="table table-sm">
+					<thead>
+						<tr>
+							<th scope="col">Выбрать</th>
+							<th scope="col">Название айтема</th>
+							<th scope="col">Автор</th>
+							<th scope="col">Содержание</th>
+							<th scope="col">Дата создания</th>
+						</tr>
+					</thead>
+					<tbody>
+						@foreach (var item in ViewData["Items"] as List<Item>)
+						{
+							<tr>
+								<td>
+									<input type="checkbox" name="selectedItems" value="@item.Id"
+								   @(Model.Items.Contains(item) ? "checked=\"checked\"" : "") />
+								</td>
+								<td>@item.Name</td>
+								<td>@item.Author</td>
+								<td>@item.Content</td>
+								<td>@item.Date</td>
+							</tr>
+						}
+					</tbody>
+				</table>
+			</div>
+		}
+		else
+		{
+			<p>Нет доступных айтемов <a class="link-info" href="/Profile/CreateItem">Создать</a></p>
+		}
+
+		<button class="btn btn-outline-primary">Изменить</button>
+		<a href="/Home/Index">test</a>
+	</form>
 </div>
-
-<div>
-	<div>
-		<h2>Добавить айтем</h2>
-		<input type="text" placeholder="Название" id="addItemName">
-		<input type="text" placeholder="Содержание" id="addItemContent">
-		<input type="submit" value="Добавить" id="addBtn" class="btn btn-outline-success">
-	</div>
-	<p>Айтемы</p>
-
-	<div style="overflow: auto;">
-		<table class="table table-sm">
-			<thead>
-				<tr>
-					<th scope="col"><p>Название</p></th>
-					<th scope="col"><p>Автор</p></th>
-					<th scope="col"><p>Содержание</p></th>
-					<th scope="col"><p>Дата создания</p></th>
-				</tr>
-			</thead>
-			@foreach (var item in Model.Items)
-			{
-				<tr>
-					<input type="hidden" id="@Model.Id" name="id" value="@Model.Id">
-					<td><p>@item.Name</p></td>
-					<td><p>@item.Author</p></td>
-					<td><p>@item.Content</p></td>
-					<td><p>@item.Date</p></td>
-					<td><button class="btn btn-outline-danger" onclick="removeItem(this)" value="@Model.Id">Удалить</button></td>
-				</tr>
-			}
-		</table>
-	</div>
-</div>
-<button class="btn btn-outline-primary">Изменить</button>
-
 
 @section Scripts {
 	<script src="~/js/editCollection.js"></script>

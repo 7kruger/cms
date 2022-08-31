@@ -11,7 +11,7 @@
 
 		<div class="row">
 			<div class="col-6 d-flex justify-content-end">
-				@if(User.Identity.IsAuthenticated)
+				@if (User.Identity.IsAuthenticated)
 				{
 					<a id="imgA" href="#">
 						<img class="like" src="~/images/unlike.png" id="like" alt="" loading="lazy" />
@@ -33,9 +33,9 @@
 
 		@if (Model.Author == User.Identity.Name || User.IsInRole("admin"))
 		{
-				<div class="text-center">
+			<div class="text-center">
 				<a class="btn btn-outline-info" href="/Profile/EditCollection/@Model.Id">Редактиовать</a>
-				</div>
+			</div>
 		}
 	</div>
 	<div class="col-xs-12 col-sm-12 col-md-6 col-lg-8 col-md-offset-6">
@@ -51,13 +51,14 @@
 
 	<div class="container">
 		<h3 class="text-center">Айтемы</h3>
-		<div style="overflow: auto; height: 300px">
-			@if (Model.Items.Count == 0)
-			{
-				<h4 class="text-center">Коллекция пуста</h4>
-			}
-			else
-			{
+
+		@if (Model.Items.Count == 0)
+		{
+			<h4 class="text-center">Коллекция пуста</h4>
+		}
+		else
+		{
+			<div style="overflow: auto; height: 300px">
 				<table class="table">
 					<thead class="table-light">
 						<tr>
@@ -67,6 +68,7 @@
 						</tr>
 					</thead>
 					<tbody>
+
 						@foreach (var item in Model.Items)
 						{
 							<tr>
@@ -77,9 +79,11 @@
 						}
 					</tbody>
 				</table>
-			}
-		</div>
+			</div>
+		}
 	</div>
+
+
 </div>
 
 

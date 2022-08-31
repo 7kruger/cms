@@ -36,8 +36,18 @@ namespace CourseWork.Controllers
         }
 
         [HttpGet]
-        public ActionResult CreateItem()
+        public async Task<ActionResult> CreateItem()
         {
+            if (User.IsInRole("admin"))
+            {
+                ViewData["Collections"] = await db.Collections.ToListAsync();
+                ViewData["Count"] = await db.Collections.CountAsync();
+            }
+            else
+            {
+                ViewData["Collections"] = await db.Collections.Where(c => c.Author == GetCurrentUser()).ToListAsync();
+                ViewData["Count"] = await db.Collections.Where(c => c.Author == GetCurrentUser()).CountAsync();
+            }
             return View();
         }
         [HttpPost]
@@ -54,7 +64,7 @@ namespace CourseWork.Controllers
                 Content = model.Content,
                 CollectionId = model.CollectionId,
                 Date = DateTime.Now,
-                Author = User.Identity.Name
+                Author = GetCurrentUser()
             };
 
             await db.Items.AddAsync(item);
@@ -116,37 +126,38 @@ namespace CourseWork.Controllers
                 Id = collection.Id,
                 Name = collection.Name,
                 Description = collection.Description,
-                Author = collection.Author,
                 Theme = collection.Theme,
                 Items = collection.Items.ToList()
             };
+
+            ViewData["Items"] = await db.Items.ToListAsync();
             
             return View(cvm);
         }
         [HttpPost]
-        public async Task<ActionResult> EditCollection(EditCollectionViewModel model)
+        public async Task<ActionResult> EditCollection(EditCollectionViewModel model, string[] selectedItems)
         {
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
-            var collection = new Collection
-            {
-                Id = model.Id,
-                Name = model.Name,
-                Author = model.Author,
-                Description = model.Description,
-                Theme = model.Theme,
-                Items = model.Items
-            };
 
-            db.Update(collection);
+            var items = await db.Items.Where(i => selectedItems.Contains(i.Id)).ToListAsync();
+            var collection = await db.Collections.Include(i => i.Items).FirstOrDefaultAsync(c => c.Id == model.Id);
+            collection.Name = model.Name;
+            collection.Description = model.Description;
+            collection.Theme = model.Theme;
+            collection.ImgRef = model.ImgRef;
+            collection.Items.Clear();
+            collection.Items = items;
+
+            db.Collections.Update(collection);
             await db.SaveChangesAsync();
 
-            return View();
+            return RedirectToAction("Index","Home");
         }
 
-        [HttpGet]
+
         public async Task<ActionResult> DeleteCollection(string collectionId)
         {
             var collection = await db.Collections.FirstOrDefaultAsync(c => c.Id == collectionId);
@@ -157,7 +168,7 @@ namespace CourseWork.Controllers
 
             db.Collections.Remove(collection);
             await db.SaveChangesAsync();
-            return Redirect($"/Profile/Collection?collectionId={collectionId}");
+            return RedirectToAction("Index", "Home");
         }
 
         private string GetCurrentUser() => User.Identity.Name;

@@ -6,6 +6,7 @@
         Signs,
         Silverware,
         Pictures,
-        Coins
+        Coins,
+        Other
     }
 }

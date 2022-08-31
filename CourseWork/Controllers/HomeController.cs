@@ -35,6 +35,15 @@ namespace CourseWork.Controllers
 			return View(result);
         }
 
+        public async Task<ActionResult> Collection(string id)
+        {
+            if (string.IsNullOrWhiteSpace(id))
+            {
+                return NotFound();
+            }
+            return View(await db.Collections.Include(i => i.Items).FirstOrDefaultAsync(c => c.Id == id));
+        }
+
         public async Task<ActionResult> LoadComments(string collectionId)
         {
             return Ok(await db.Comments.Where(c => c.CollectionId == collectionId).ToListAsync());
@@ -54,6 +63,7 @@ namespace CourseWork.Controllers
 
             return Ok(json);
         }
+
 
         [HttpPost]
         public async Task<ActionResult> SetLike(string collectionId)

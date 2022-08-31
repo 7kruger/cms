@@ -29,7 +29,6 @@ namespace CourseWork.Controllers
             return View();
         }
 
-        #region Items
 
         public async Task<ActionResult> MyItems()
         {
@@ -63,18 +62,14 @@ namespace CourseWork.Controllers
 
             return Ok(item);
         }
-        #endregion
 
-        #region Collections
-        [AllowAnonymous]
-        public async Task<ActionResult> Collection(string id)
-        {
-            if (string.IsNullOrWhiteSpace(id))
-            {
-                return NotFound();
-            }
-            return View(await db.Collections.Include(i => i.Items).FirstOrDefaultAsync(c => c.Id == id));
-        }
+
+
+
+
+
+        
+        
 
         public async Task<ActionResult> MyCollections()
         {
@@ -164,8 +159,6 @@ namespace CourseWork.Controllers
             await db.SaveChangesAsync();
             return Redirect($"/Profile/Collection?collectionId={collectionId}");
         }
-
-        #endregion
 
         private string GetCurrentUser() => User.Identity.Name;
     }

@@ -121,17 +121,25 @@ namespace CourseWork.Controllers
         public async Task<ActionResult> EditCollection(string id)
         {
             var collection = await db.Collections.Include(i => i.Items).FirstOrDefaultAsync(c => c.Id == id);
+
+            if (collection == null)
+            {
+                return NotFound();
+            }
+
+            var items = collection.Items.ToList();
             var cvm = new EditCollectionViewModel
             {
                 Id = collection.Id,
                 Name = collection.Name,
                 Description = collection.Description,
                 Theme = collection.Theme,
-                Items = collection.Items.ToList()
+                Items = items
             };
-
-            ViewData["Items"] = await db.Items.ToListAsync();
             
+            items.AddRange(await db.Items.Where(i => string.IsNullOrWhiteSpace(i.CollectionId)).ToListAsync());
+            ViewData["Items"] = items;
+
             return View(cvm);
         }
         [HttpPost]
@@ -154,21 +162,25 @@ namespace CourseWork.Controllers
             db.Collections.Update(collection);
             await db.SaveChangesAsync();
 
-            return RedirectToAction("Index","Home");
+            return Redirect($"/Home/Collection/{collection.Id}");
         }
 
-
-        public async Task<ActionResult> DeleteCollection(string collectionId)
+        public async Task<ActionResult> DeleteCollection(string id)
         {
-            var collection = await db.Collections.FirstOrDefaultAsync(c => c.Id == collectionId);
-            if (collection.Author != GetCurrentUser() || !User.IsInRole("admin"))
+            var collection = await db.Collections.FirstOrDefaultAsync(c => c.Id == id);
+
+            if (collection == null)
             {
                 return NotFound();
             }
+            if (collection.Author == GetCurrentUser() || User.IsInRole("admin"))
+            {
+                db.Collections.Remove(collection);
+                await db.SaveChangesAsync();
+                return RedirectToAction("Index", "Home");
+            }
 
-            db.Collections.Remove(collection);
-            await db.SaveChangesAsync();
-            return RedirectToAction("Index", "Home");
+            return NotFound();
         }
 
         private string GetCurrentUser() => User.Identity.Name;

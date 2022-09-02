@@ -7,8 +7,6 @@ document.querySelector("#sendComment").addEventListener("click", () => {
     const formData = new FormData();
     let collectionId = document.querySelector("#collectionId").value;
     let comment = document.querySelector("#comment").value;
-    console.log(comment);
-    console.log(collectionId);
 
     formData.append("collectionId", collectionId);
     formData.append("content", comment);
@@ -55,6 +53,7 @@ function loadComments() {
                 div.appendChild(small);
                 p.textContent = `${index.content}`;
                 div.appendChild(p);
+
                 comments.appendChild(div);
             });
 

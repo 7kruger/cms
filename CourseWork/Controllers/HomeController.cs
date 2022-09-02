@@ -48,7 +48,8 @@ namespace CourseWork.Controllers
 
         public async Task<ActionResult> LoadComments(string collectionId)
         {
-            return Ok(await db.Comments.Where(c => c.CollectionId == collectionId).ToListAsync());
+            var comments = await db.Comments.Where(c => c.CollectionId == collectionId).ToListAsync();
+            return Ok(comments.OrderByDescending(c => c.Date));
         }
 
         public async Task<ActionResult> LoadLikesInfo(string collectionId)

@@ -23,7 +23,6 @@ document.querySelector("#sendComment").addEventListener("click", () => {
                 alert("Не удалось добавить комментарий");
             }
         })
-
 });
 
 function loadComments() {
@@ -58,7 +57,6 @@ function loadComments() {
             });
 
         });
-
 }
 
 function clearComments() {

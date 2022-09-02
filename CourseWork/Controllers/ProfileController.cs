@@ -173,8 +173,13 @@ namespace CourseWork.Controllers
             }
             if (collection.Author == GetCurrentUser() || User.IsInRole("admin"))
             {
+                db.Items.RemoveRange(await db.Items.Where(i => i.CollectionId == collection.Id).ToListAsync());
+                db.Comments.RemoveRange(await db.Comments.Where(c => c.CollectionId == collection.Id).ToArrayAsync());
+                db.Likes.RemoveRange(await db.Likes.Where(l => l.CollectionId == collection.Id).ToArrayAsync());
+
                 db.Collections.Remove(collection);
                 await db.SaveChangesAsync();
+
                 return RedirectToAction("Index", "Home");
             }
 

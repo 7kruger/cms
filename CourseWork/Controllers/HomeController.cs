@@ -44,6 +44,8 @@ namespace CourseWork.Controllers
             return View(await db.Collections.Include(i => i.Items).FirstOrDefaultAsync(c => c.Id == id));
         }
 
+
+
         public async Task<ActionResult> LoadComments(string collectionId)
         {
             return Ok(await db.Comments.Where(c => c.CollectionId == collectionId).ToListAsync());

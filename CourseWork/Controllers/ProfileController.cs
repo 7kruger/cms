@@ -2,9 +2,12 @@
 using CourseWork.Models.Entities;
 using CourseWork.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -14,9 +17,11 @@ namespace CourseWork.Controllers
     public class ProfileController : Controller
     {
         private readonly ApplicationDbContext db;
-        public ProfileController(ApplicationDbContext context)
+        private readonly IWebHostEnvironment _appEnvironment;
+        public ProfileController(ApplicationDbContext context, IWebHostEnvironment appEnvironment)
         {
             db = context;
+            _appEnvironment = appEnvironment;
         }
         public ActionResult Index()
         {
@@ -71,15 +76,7 @@ namespace CourseWork.Controllers
             await db.SaveChangesAsync();
 
             return Ok(item);
-        }
-
-
-
-
-
-
-        
-        
+        }        
 
         public async Task<ActionResult> MyCollections()
         {
@@ -100,6 +97,8 @@ namespace CourseWork.Controllers
                 return View(model);
             }
 
+            string path = string.Empty;
+
             var collection = new Collection
             {
                 Id = Guid.NewGuid().ToString(),
@@ -108,7 +107,7 @@ namespace CourseWork.Controllers
                 Description = model.Description,
                 Theme = model.Theme,
                 Date = DateTime.Now,
-                ImgRef = ""
+                ImgRef = path
             };
 
             await db.Collections.AddAsync(collection);
@@ -134,7 +133,7 @@ namespace CourseWork.Controllers
                 Name = collection.Name,
                 Description = collection.Description,
                 Theme = collection.Theme,
-                Items = items
+                Items = collection.Items.ToList()
             };
             
             items.AddRange(await db.Items.Where(i => string.IsNullOrWhiteSpace(i.CollectionId)).ToListAsync());
@@ -155,7 +154,6 @@ namespace CourseWork.Controllers
             collection.Name = model.Name;
             collection.Description = model.Description;
             collection.Theme = model.Theme;
-            collection.ImgRef = model.ImgRef;
             collection.Items.Clear();
             collection.Items = items;
 

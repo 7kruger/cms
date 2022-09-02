@@ -9,12 +9,12 @@
 		<img class="collection-image" src="~/images/imgnotfound2.jpg" onError="this.src='/images/imgnotfound.jpg'" />
 
 
-		<div class="row">
+		<div class="row m-3">
 			<div class="col-6 d-flex justify-content-end">
 				@if (User.Identity.IsAuthenticated)
 				{
 					<a id="imgA" href="#">
-						<img class="like" src="~/images/unlike.png" id="like" alt="" loading="lazy" />
+						<img class="like" src="~/images/nolike.png" id="like" alt="" loading="lazy" />
 					</a>
 				}
 				else
@@ -44,8 +44,8 @@
 		<h1>@Model.Name</h1>
 		<h2>О коллекции</h2>
 		<p>Автор: @Model.Author</p>
-		<p>Описание: @Model.Description</p>
 		<p>Тема: @Model.Theme</p>
+		<p>Описание: @Model.Description</p>
 	</div>
 
 

@@ -5,7 +5,7 @@ let collectionId = document.querySelector("#collectionId").value;
 let liked = false;
 
 const likeImageurl = "/images/like.png";
-const defaultImageurl = "/images/unlike.png";
+const defaultImageurl = "/images/nolike.png";
 
 loadInfo();
 
@@ -17,14 +17,12 @@ function loadInfo() {
                 return response.json();
             }
             else {
-                console.log(response);
-                console.log(response.json());
+                Swal.fire("Не удалось загрузить лайки");
             }
         })
         .then(data => {
             let likesCount = document.querySelector("#likesCount");
             likesCount.textContent = data.likesCount;
-            console.log(data.likesCount);
 
             if (data.liked) {
                 liked = true;
@@ -35,7 +33,6 @@ function loadInfo() {
                 imgLike.src = defaultImageurl;
             }
         })
-
 }
 
 function setLike() {
@@ -52,7 +49,6 @@ function setLike() {
                 loadInfo();
             }
         })
-
 }
 function removeLike() {
 
@@ -68,18 +64,15 @@ function removeLike() {
                 loadInfo();
             }
         })
-
 }
 
 
 document.querySelector("#imgA").onclick = () => {
 
-    console.log(liked);
     if (liked) {
         removeLike();
     }
     else {
         setLike();
     }
-
 }

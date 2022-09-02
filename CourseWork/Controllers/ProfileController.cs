@@ -75,7 +75,7 @@ namespace CourseWork.Controllers
             await db.Items.AddAsync(item);
             await db.SaveChangesAsync();
 
-            return Ok(item);
+            return Ok();
         }        
 
         public async Task<ActionResult> MyCollections()

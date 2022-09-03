@@ -10,23 +10,40 @@ namespace CourseWork.Services
 {
     public class DropboxService
     {
-        private static readonly string token = "dropbox_token";
+        private readonly string token;
+
+        public DropboxService()
+		{
+            var path = Environment.CurrentDirectory + "/wwwroot/files/token.txt";
+			using (var reader = new StreamReader(path))
+			{
+                token = reader.ReadToEnd();
+			}
+		}
+
         public async Task<string> UploadFileAsync(IFormFile file, string name)
         {
-            using (var dbx = new DropboxClient(token))
-            {
-                string folder = "/Public";
-                string filename = name;
-                string url = "";
-                using (var mem = file.OpenReadStream())
+			try
+			{
+                using (var dbx = new DropboxClient(token))
                 {
-                    var updated = dbx.Files.UploadAsync($"{folder}/{filename}", WriteMode.Overwrite.Instance, body: mem);
-                    updated.Wait();
-                    var tx = dbx.Sharing.CreateSharedLinkWithSettingsAsync($"{folder}/{filename}");
-                    tx.Wait();
-                    return tx.Result.Url.Replace("dl=0", "raw=1");
+                    string folder = "/Public";
+                    string filename = name;
+                    string url = "";
+                    using (var mem = file.OpenReadStream())
+                    {
+                        var updated = dbx.Files.UploadAsync($"{folder}/{filename}", WriteMode.Overwrite.Instance, body: mem);
+                        updated.Wait();
+                        var tx = dbx.Sharing.CreateSharedLinkWithSettingsAsync($"{folder}/{filename}");
+                        tx.Wait();
+                        return tx.Result.Url.Replace("dl=0", "raw=1");
+                    }
                 }
             }
+			catch (Exception)
+			{
+                return string.Empty;
+			}
         }
     }
 }

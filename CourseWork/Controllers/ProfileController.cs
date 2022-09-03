@@ -1,6 +1,7 @@
 ﻿using CourseWork.Models;
 using CourseWork.Models.Entities;
 using CourseWork.Models.ViewModels;
+using CourseWork.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -33,7 +34,6 @@ namespace CourseWork.Controllers
             ViewData["LikesCount"] = likesCount;
             return View();
         }
-
 
         public async Task<ActionResult> MyItems()
         {
@@ -90,14 +90,20 @@ namespace CourseWork.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<ActionResult> CreateCollection(CreateCollectionViewModel model)
+        public async Task<ActionResult> CreateCollection(CreateCollectionViewModel model,IFormFile image)
         {
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
-
+            var dbx = new DropboxService();
             string path = string.Empty;
+
+            string extension = Path.GetExtension(image.FileName);
+            if (extension == ".png" || extension == ".jpg")
+            {
+                path = await dbx.UploadFileAsync(image, image.FileName);
+            }
 
             var collection = new Collection
             {
@@ -133,6 +139,7 @@ namespace CourseWork.Controllers
                 Name = collection.Name,
                 Description = collection.Description,
                 Theme = collection.Theme,
+                ImgRef = collection.ImgRef,
                 Items = collection.Items.ToList()
             };
             
@@ -142,7 +149,7 @@ namespace CourseWork.Controllers
             return View(cvm);
         }
         [HttpPost]
-        public async Task<ActionResult> EditCollection(EditCollectionViewModel model, string[] selectedItems)
+        public async Task<ActionResult> EditCollection(EditCollectionViewModel model, string[] selectedItems, IFormFile image)
         {
             if (!ModelState.IsValid)
             {
@@ -156,6 +163,18 @@ namespace CourseWork.Controllers
             collection.Theme = model.Theme;
             collection.Items.Clear();
             collection.Items = items;
+
+            if (model?.ImgRef != image?.FileName)
+            {
+                var dbx = new DropboxService();
+                string path = string.Empty;
+                string extension = Path.GetExtension(image.FileName);
+                if (extension == ".png" || extension == ".jpg")
+                {
+                    path = await dbx.UploadFileAsync(image, image.FileName);
+                }
+                collection.ImgRef = path;
+            }
 
             db.Collections.Update(collection);
             await db.SaveChangesAsync();

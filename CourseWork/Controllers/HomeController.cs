@@ -44,8 +44,6 @@ namespace CourseWork.Controllers
             return View(await db.Collections.Include(i => i.Items).FirstOrDefaultAsync(c => c.Id == id));
         }
 
-
-
         public async Task<ActionResult> LoadComments(string collectionId)
         {
             var comments = await db.Comments.Where(c => c.CollectionId == collectionId).ToListAsync();
@@ -54,8 +52,8 @@ namespace CourseWork.Controllers
 
         public async Task<ActionResult> LoadLikesInfo(string collectionId)
         {
-            var currentUserInfo = await db.Likes.FirstOrDefaultAsync(l => l.CollectionId == collectionId && l.UserName == GetCurrentUser());
-            var liked = currentUserInfo == null ? false : true;
+            var currentUserLikedInfo = await db.Likes.FirstOrDefaultAsync(l => l.CollectionId == collectionId && l.UserName == GetCurrentUser());
+            var liked = currentUserLikedInfo == null ? false : true;
             string json = "";
             var count = db.Likes.Where(l => l.CollectionId == collectionId).Count();
             json = JsonSerializer.Serialize(new
@@ -66,7 +64,6 @@ namespace CourseWork.Controllers
 
             return Ok(json);
         }
-
 
         [HttpPost]
         public async Task<ActionResult> SetLike(string collectionId)
@@ -79,9 +76,9 @@ namespace CourseWork.Controllers
             await db.Likes.AddAsync(like);
             await db.SaveChangesAsync();
 
-
             return Ok();
         }
+
         [HttpPost]
         public async Task<ActionResult> RemoveLike(string collectionId)
         {
@@ -110,6 +107,5 @@ namespace CourseWork.Controllers
         }
 
         private string GetCurrentUser() => User.Identity.Name;
-
     }
 }

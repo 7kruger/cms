@@ -15,6 +15,7 @@ namespace CourseWork.Models.ViewModels
         public string Description { get; set; }
         [Required]
         public Theme Theme { get; set; }
+        public string ImgRef { get; set; }
         public List<Item> Items { get; set; }
     }
 }

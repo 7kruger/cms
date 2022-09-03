@@ -80,15 +80,21 @@ namespace CourseWork.Controllers
         public async Task<ActionResult> EditItem(string id)
         {
             var item = await db.Items.FindAsync(id);
-            var civm = new EditItemViewModel
+
+            if (item.Author == GetCurrentUser() || !User.IsInRole("admin"))
             {
-                Id = item.Id,
-                CollectionId = item.CollectionId,
-                Name = item.Name,
-                Content = item.Content
-            };
-            ViewData["Collections"] = await db.Collections.ToListAsync();
-            return View(civm);
+                var civm = new EditItemViewModel
+                {
+                    Id = item.Id,
+                    CollectionId = item.CollectionId,
+                    Name = item.Name,
+                    Content = item.Content
+                };
+                ViewData["Collections"] = await db.Collections.ToListAsync();
+                return View(civm);
+            }
+
+            return NotFound();
         }
         [HttpPost]
         public async Task<ActionResult> EditItem(EditItemViewModel model)
@@ -107,10 +113,16 @@ namespace CourseWork.Controllers
         public async Task<ActionResult> DeleteItem(string id)
         {
             var item = await db.Items.FindAsync(id);
-            db.Items.Remove(item);
-            await db.SaveChangesAsync();
 
-            return RedirectToAction("Index", "Home");
+            if (item.Author == GetCurrentUser() || !User.IsInRole("admin"))
+            {
+                db.Items.Remove(item);
+                await db.SaveChangesAsync();
+
+                return RedirectToAction("Index", "Home");
+            }
+
+            return NotFound();
         }
 
         public async Task<ActionResult> MyCollections()
@@ -167,21 +179,26 @@ namespace CourseWork.Controllers
                 return NotFound();
             }
 
-            var items = collection.Items.ToList();
-            var cvm = new EditCollectionViewModel
+            if (collection.Author == GetCurrentUser() || User.IsInRole("admin"))
             {
-                Id = collection.Id,
-                Name = collection.Name,
-                Description = collection.Description,
-                Theme = collection.Theme,
-                ImgRef = collection.ImgRef,
-                Items = collection.Items.ToList()
-            };
-            
-            items.AddRange(await db.Items.Where(i => string.IsNullOrWhiteSpace(i.CollectionId)).ToListAsync());
-            ViewData["Items"] = items;
+                var items = collection.Items.ToList();
+                var cvm = new EditCollectionViewModel
+                {
+                    Id = collection.Id,
+                    Name = collection.Name,
+                    Description = collection.Description,
+                    Theme = collection.Theme,
+                    ImgRef = collection.ImgRef,
+                    Items = collection.Items.ToList()
+                };
 
-            return View(cvm);
+                items.AddRange(await db.Items.Where(i => string.IsNullOrWhiteSpace(i.CollectionId)).ToListAsync());
+                ViewData["Items"] = items;
+
+                return View(cvm);
+            }
+
+            return NotFound();
         }
         [HttpPost]
         public async Task<ActionResult> EditCollection(EditCollectionViewModel model, string[] selectedItems, IFormFile image)

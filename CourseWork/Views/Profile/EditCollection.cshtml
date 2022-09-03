@@ -6,7 +6,7 @@
 
 <h1 class="text-center">Редактирование коллекции</h1>
 <div class="container text-center">
-	<form asp-action="EditCollection" asp-controller="Profile" method="post">
+	<form asp-action="EditCollection" asp-controller="Profile" enctype="multipart/form-data" method="post">
 		<div class="container text-center custom-group-form">
 			<input type="hidden" id="collectionId" value="@Model.Id" />
 
@@ -24,7 +24,7 @@
 
 			<div class="form-group">
 				<label asp-for="ImgRef">Обложка коллекции</label>
-				<input asp-for="ImgRef" type="file" name="image" id="image" /><br /><br />
+				<input asp-for="ImgRef" type="file" name="image" id="image"/><br /><br />
 			</div>
 
 			<div class="form-group">

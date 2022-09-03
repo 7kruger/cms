@@ -17,18 +17,18 @@
     })
         .then(response => {
             if (response.ok) {
-                name.value = "";
-                content.value = "";
+                document.querySelector("#name").value = "";
+                document.querySelector("#content").value = "";
+
+                Swal.fire("айтем был успешно добавлен");
 
                 //тернарный оператор не работал -_-
-                if (radio.checked == true) {
+                if (radio.checked === true) {
                     radio.checked = false;
                 }
                 else {
                     radio.checked = true;
                 }
-
-                Swal.fire("айтем был успешно добавлен");
             }
         })
 })

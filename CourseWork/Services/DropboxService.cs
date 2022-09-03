@@ -10,7 +10,7 @@ namespace CourseWork.Services
 {
     public class DropboxService
     {
-        private static string token = "dropbox_token";
+        private static readonly string token = "dropbox_token";
         public async Task<string> UploadFileAsync(IFormFile file, string name)
         {
             using (var dbx = new DropboxClient(token))
@@ -24,9 +24,7 @@ namespace CourseWork.Services
                     updated.Wait();
                     var tx = dbx.Sharing.CreateSharedLinkWithSettingsAsync($"{folder}/{filename}");
                     tx.Wait();
-                    var txurl = tx.Result.Url;
-                    url = txurl.Replace("dl=0", "raw=1");
-                    return url;
+                    return tx.Result.Url.Replace("dl=0", "raw=1");
                 }
             }
         }

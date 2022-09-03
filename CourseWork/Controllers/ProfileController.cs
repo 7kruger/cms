@@ -18,11 +18,9 @@ namespace CourseWork.Controllers
     public class ProfileController : Controller
     {
         private readonly ApplicationDbContext db;
-        private readonly IWebHostEnvironment _appEnvironment;
-        public ProfileController(ApplicationDbContext context, IWebHostEnvironment appEnvironment)
+        public ProfileController(ApplicationDbContext context)
         {
             db = context;
-            _appEnvironment = appEnvironment;
         }
         public ActionResult Index()
         {
@@ -77,6 +75,43 @@ namespace CourseWork.Controllers
 
             return Ok();
         }        
+
+        [HttpGet]
+        public async Task<ActionResult> EditItem(string id)
+        {
+            var item = await db.Items.FindAsync(id);
+            var civm = new EditItemViewModel
+            {
+                Id = item.Id,
+                CollectionId = item.CollectionId,
+                Name = item.Name,
+                Content = item.Content
+            };
+            ViewData["Collections"] = await db.Collections.ToListAsync();
+            return View(civm);
+        }
+        [HttpPost]
+        public async Task<ActionResult> EditItem(EditItemViewModel model)
+        {
+            var item = await db.Items.FindAsync(model.Id);
+            item.CollectionId = model.CollectionId;
+            item.Content = model.Content;
+            item.Name = model.Name;
+
+            db.Items.Update(item);
+            await db.SaveChangesAsync();
+
+            return RedirectToAction("MyItems", "Profile");
+        }
+
+        public async Task<ActionResult> DeleteItem(string id)
+        {
+            var item = await db.Items.FindAsync(id);
+            db.Items.Remove(item);
+            await db.SaveChangesAsync();
+
+            return RedirectToAction("Index", "Home");
+        }
 
         public async Task<ActionResult> MyCollections()
         {
@@ -164,7 +199,7 @@ namespace CourseWork.Controllers
             collection.Items.Clear();
             collection.Items = items;
 
-            if (model?.ImgRef != image?.FileName)
+            if (!string.IsNullOrWhiteSpace(image?.FileName))
             {
                 var dbx = new DropboxService();
                 string path = string.Empty;

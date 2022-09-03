@@ -129,3 +129,13 @@ textarea {
     pointer-events: none;
     cursor: default;
 }
+
+.custom-border {
+    border: 1px solid #ccc !important;
+    border-radius: 13px;
+}
+
+/*.image {
+    max-height:300px;
+    max-width: 300px;
+}*/

@@ -10,26 +10,18 @@ namespace CourseWork.Services
 {
     public class DropboxService
     {
-        private readonly string token;
-
-        public DropboxService()
-		{
-            var path = Environment.CurrentDirectory + "/wwwroot/files/token.txt";
-			using (var reader = new StreamReader(path))
-			{
-                token = reader.ReadToEnd();
-			}
-		}
+        private const string refreshToken = "refresh_token";
+        private const string appKey = "app_key";
+        private const string appSecret = "app_secret";
 
         public async Task<string> UploadFileAsync(IFormFile file, string name)
         {
 			try
 			{
-                using (var dbx = new DropboxClient(token))
+                using (var dbx = new DropboxClient(refreshToken, appKey, appSecret))
                 {
                     string folder = "/Public";
                     string filename = name;
-                    string url = "";
                     using (var mem = file.OpenReadStream())
                     {
                         var updated = dbx.Files.UploadAsync($"{folder}/{filename}", WriteMode.Overwrite.Instance, body: mem);

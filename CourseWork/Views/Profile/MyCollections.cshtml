@@ -3,11 +3,11 @@
     ViewData["Title"] = "Мои коллекции";
 }
 
-<h1 class="text-center">Список моих коллекций</h1>
+<h1 class="text-center text-dark">Список моих коллекций</h1>
 <div class="row">
     @if(Model.Count == 0)
     {
-        <h1 class="col-12 text-center">Вы пока не создали ни одну коллекцию</h1>
+        <h4 class="col-12 text-center text-dark">Вы пока не создали ни одну коллекцию</h4>
     }
     @foreach(var col in Model)
     {

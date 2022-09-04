@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -35,6 +36,10 @@ namespace CourseWork.Controllers
 
         public async Task<ActionResult> MyItems()
         {
+            if (User.IsInRole("admin"))
+            {
+                return View(await db.Items.ToListAsync());
+            }
             return View(await db.Items.Where(c => c.Author == GetCurrentUser()).ToListAsync());
         }
 
@@ -127,7 +132,13 @@ namespace CourseWork.Controllers
 
         public async Task<ActionResult> MyCollections()
         {
-            var collections = await db.Collections.Where(c => c.Author == GetCurrentUser()).ToListAsync();
+            List<Collection> collections = null;
+            if (User.IsInRole("admin"))
+            {
+                collections = await db.Collections.ToListAsync();
+                return View(collections.OrderByDescending(c => c.Date).ToList());
+            }
+            collections = await db.Collections.Where(c => c.Author == GetCurrentUser()).ToListAsync();
             return View(collections.OrderByDescending(c => c.Date).ToList());
         }
 
@@ -143,13 +154,17 @@ namespace CourseWork.Controllers
             {
                 return View(model);
             }
-            var dbx = new DropboxService();
             string path = string.Empty;
 
-            string extension = Path.GetExtension(image.FileName);
-            if (extension == ".png" || extension == ".jpg")
+            if (image != null)
             {
-                path = await dbx.UploadFileAsync(image, image.FileName);
+                var dbx = new DropboxService();
+
+                string extension = Path.GetExtension(image.FileName);
+                if (extension == ".png" || extension == ".jpg")
+                {
+                    path = await dbx.UploadFileAsync(image, image.FileName);
+                }
             }
 
             var collection = new Collection

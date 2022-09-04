@@ -3,18 +3,18 @@
 	ViewData["Title"] = "MyItems";
 }
 
-<h1>Мои айтемы</h1>
+<h1 class="text-center text-dark">Мои айтемы</h1>
 <div class="container">
 	@if (Model.Count == 0)
 	{
-		<h1>Вы пока не создали ни одного айтема</h1>
+		<h4 class="text-center text-dark">Вы пока не создали ни одного айтема</h4>
 	}
 	else
 	{
 		@foreach (var item in Model)
 		{
 			<div class="row m-1 custom-border">
-				<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 d-flex justify-content-center mb-2 mt-2">
+				<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 mb-2 mt-2">
 					<p>@item.Name</p>
 				</div>
 				<div class="col-xs-12 col-sm-3 col-md-3 col-lg-3 d-flex justify-content-center mb-2 mt-2">

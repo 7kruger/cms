@@ -4,9 +4,9 @@ namespace CourseWork.Models.ViewModels
 {
     public class CreateItemViewModel
     {
-        [Required]
+        [Required(ErrorMessage = "Нет названия айтема")]
         public string Name { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Нет содержания")]
         public string Content { get; set; }
         public string CollectionId { get; set; }
     }

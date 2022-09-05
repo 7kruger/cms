@@ -10,10 +10,10 @@ namespace CourseWork.Models.ViewModels
     {
         [HiddenInput(DisplayValue = false)]
         public string Id { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Нет названия коллекции")]
         public string Name { get; set; }
         public string Description { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Нет указана тема коллекции")]
         public Theme Theme { get; set; }
         public string ImgRef { get; set; }
         public List<Item> Items { get; set; }

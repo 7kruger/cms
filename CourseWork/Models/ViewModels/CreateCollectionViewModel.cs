@@ -5,11 +5,11 @@ namespace CourseWork.Models.ViewModels
 {
     public class CreateCollectionViewModel
     {
-        [Required]
+        [Required(ErrorMessage = "Не указано названия коллекции")]
         public string Name { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Нет описания коллекции")]
         public string Description { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Нет темы коллекции")]
         public Theme Theme { get; set; }
     }
 }

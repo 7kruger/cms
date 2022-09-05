@@ -24,8 +24,7 @@ namespace CourseWork.Services
                     string filename = name;
                     using (var mem = file.OpenReadStream())
                     {
-                        var updated = dbx.Files.UploadAsync($"{folder}/{filename}", WriteMode.Overwrite.Instance, body: mem);
-                        updated.Wait();
+                        await dbx.Files.UploadAsync($"{folder}/{filename}", WriteMode.Overwrite.Instance, body: mem);
                         var tx = dbx.Sharing.CreateSharedLinkWithSettingsAsync($"{folder}/{filename}");
                         tx.Wait();
                         return tx.Result.Url.Replace("dl=0", "raw=1");

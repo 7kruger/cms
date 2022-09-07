@@ -44,6 +44,20 @@ namespace CourseWork.Controllers
             return View(await db.Collections.Include(i => i.Items).FirstOrDefaultAsync(c => c.Id == id));
         }
 
+        public async Task<ActionResult> Item(string id)
+        {
+            if (string.IsNullOrWhiteSpace(id))
+            {
+                return NotFound();
+            }
+            var item = await db.Items.FirstOrDefaultAsync(i => i.Id == id);
+            if (!string.IsNullOrWhiteSpace(item.CollectionId))
+            {
+                ViewData["CollectionName"] = db.Collections.FirstOrDefault(c => c.Id == item.CollectionId).Name;
+            }
+            return View(item);
+        }
+
         public async Task<ActionResult> LoadComments(string collectionId)
         {
             var comments = await db.Comments.Where(c => c.CollectionId == collectionId).ToListAsync();

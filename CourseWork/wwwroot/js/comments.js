@@ -17,6 +17,7 @@ document.querySelector("#sendComment").addEventListener("click", () => {
     })
         .then(response => {
             if (response.ok) {
+                document.getElementById("comment").value = "";
                 loadComments();
             }
             else {

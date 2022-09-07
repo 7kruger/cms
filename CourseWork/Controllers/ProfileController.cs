@@ -59,12 +59,25 @@ namespace CourseWork.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<ActionResult> CreateItem(CreateItemViewModel model)
+        public async Task<ActionResult> CreateItem(CreateItemViewModel model, IFormFile image)
         {
             if (!ModelState.IsValid)
             {
                 return View();
             }
+            string path = string.Empty;
+
+            if (image != null)
+            {
+                var dbx = new DropboxService();
+
+                string extension = Path.GetExtension(image.FileName);
+                if (extension == ".png" || extension == ".jpg")
+                {
+                    path = await dbx.UploadFileAsync(image, image.FileName);
+                }
+            }
+
             var item = new Item
             {
                 Id = Guid.NewGuid().ToString(),
@@ -72,6 +85,7 @@ namespace CourseWork.Controllers
                 Content = model.Content,
                 CollectionId = model.CollectionId,
                 Date = DateTime.Now,
+                ImgRef = path,
                 Author = GetCurrentUser()
             };
 

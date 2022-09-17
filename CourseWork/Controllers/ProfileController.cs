@@ -254,7 +254,7 @@ namespace CourseWork.Controllers
                 {
                     path = await dbx.UploadFileAsync(image, image.FileName);
                 }
-                collection.ImgRef = path;
+                collection.ImgRef = string.IsNullOrWhiteSpace(collection.ImgRef) ? path : collection.ImgRef;
             }
 
             db.Collections.Update(collection);

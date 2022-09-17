@@ -133,12 +133,12 @@ namespace CourseWork.Controllers
         {
             var item = await db.Items.FindAsync(id);
 
-            if (item.Author == GetCurrentUser() || !User.IsInRole("admin"))
+            if (item.Author == GetCurrentUser() || User.IsInRole("admin"))
             {
                 db.Items.Remove(item);
                 await db.SaveChangesAsync();
 
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("MyItems", "Profile");
             }
 
             return NotFound();

@@ -63,6 +63,12 @@ namespace CourseWork.Controllers
             var comments = await db.Comments.Where(c => c.CollectionId == collectionId).ToListAsync();
             return Ok(comments.OrderByDescending(c => c.Date));
         }
+                
+        public async Task<ActionResult> LoadItemComments(string itemId)
+        {
+            var comments = await db.Comments.Where(c => c.ItemId == itemId).ToListAsync();
+            return Ok(comments.OrderByDescending(c => c.Date));
+        }
 
         public async Task<ActionResult> LoadLikesInfo(string collectionId)
         {
@@ -70,6 +76,21 @@ namespace CourseWork.Controllers
             var liked = currentUserLikedInfo == null ? false : true;
             string json = "";
             var count = db.Likes.Where(l => l.CollectionId == collectionId).Count();
+            json = JsonSerializer.Serialize(new
+            {
+                likesCount = count,
+                liked = liked
+            });
+
+            return Ok(json);
+        }
+
+        public async Task<ActionResult> LoadItemLikesInfo(string imtemId)
+        {
+            var currentUserLikedInfo = await db.Likes.FirstOrDefaultAsync(l => l.ItemId == imtemId && l.UserName == GetCurrentUser());
+            var liked = currentUserLikedInfo == null ? false : true;
+            string json = "";
+            var count = db.Likes.Where(l => l.ItemId == imtemId).Count();
             json = JsonSerializer.Serialize(new
             {
                 likesCount = count,
@@ -92,6 +113,19 @@ namespace CourseWork.Controllers
 
             return Ok();
         }
+        [HttpPost]
+        public async Task<ActionResult> SetItemLike(string itemId)
+        {
+            var like = new Like
+            {
+                ItemId = itemId,
+                UserName = GetCurrentUser()
+            };
+            await db.Likes.AddAsync(like);
+            await db.SaveChangesAsync();
+
+            return Ok();
+        }
 
         [HttpPost]
         public async Task<ActionResult> RemoveLike(string collectionId)
@@ -104,11 +138,38 @@ namespace CourseWork.Controllers
         }
 
         [HttpPost]
+        public async Task<ActionResult> RemoveItemLike(string itemId)
+        {
+            var like = await db.Likes.FirstOrDefaultAsync(l => l.ItemId == itemId && l.UserName == GetCurrentUser());
+            db.Likes.Remove(like);
+            await db.SaveChangesAsync();
+
+            return Ok();
+        }
+
+        [HttpPost]
         public async Task<ActionResult> AddComment(string collectionId, string content)
         {
             Comment comment = new Comment
             {
                 CollectionId = collectionId,
+                UserName = GetCurrentUser(),
+                Content = content,
+                Date = DateTime.Now
+            };
+
+            await db.Comments.AddAsync(comment);
+            await db.SaveChangesAsync();
+
+            return Ok();
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> AddItemComment(string itemId, string content)
+        {
+            Comment comment = new Comment
+            {
+                ItemId = itemId,
                 UserName = GetCurrentUser(),
                 Content = content,
                 Date = DateTime.Now

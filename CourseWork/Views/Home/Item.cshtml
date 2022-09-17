@@ -33,12 +33,12 @@
 		@if (Model.Author == User.Identity.Name || User.IsInRole("admin"))
 		{
 			<div class="text-center">
-				<a class="btn btn-outline-info" href="/Profile/EditCollection/@Model.Id">Редактиовать</a>
+				<a class="btn btn-outline-info" href="/Profile/EditItem/@Model.Id">Редактиовать</a>
 			</div>
 		}
 	</div>
 	<div class="col-xs-12 col-sm-12 col-md-6 col-lg-8 col-md-offset-6">
-		<input type="hidden" id="collectionId" value="@Model.Id" />
+		<input type="hidden" id="itemId" value="@Model.Id" />
 		<h1>@Model.Name</h1>
 		<h3>Об айтеме</h3>
 		<small class="text-secondary">Дата создания: @Model.Date</small>
@@ -50,16 +50,20 @@
 	<div class="container">
 		<h3 class="text-center"></h3>
 
-		@if (string.IsNullOrWhiteSpace(Model.CollectionId))
-		{
-
-		}
-		else
+		@if (!string.IsNullOrWhiteSpace(Model.CollectionId))
 		{
 			<h4>Айтем находится в коллекции <a href="/Home/Collection/@Model.CollectionId">@ViewData["CollectionName"]</a></h4>
 		}
 	</div>
 
-
 </div>
+
+<hr />
+@await Html.PartialAsync("CommentsPartial")
+
+
+@section Scripts {
+<script src="~/js/itemComments.js"></script>
+<script src="~/js/itemLikes.js"></script>
+}
 

@@ -40,7 +40,7 @@ function setLike() {
     const formData = new FormData();
     formData.append("itemId", itemId);
 
-    fetch("/Home/SetLike", {
+    fetch("/Home/SetItemLike", {
         method: "post",
         body: formData
     })
@@ -55,7 +55,7 @@ function removeLike() {
     const formData = new FormData();
     formData.append("itemId", itemId);
 
-    fetch("/Home/RemoveLike", {
+    fetch("/Home/RemoveItemLike", {
         method: "post",
         body: formData
     })
@@ -67,8 +67,8 @@ function removeLike() {
 }
 
 
-document.querySelector("#imgA").onclick = () => {
-
+document.querySelector("#img").onclick = () => {
+    
     if (liked) {
         removeLike();
     }

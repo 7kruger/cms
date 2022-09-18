@@ -6,7 +6,7 @@ document.querySelector("#sendComment").addEventListener("click", () => {
 
     const formData = new FormData();
     let itemId = document.querySelector("#itemId").value;
-    let comment = document.querySelector("#itemId").value;
+    let comment = document.querySelector("#comment").value;
 
     formData.append("itemId", itemId);
     formData.append("content", comment);

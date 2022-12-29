@@ -1,0 +1,69 @@
+﻿@model CourseWork.Domain.ViewModels.Item.ItemViewModel
+
+@{
+    ViewData["Title"] = "GetItem";
+}
+
+<div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 text-center">
+		<img class="collection-image" src="@Model.ImgRef" onError="this.src='/images/imgnotfound.jpg'" />
+
+
+		<div class="row m-3">
+			<div class="col-6 d-flex justify-content-end">
+				@if (User.Identity.IsAuthenticated)
+				{
+					<a id="imgA" href="#">
+						<img class="like" src="~/images/nolike.png" id="like" alt="" loading="lazy" />
+					</a>
+				}
+				else
+				{
+					<a id="imgA" href="#" class="like-disabled">
+						<img class="like" src="~/images/nolike.png" id="like" alt="" loading="lazy" />
+					</a>
+				}
+			</div>
+			<div class="col-6 d-flex justify-content-start">
+				<h1 id="likesCount"></h1>
+			</div>
+		</div>
+
+
+		@if (Model.Author == User.Identity.Name || User.IsInRole("admin"))
+		{
+			<div class="text-center">
+				<a class="btn btn-outline-info" href="/Item/EditItem/@Model.Id">Редактиовать</a>
+			</div>
+		}
+	</div>
+	<div class="col-xs-12 col-sm-12 col-md-6 col-lg-8 col-md-offset-6">
+		<input type="hidden" id="srcId" value="@Model.Id" />
+		<h1>@Model.Name</h1>
+		<h3>Об айтеме</h3>
+		<small class="text-secondary">Дата создания: @Model.Date</small>
+		<p>Автор: @Model.Author</p>
+		<p>Содержание: @Model.Content</p>
+	</div>
+
+
+	<div class="container">
+		<h3 class="text-center"></h3>
+
+		@if (!string.IsNullOrWhiteSpace(Model.CollectionId))
+		{
+			<h4>Айтем находится в коллекции <a href="/Collection/GetCollection/@Model.CollectionId">@Model.CollectionName</a></h4>
+		}
+	</div>
+
+</div>
+
+<hr />
+@await Html.PartialAsync("CommentsPartial")
+
+
+@section Scripts {
+	<script src="~/js/comments.js"></script>
+	<script src="~/js/likes.js"></script>
+}
+

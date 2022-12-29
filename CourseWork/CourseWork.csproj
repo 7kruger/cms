@@ -19,4 +19,10 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.5" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\CourseWork.DAL\CourseWork.DAL.csproj" />
+    <ProjectReference Include="..\CourseWork.Domain\CourseWork.Domain.csproj" />
+    <ProjectReference Include="..\CourseWork.Service\CourseWork.Service.csproj" />
+  </ItemGroup>
+
 </Project>

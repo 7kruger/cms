@@ -1,9 +1,9 @@
-﻿using CourseWork.Models;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
+using CourseWork.DAL;
 
 namespace CourseWork.Controllers
 {

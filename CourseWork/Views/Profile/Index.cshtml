@@ -1,18 +1,17 @@
-﻿
-@{
-    ViewData["Title"] = "Профиль";
+﻿@{
+	ViewData["Title"] = "Профиль";
 }
 
 <div class="row">
 	<div class="col-md-6 col-lg-4">
-		@if(User.IsInRole("admin"))
+		@if (User.IsInRole("admin"))
 		{
 			<a class="list-group-item list-group-item-action list-group-item-danger" href="/Admin">Админка</a>
 		}
-		<a class="list-group-item list-group-item-action list-group-item-light" href="/Profile/CreateCollection">Создать коллекцию</a>
-		<a class="list-group-item list-group-item-action list-group-item-light" href="/Profile/MyCollections">Мои коллекции</a>
-		<a class="list-group-item list-group-item-action list-group-item-light" href="/Profile/CreateItem">Создать айтем</a>
-		<a class="list-group-item list-group-item-action list-group-item-light" href="/Profile/MyItems">Мои айтемы</a>
+		<a class="list-group-item list-group-item-action list-group-item-light" href="/Collection/CreateCollection">Создать коллекцию</a>
+		<a class="list-group-item list-group-item-action list-group-item-light" href="#">Мои коллекции</a>
+		<a class="list-group-item list-group-item-action list-group-item-light" href="/Item/CreateItem">Создать айтем</a>
+		<a class="list-group-item list-group-item-action list-group-item-light" href="#">Мои айтемы</a>
 		<a class="list-group-item list-group-item-action list-group-item-light" href="#">Поменять пароль</a>
 		<a class="list-group-item list-group-item-action list-group-item-light" href="#">Редактирование профиля</a>
 	</div>
@@ -24,7 +23,4 @@
 		<p>Количество лайков: @ViewData["LikesCount"]</p>
 	</div>
 </div>
-
-
-
 

@@ -1,0 +1,48 @@
+﻿@model CourseWork.Domain.ViewModels.Collection.CreateCollectionViewModel
+
+@{
+	ViewData["Title"] = "Создание коллекции";
+}
+
+<h1 class="text-center">Создать коллекцию</h1>
+<div class="container text-center custom-group-form">
+	<form asp-action="CreateCollection" asp-controller="Collection" enctype="multipart/form-data" method="post">
+		<div class="validation" asp-validation-summary="ModelOnly"></div>
+
+		<div class="form-group">
+			<label asp-for="Name">Название коллекции</label><br />
+			<input class="form-control" type="text" asp-for="Name" />
+			<span asp-validation-for="Name" />
+		</div>
+
+		<div class="form-group">
+			<label asp-for="Description">Описание коллекции</label><br />
+			<textarea class="form-control" asp-for="Description"></textarea>
+			<span asp-validation-for="Description" />
+		</div>
+
+		<div class="form-group">
+			<p>Обложка коллекции</p>
+			<input type="file" name="image" id="image" /><br /><br />
+		</div>
+
+		<div class="form-group">
+			<label asp-for="Theme">Тема коллекции</label><br />
+			<select class="form-select form-control" aria-label=".form-select-lg example" asp-for="Theme">
+				<option value="Books">Books</option>
+				<option value="Signs">Signs</option>
+				<option value="Silverware">Silverware</option>
+				<option value="Pictures">Pictures</option>
+				<option value="Coins">Coins</option>
+				<option value="Other">Other</option>
+			</select>
+			<span asp-validation-for="Theme" />
+		</div>
+		<div class="form-group">
+			<button class="btn btn-outline-primary">Добавить</button>
+		</div>
+
+	</form>
+
+</div>
+

@@ -1,10 +1,10 @@
-﻿@using CourseWork.Models.Entities
+﻿@using CourseWork.Domain.Entities
 @using System
+@model IEnumerable<Collection>
+
 @{
 	ViewData["Title"] = "Главная страница";
 }
-@model List<Collection>
-
 
 <div>
 	<form class="text-center d-flex" role="search" asp-action="Search" asp-controller="Home">
@@ -24,10 +24,11 @@
 					<h5 class="card-title">@col.Name</h5>
 					<p class="card-text">@col.Description.Substring(0, Math.Min(col.Description.Length, 50))</p>
 					<div class="d-flex align-items-end">
-						<a href="/Home/Collection/@col.Id" class="btn btn-primary">Посмотреть коллекцию</a>
+						<a href="/Collection/GetCollection/@col.Id" class="btn btn-primary">Посмотреть коллекцию</a>
 					</div>
 				</div>
 			</div>
 		</div>
 	}
 </div>
+

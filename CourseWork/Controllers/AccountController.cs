@@ -1,6 +1,4 @@
-﻿using CourseWork.Models;
-using CourseWork.Models.Entities;
-using CourseWork.Models.ViewModels;
+﻿using CourseWork.Domain.Entities;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
@@ -9,6 +7,8 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System;
+using CourseWork.DAL;
+using CourseWork.Domain.ViewModels.Account;
 
 namespace CourseWork.Controllers
 {
@@ -22,13 +22,8 @@ namespace CourseWork.Controllers
         }
 
         [HttpGet]
-        public IActionResult Register()
-        {
-            if (User.Identity.IsAuthenticated)
-                return RedirectToAction("Index", "Home");
-            else
-                return View();
-        }
+        public IActionResult Register() => View();
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterViewModel model)

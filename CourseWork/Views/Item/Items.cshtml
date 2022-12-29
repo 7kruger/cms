@@ -1,0 +1,27 @@
+﻿@using CourseWork.Domain.Entities
+@using System
+@model IEnumerable<Item>
+
+@{
+	ViewData["Title"] = "Items";
+}
+
+<h3 class="text-center text-dark">All items</h3>
+<div class="row">
+	@foreach (var col in Model)
+	{
+		<div class="col-xs-12 col-sm-6 col-md-6 col-lg-4 d-flex justify-content-center">
+			<div class="card m-2">
+				<img src="@col.ImgRef" onError="this.src='/images/imgnotfound.jpg'" class="card-img-top image" alt="">
+				<div class="card-body">
+					<h5 class="card-title">@col.Name</h5>
+					<p class="card-text">@col.Content.Substring(0, Math.Min(col.Content.Length, 50))</p>
+					<div class="d-flex align-items-end">
+						<a href="/Item/GetItem/@col.Id" class="btn btn-primary">Посмотреть item</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	}
+</div>
+

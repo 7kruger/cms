@@ -13,7 +13,7 @@
         formData.append("collectionId", radio.value);
     }
 
-    fetch("/Profile/CreateItem", {
+    fetch("/Item/CreateItem", {
         method: "post",
         headers: {
             "Accept": "application/json",

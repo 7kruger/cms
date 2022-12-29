@@ -5,13 +5,13 @@ loadComments();
 document.querySelector("#sendComment").addEventListener("click", () => {
 
     const formData = new FormData();
-    let collectionId = document.querySelector("#collectionId").value;
+    let srcId = document.querySelector("#srcId").value;
     let comment = document.querySelector("#comment").value;
 
-    formData.append("collectionId", collectionId);
+    formData.append("id", srcId);
     formData.append("content", comment);
 
-    fetch("/Home/AddComment", {
+    fetch("/api/AddComment", {
         method: "post",
         body: formData
     })
@@ -21,7 +21,7 @@ document.querySelector("#sendComment").addEventListener("click", () => {
                 loadComments();
             }
             else {
-                alert("Не удалось добавить комментарий");
+                Swal.fire("Не удалось добавить комментарий");
             }
         })
 });
@@ -29,9 +29,9 @@ document.querySelector("#sendComment").addEventListener("click", () => {
 function loadComments() {
 
     clearComments();
-    let collectionId = document.querySelector("#collectionId").value;
+    let srcId = document.querySelector("#srcId").value;
 
-    fetch(`/Home/LoadComments?collectionId=${collectionId}`)
+    fetch(`/api/LoadComments?id=${srcId}`)
         .then(response => response.json())
         .then(data => {
 
@@ -45,10 +45,10 @@ function loadComments() {
                 div.setAttribute("class", "list-group-item list-group-item-light comment");
                 let p = document.createElement("p");
 
-                let date = index.date;
-                let d = new Date(Date.parse(date));
+                let d = new Date(Date.parse(index.date)).toUTCString();
+                const date = getDate(d);
 
-                strong.textContent = `Автор - "${index.userName}"     ${d.toUTCString()}`;
+                strong.textContent = `Автор - "${index.userName}"     ${date}`;
                 small.appendChild(strong);
                 div.appendChild(small);
                 p.textContent = `${index.content}`;
@@ -66,4 +66,16 @@ function clearComments() {
     while (container.firstChild) {
         container.removeChild(container.firstChild);
     }
+}
+
+function getDate(date) {
+
+    let newDate = "";
+
+    for (var i = 0; i < date.length - 7; i++) {
+        console.log(date[i])
+        newDate += date[i]
+    }
+
+    return newDate;
 }

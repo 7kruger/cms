@@ -1,7 +1,7 @@
 ﻿const imgLike = document.querySelector("#like");
 let setLikeBtn = document.querySelector("#setLike");
 let removeLikeBtn = document.querySelector("#removeLike");
-let collectionId = document.querySelector("#collectionId").value;
+let srcId = document.querySelector("#srcId").value;
 let liked = false;
 
 const likeImageurl = "/images/like.png";
@@ -11,7 +11,7 @@ loadInfo();
 
 function loadInfo() {
 
-    fetch(`/Home/LoadLikesInfo?collectionId=${collectionId}`)
+    fetch(`/api/loadlikes?id=${srcId}`)
         .then(response => {
             if (response.ok) {
                 return response.json();
@@ -35,12 +35,14 @@ function loadInfo() {
         })
 }
 
-function setLike() {
+function addLike() {
 
     const formData = new FormData();
-    formData.append("collectionId", collectionId);
+    formData.append("id", srcId);
 
-    fetch("/Home/SetLike", {
+    console.log(srcId)
+
+    fetch("/api/addlike", {
         method: "post",
         body: formData
     })
@@ -53,9 +55,9 @@ function setLike() {
 function removeLike() {
 
     const formData = new FormData();
-    formData.append("collectionId", collectionId);
+    formData.append("id", srcId);
 
-    fetch("/Home/RemoveLike", {
+    fetch("/api/RemoveLike", {
         method: "post",
         body: formData
     })
@@ -73,6 +75,6 @@ document.querySelector("#imgA").onclick = () => {
         removeLike();
     }
     else {
-        setLike();
+        addLike();
     }
 }

@@ -3,40 +3,27 @@
 loadComments();
 
 document.querySelector("#sendComment").addEventListener("click", () => {
-
-    const formData = new FormData();
-    let srcId = document.querySelector("#srcId").value;
-    let comment = document.querySelector("#comment").value;
-
-    formData.append("id", srcId);
-    formData.append("content", comment);
-
-    fetch("/api/AddComment", {
-        method: "post",
-        body: formData
-    })
-        .then(response => {
-            if (response.ok) {
-                document.getElementById("comment").value = "";
-                loadComments();
-            }
-            else {
-                Swal.fire("Не удалось добавить комментарий");
-            }
-        })
+    addComment();
 });
 
-function loadComments() {
+async function loadComments() {
 
     clearComments();
     let srcId = document.querySelector("#srcId").value;
 
-    fetch(`/api/LoadComments?id=${srcId}`)
-        .then(response => response.json())
-        .then(data => {
+    try {
+        const response = await fetch(`/api/loadcomments?id=${srcId}`, {
+            method: "get",
+            headers: {
+                "content-type": "application/json"
+            }
+        });
+
+        if (response.ok) {
+
+            const data = await response.json();
 
             data.forEach(index => {
-
                 //мне самому плохо от этого франкенштейна
 
                 let div = document.createElement("div");
@@ -56,8 +43,55 @@ function loadComments() {
 
                 comments.appendChild(div);
             });
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Не удалось загрузить комментарии',
+            })
+        }
+    } catch (e) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Something went wrong!',
+        })
+    }   
+}
 
+async function addComment() {
+
+    let srcId = document.querySelector("#srcId").value;
+    let comment = document.querySelector("#comment").value;
+
+    const formData = new FormData();
+    formData.append("id", srcId);
+    formData.append("content", comment);
+
+    try {
+        const response = await fetch("/api/addcomment", {
+            method: "post",
+            body: formData
         });
+
+        if (response.ok) {
+            document.getElementById("comment").value = "";
+            loadComments();
+        } else {
+            Swal.fire({
+                html: "<h1>Не удалось добавить комментарий</h1>"
+            });
+        }
+    } catch (e) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Something went wrong!',
+        })
+    }
+
+    
+    
 }
 
 function clearComments() {
@@ -73,7 +107,6 @@ function getDate(date) {
     let newDate = "";
 
     for (var i = 0; i < date.length - 7; i++) {
-        console.log(date[i])
         newDate += date[i]
     }
 

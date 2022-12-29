@@ -9,18 +9,20 @@ const defaultImageurl = "/images/nolike.png";
 
 loadInfo();
 
-function loadInfo() {
+async function loadInfo() {
 
-    fetch(`/api/loadlikes?id=${srcId}`)
-        .then(response => {
-            if (response.ok) {
-                return response.json();
-            }
-            else {
-                Swal.fire("Не удалось загрузить лайки");
+    try {
+        const response = await fetch(`/api/loadlikes?id=${srcId}`, {
+            method: "get",
+            headers: {
+                "content-type": "application/json"
             }
         })
-        .then(data => {
+
+        if (response.ok) {
+
+            const data = await response.json();
+
             let likesCount = document.querySelector("#likesCount");
             likesCount.textContent = data.likesCount;
 
@@ -32,42 +34,68 @@ function loadInfo() {
                 liked = false;
                 imgLike.src = defaultImageurl;
             }
+        } else {
+            Swal.fire({
+                html: "<h1>Не удалось загрузить лайки</h1>"
+            });
+        }
+    } catch (e) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Something went wrong!',
         })
+    }
+
+    
 }
 
-function addLike() {
+async function addLike() {
 
     const formData = new FormData();
     formData.append("id", srcId);
 
-    console.log(srcId)
+    try {
+        const response = await fetch("/api/addlike", {
+            method: "post",
+            body: formData
+        });
 
-    fetch("/api/addlike", {
-        method: "post",
-        body: formData
-    })
-        .then(response => {
-            if (response.ok) {
-                loadInfo();
-            }
+        if (response.ok) {
+            loadInfo();
+        }
+    } catch (e) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Something went wrong!',
         })
+    }
+    
 }
-function removeLike() {
+
+async function removeLike() {
 
     const formData = new FormData();
     formData.append("id", srcId);
 
-    fetch("/api/RemoveLike", {
-        method: "post",
-        body: formData
-    })
-        .then(response => {
-            if (response.ok) {
-                loadInfo();
-            }
-        })
-}
+    try {
+        const response = await fetch("/api/removelike", {
+            method: "post",
+            body: formData
+        });
 
+        if (response.ok) {
+            loadInfo();
+        }
+    } catch (e) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Something went wrong!',
+        })
+    }    
+}
 
 document.querySelector("#imgA").onclick = () => {
 

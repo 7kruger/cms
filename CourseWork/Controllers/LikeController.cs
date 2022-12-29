@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace CourseWork.Controllers
 {
-	[Route("/api")]
+	[Route("api")]
 	public class LikeController : Controller
 	{
 		private readonly ILikeService _likeService;

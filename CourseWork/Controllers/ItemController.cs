@@ -92,7 +92,7 @@ namespace CourseWork.Controllers
 			var response = await _itemService.Delete(id);
 			if (response.StatusCode == Domain.Enum.StatusCode.OK)
 			{
-				return View("Index", "Home");
+				return Redirect("/");
 			}
 			return View("Error", response.Description);
 		}

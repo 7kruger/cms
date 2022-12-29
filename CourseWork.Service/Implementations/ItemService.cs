@@ -183,6 +183,8 @@ namespace CourseWork.Service.Implementations
 					};
 				}
 
+				await _itemRepository.Delete(item);
+
 				return new BaseResponse<bool>
 				{
 					StatusCode = StatusCode.OK,

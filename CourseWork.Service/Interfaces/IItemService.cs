@@ -1,6 +1,7 @@
 ﻿using CourseWork.Domain.Entities;
 using CourseWork.Domain.Response;
 using CourseWork.Domain.ViewModels.Item;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -12,8 +13,8 @@ namespace CourseWork.Service.Interfaces
 	{
 		Task<IBaseResponse<List<Item>>> GetItems();
 		Task<IBaseResponse<ItemViewModel>> GetItem(string id);
-		Task<IBaseResponse<Item>> Create(CreateItemViewModel model, string username);
-		Task<IBaseResponse<Item>> Edit(ItemViewModel model);
+		Task<IBaseResponse<Item>> Create(CreateItemViewModel model, string username, IFormFile image);
+		Task<IBaseResponse<Item>> Edit(ItemViewModel model, IFormFile image);
 		Task<IBaseResponse<bool>> Delete(string id);
 	}
 }

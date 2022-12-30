@@ -1,0 +1,121 @@
+﻿using CourseWork.Service.Interfaces;
+using Microsoft.AspNetCore.Http;
+using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Threading.Tasks;
+using Dropbox.Api;
+using Dropbox.Api.Files;
+using Dropbox.Api.Users;
+using System.IO;
+using System.Xml.Linq;
+using System.Linq;
+using System.IO.Enumeration;
+
+namespace CourseWork.Service.Implementations
+{
+	public class DropboxService : ICloudStorageService
+	{
+		private const string refreshToken = "refresh_token";
+		private const string appKey = "app_key";
+		private const string appSecret = "app_secret";
+
+		public async Task<string> UploadAsync(IFormFile image, string folder, string srcId)
+		{
+			try
+			{
+				if (image != null)
+				{
+					string extension = Path.GetExtension(image.FileName);
+					if (extension == ".png" || extension == ".jpg")
+					{
+						return await UploadImage(image, folder, srcId);
+					}
+				}
+
+				return "imgnotfound.jpg";
+			}
+			catch (Exception)
+			{
+				return "imgnotfound.jpg";
+			}
+		}
+
+		public async Task<string> UpdateAsync(IFormFile image, string folder, string srcId)
+		{
+			try
+			{
+				string filename = $"img-{srcId}.jpg";
+
+				var isExists = await IsExists(folder, filename);
+
+				if (isExists)
+				{
+					await DeleteImage(folder, filename);
+					return await UploadImage(image, folder, srcId);
+				}
+				
+				return await UploadImage(image, folder, srcId);
+			}
+			catch (Exception)
+			{
+				return "imgnotfound";
+			}
+		}
+
+		public async Task DeleteAsync(string folder, string srcId)
+		{
+			try
+			{
+				string filename = $"img-{srcId}.jpg";
+				await DeleteImage(folder, filename);
+			}
+			catch (Exception)
+			{
+
+			}
+		}
+
+		private async Task<string> UploadImage(IFormFile image, string folder, string srcId)
+		{
+			using (var dbx = new DropboxClient(refreshToken, appKey, appSecret))
+			{
+				string filename = $"img-{srcId}.jpg";
+				using (var mem = image.OpenReadStream())
+				{
+					await dbx.Files.UploadAsync($"{folder}/{filename}", WriteMode.Overwrite.Instance, body: mem);
+					var tx = dbx.Sharing.CreateSharedLinkWithSettingsAsync($"{folder}/{filename}");
+					tx.Wait();
+					return tx.Result.Url.Replace("dl=0", "raw=1");
+				}
+			}
+		}
+
+		private async Task DeleteImage(string folder, string filename)
+		{
+			using (var dbx = new DropboxClient(refreshToken, appKey, appSecret))
+			{
+				await dbx.Files.DeleteAsync($"{folder}/{filename}");
+			}
+		}
+
+		private async Task<bool> IsExists(string folder, string filename)
+		{
+			try
+			{
+				using (var dbx = new DropboxClient(refreshToken, appKey, appSecret))
+				{
+					var response = await dbx.Files.ListFolderAsync(folder);
+
+					var result = response.Entries.FirstOrDefault(i => i.Name == filename);
+
+					return result == null ? false : true;
+				}
+			}
+			catch (Exception)
+			{
+				return false;
+			}
+		}
+	}
+}

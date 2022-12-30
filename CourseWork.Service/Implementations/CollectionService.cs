@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using CourseWork.Domain.ViewModels.Collection;
+using Microsoft.AspNetCore.Http;
 
 namespace CourseWork.Service.Implementations
 {
@@ -17,11 +18,15 @@ namespace CourseWork.Service.Implementations
 	{
 		private readonly IRepository<Collection> _collectionRepository;
 		private readonly IRepository<Item> _itemRepository;
+		private readonly ICloudStorageService _cloudStorageService;
 
-		public CollectionService(IRepository<Collection> repository, IRepository<Item> itemRepository)
+		public CollectionService(IRepository<Collection> repository, 
+								 IRepository<Item> itemRepository, 
+								 ICloudStorageService cloudStorageService)
 		{
 			_collectionRepository = repository;
 			_itemRepository = itemRepository;
+			_cloudStorageService = cloudStorageService;
 		}
 
 		public async Task<IBaseResponse<List<Collection>>> GetCollections()
@@ -136,7 +141,7 @@ namespace CourseWork.Service.Implementations
 			}
 		}
 
-		public async Task<IBaseResponse<Collection>> Create(CreateCollectionViewModel model, string username)
+		public async Task<IBaseResponse<Collection>> Create(CreateCollectionViewModel model, string username, IFormFile image)
 		{
 			try
 			{
@@ -147,9 +152,10 @@ namespace CourseWork.Service.Implementations
 					Author = username,
 					Description = model.Description,
 					Theme = model.Theme,
-					ImgRef = "~/images/imgnotfound.jpg",
 					Date = DateTime.Now,
 				};
+
+				collection.ImgRef = await _cloudStorageService.UploadAsync(image, "/collections", collection.Id);
 
 				await _collectionRepository.Create(collection);
 
@@ -169,7 +175,7 @@ namespace CourseWork.Service.Implementations
 			}
 		}
 
-		public async Task<IBaseResponse<Collection>> Edit(string id, CollectionViewModel model, string[] selectedItems)
+		public async Task<IBaseResponse<Collection>> Edit(string id, CollectionViewModel model, string[] selectedItems, IFormFile image)
 		{
 			try
 			{
@@ -188,10 +194,15 @@ namespace CourseWork.Service.Implementations
 
 				collection.Name = model.Name;
 				collection.Description = model.Description;
-				collection.ImgRef = model.ImgRef;
 				collection.Theme = model.Theme;
 				collection.Items.Clear();
 				collection.Items.AddRange(items);
+
+				// если картинка не пустая то обновить, а если пустая то останется старая картинка
+				if (image != null)
+				{
+					collection.ImgRef = await _cloudStorageService.UpdateAsync(image, "/collections", collection.Id);
+				}
 
 				await _collectionRepository.Update(collection);
 
@@ -227,6 +238,7 @@ namespace CourseWork.Service.Implementations
 					};
 				}
 
+				await _cloudStorageService.DeleteAsync("/collections", collection.Id);
 				await _collectionRepository.Delete(collection);
 
 				return new BaseResponse<bool>

@@ -4,6 +4,7 @@ using CourseWork.Domain.Enum;
 using CourseWork.Domain.Response;
 using CourseWork.Domain.ViewModels.Item;
 using CourseWork.Service.Interfaces;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,11 +17,15 @@ namespace CourseWork.Service.Implementations
 	{
 		private readonly IRepository<Item> _itemRepository;
 		private readonly IRepository<Collection> _collectionRepository;
+		private readonly ICloudStorageService _cloudStorageService;
 
-		public ItemService(IRepository<Item> itemRepository, IRepository<Collection> collectionRepository)
+		public ItemService(IRepository<Item> itemRepository, 
+						   IRepository<Collection> collectionRepository,
+						   ICloudStorageService cloudStorageService)
 		{
 			_itemRepository = itemRepository;
 			_collectionRepository = collectionRepository;
+			_cloudStorageService = cloudStorageService;
 		}
 
 		public async Task<IBaseResponse<List<Item>>> GetItems()
@@ -79,7 +84,7 @@ namespace CourseWork.Service.Implementations
 					Author = item.Author,
 					Content = item.Content,
 					Date = item.Date,
-					ImgRef = string.Empty,
+					ImgRef = item.ImgRef,
 					CollectionName = collectionName,
 				};
 
@@ -99,20 +104,20 @@ namespace CourseWork.Service.Implementations
 			}
 		}
 
-		public async Task<IBaseResponse<Item>> Create(CreateItemViewModel model, string username)
+		public async Task<IBaseResponse<Item>> Create(CreateItemViewModel model, string username, IFormFile image)
 		{
 			try
 			{
 				var item = new Item
 				{
 					Id = Guid.NewGuid().ToString(),
-					CollectionId = model.CollectionId,
 					Name = model.Name,
 					Content = model.Content,
 					Author = username,
 					Date = DateTime.Now,
-					ImgRef = "imgnotfound.jpg"
 				};
+
+				item.ImgRef = await _cloudStorageService.UploadAsync(image, "/items", item.Id);
 
 				await _itemRepository.Create(item);
 
@@ -132,7 +137,7 @@ namespace CourseWork.Service.Implementations
 			}
 		}
 
-		public async Task<IBaseResponse<Item>> Edit(ItemViewModel model)
+		public async Task<IBaseResponse<Item>> Edit(ItemViewModel model, IFormFile image)
 		{
 			try
 			{
@@ -149,6 +154,11 @@ namespace CourseWork.Service.Implementations
 
 				item.Name = model.Name;
 				item.Content = model.Content;
+
+				if (image != null)
+				{
+					item.ImgRef = await _cloudStorageService.UpdateAsync(image, "/items", item.Id);
+				}
 
 				await _itemRepository.Update(item);
 
@@ -183,6 +193,7 @@ namespace CourseWork.Service.Implementations
 					};
 				}
 
+				await _cloudStorageService.DeleteAsync("/items", item.Id);
 				await _itemRepository.Delete(item);
 
 				return new BaseResponse<bool>

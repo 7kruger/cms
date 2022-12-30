@@ -14,6 +14,7 @@ namespace CourseWork.Controllers
 			_likeService = likeService;
 		}
 
+		[HttpGet]
 		[Route("LoadLikes")]
 		public async Task<IActionResult> LoadLikes(string id)
 		{

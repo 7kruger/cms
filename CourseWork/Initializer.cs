@@ -24,6 +24,7 @@ namespace CourseWork
 			services.AddScoped<IItemService, ItemService>();
 			services.AddScoped<ILikeService, LikeService>();
 			services.AddScoped<ICommentService, CommentService>();
+			services.AddScoped<ICloudStorageService, DropboxService>();
 		}
 	}
 }

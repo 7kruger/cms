@@ -40,7 +40,7 @@ namespace CourseWork.Controllers
 				return View(model);
 			}
 
-			var response = await _collectionService.Create(model, GetCurrentUsername());
+			var response = await _collectionService.Create(model, GetCurrentUsername(), image);
 			if (response.StatusCode == Domain.Enum.StatusCode.OK)
 			{
 				return Redirect($"/Collection/EditCollection/{response.Data.Id}");
@@ -60,14 +60,14 @@ namespace CourseWork.Controllers
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> EditCollection(CollectionViewModel model, string[] selectedItems)
+		public async Task<IActionResult> EditCollection(CollectionViewModel model, string[] selectedItems, IFormFile image)
 		{
 			if (!ModelState.IsValid)
 			{
 				return View(model);
 			}
 
-			var response = await _collectionService.Edit(model.Id, model, selectedItems);
+			var response = await _collectionService.Edit(model.Id, model, selectedItems, image);
 			if (response.StatusCode == Domain.Enum.StatusCode.OK)
 			{
 				return Redirect($"/Collection/GetCollection/{response.Data.Id}");

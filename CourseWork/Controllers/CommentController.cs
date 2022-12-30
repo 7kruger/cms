@@ -15,6 +15,7 @@ namespace CourseWork.Controllers
 			_commentService = commentService;
 		}
 
+		[HttpGet]
 		[Route("LoadComments")]
 		public async Task<IActionResult> LoadComments(string id)
 		{

@@ -1,6 +1,7 @@
 ﻿using CourseWork.Domain.ViewModels.Item;
 using CourseWork.Service.Interfaces;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -44,14 +45,14 @@ namespace CourseWork.Controllers
 		public IActionResult CreateItem() => View();
 
 		[HttpPost]
-		public async Task<IActionResult> CreateItem(CreateItemViewModel model)
+		public async Task<IActionResult> CreateItem(CreateItemViewModel model, IFormFile image)
 		{
 			if (!ModelState.IsValid)
 			{
 				return View(model);
 			}
 
-			var response = await _itemService.Create(model, GetCurrentUsername());
+			var response = await _itemService.Create(model, GetCurrentUsername(), image);
 			if (response.StatusCode == Domain.Enum.StatusCode.OK)
 			{
 				return Redirect($"/Item/GetItem/{response.Data.Id}");
@@ -71,14 +72,14 @@ namespace CourseWork.Controllers
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> EditItem(ItemViewModel model)
+		public async Task<IActionResult> EditItem(ItemViewModel model, IFormFile image)
 		{
 			if (!ModelState.IsValid)
 			{
 				return View(model);
 			}
 
-			var response = await _itemService.Edit(model);
+			var response = await _itemService.Edit(model, image);
 			if (response.StatusCode == Domain.Enum.StatusCode.OK)
 			{
 				return Redirect($"/Item/GetItem/{response.Data.Id}");

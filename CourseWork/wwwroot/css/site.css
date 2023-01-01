@@ -89,8 +89,8 @@ body {
 }
 
 .collection-image {
-    height: 250px;
-    width: 250px;
+    height: 300px;
+    width: 300px;
 }
 
 textarea {
@@ -135,7 +135,17 @@ textarea {
     border-radius: 13px;
 }
 
-/*.image {
-    max-height:300px;
-    max-width: 300px;
-}*/
+.parent {
+    border-radius: 3px;
+    overflow: hidden;
+    height: 300px;
+    max-height: 300px;
+}
+
+    .parent img {
+        width: 100%;
+        display: block;
+        background-image: url(data:image/gif;base64,R0lGODlhCgAIAIABAN3d3f///yH5BAEAAAEALAAAAAAKAAgAAAINjAOnyJv2oJOrVXrzKQA7);
+        height: 300px;
+        max-height: 300px;
+    }

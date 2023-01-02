@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace CourseWork.Domain.Models
+namespace CourseWork.Domain.Enum
 {
-	public class CommentModel
+	public enum Role
 	{
+		User,
+		Admin
 	}
 }

@@ -19,7 +19,7 @@ namespace CourseWork.Controllers
         {
             if (!User.Identity.IsAuthenticated)
                 return RedirectToAction("Login", "Account");
-            if (!User.IsInRole("admin"))
+            if (!User.IsInRole("dmin"))
                 return RedirectToAction("Index", "Home");
             return View(await db.Users.ToListAsync());
         }
@@ -53,7 +53,7 @@ namespace CourseWork.Controllers
         {
             foreach (var u in db.Users.Where(user => selectedUsers.Contains(user.Id)))
             {
-                u.Status = true;
+                u.IsBlocked = true;
                 db.Users.Update(u);
             }
             await db.SaveChangesAsync();
@@ -64,7 +64,7 @@ namespace CourseWork.Controllers
         {
             foreach (var u in db.Users.Where(user => selectedUsers.Contains(user.Id)))
             {
-                u.RoleId = 1;
+                u.Role = Domain.Enum.Role.Admin;
                 db.Users.Update(u);
             }
             await db.SaveChangesAsync();
@@ -76,7 +76,7 @@ namespace CourseWork.Controllers
             var isThereCurrentUser = db.Users.FirstOrDefault(u => u.Name == User.Identity.Name && selectedUsers.Contains(u.Id));
             foreach (var u in db.Users.Where(user => selectedUsers.Contains(user.Id)))
             {
-                u.Status = false;
+                u.IsBlocked = false;
                 db.Users.Update(u);
             }
             await db.SaveChangesAsync();
@@ -89,7 +89,7 @@ namespace CourseWork.Controllers
         {
             foreach (var u in db.Users.Where(user => selectedUsers.Contains(user.Id)))
             {
-                u.RoleId = 2;
+                u.Role = Domain.Enum.Role.User;
                 db.Users.Update(u);
             }
             await db.SaveChangesAsync();

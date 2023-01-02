@@ -16,6 +16,7 @@ namespace CourseWork
 			services.AddScoped<IRepository<Item>, ItemRepository>();
 			services.AddScoped<ILikeRepository, LikeRepository>();
 			services.AddScoped<ICommentRepository, CommentRepository>();
+			services.AddScoped<IRepository<User>, UserRepository>();
 		}
 
 		public static void InitializeServices(this IServiceCollection services)
@@ -25,6 +26,7 @@ namespace CourseWork
 			services.AddScoped<ILikeService, LikeService>();
 			services.AddScoped<ICommentService, CommentService>();
 			services.AddScoped<ICloudStorageService, DropboxService>();
+			services.AddScoped<IAccountService, AccountService>();
 		}
 	}
 }

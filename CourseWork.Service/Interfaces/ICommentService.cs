@@ -1,5 +1,4 @@
 ﻿using CourseWork.Domain.Entities;
-using CourseWork.Domain.Models;
 using CourseWork.Domain.Response;
 using System.Collections.Generic;
 using System.Threading.Tasks;

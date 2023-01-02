@@ -1,5 +1,4 @@
-﻿using CourseWork.Domain.Models;
-using CourseWork.Domain.Response;
+﻿using CourseWork.Domain.Response;
 using System.Threading.Tasks;
 
 namespace CourseWork.Service.Interfaces

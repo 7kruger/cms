@@ -1,7 +1,6 @@
 ﻿using CourseWork.DAL.Interfaces;
 using CourseWork.Domain.Entities;
 using CourseWork.Domain.Enum;
-using CourseWork.Domain.Models;
 using CourseWork.Domain.Response;
 using CourseWork.Service.Interfaces;
 using System;

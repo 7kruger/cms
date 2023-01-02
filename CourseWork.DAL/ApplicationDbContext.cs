@@ -1,4 +1,5 @@
 ﻿using CourseWork.Domain.Entities;
+using CourseWork.Domain.Helpers;
 using Microsoft.EntityFrameworkCore;
 
 namespace CourseWork.DAL
@@ -23,7 +24,7 @@ namespace CourseWork.DAL
 			{
 				Id = 1,
 				Name = "admin",
-				Password = "admin",
+				Password = HashPasswordHelper.HashPassword("admin"),
 				Role = Domain.Enum.Role.Admin,
 				RegistrationDate = System.DateTime.Now,
 				IsBlocked = false,

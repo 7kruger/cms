@@ -1,6 +1,7 @@
 ﻿using CourseWork.DAL.Interfaces;
 using CourseWork.Domain.Entities;
 using CourseWork.Domain.Enum;
+using CourseWork.Domain.Helpers;
 using CourseWork.Domain.Response;
 using CourseWork.Domain.ViewModels.Account;
 using CourseWork.Service.Interfaces;
@@ -8,7 +9,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CourseWork.Service.Implementations
@@ -39,8 +39,8 @@ namespace CourseWork.Service.Implementations
 				user = new User
 				{
 					Name = model.Name,
-					Password = model.Password,
-					RegistrationDate= DateTime.Now,
+					Password = HashPasswordHelper.HashPassword(model.Password),
+					RegistrationDate = DateTime.Now,
 					Role = Role.User,
 					IsBlocked = false,
 				};
@@ -79,7 +79,7 @@ namespace CourseWork.Service.Implementations
 						Description = "Пользователя не найден"
 					};
 				}
-				if (user.Password != model.Password)
+				if (user.Password != HashPasswordHelper.HashPassword(model.Password))
 				{
 					return new BaseResponse<ClaimsIdentity>
 					{
@@ -119,7 +119,7 @@ namespace CourseWork.Service.Implementations
 					};
 				}
 
-				user.Password = model.NewPassword;
+				user.Password = HashPasswordHelper.HashPassword(model.NewPassword);
 
 				await _userRepository.Update(user);
 

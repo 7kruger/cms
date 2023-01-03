@@ -1,9 +1,8 @@
 ﻿using CourseWork.Domain.Enum;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using CourseWork.Domain.Entities;
-using System;
 
 namespace CourseWork.Domain.ViewModels.Collection
 {

@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CourseWork.Service.Implementations
@@ -19,7 +18,7 @@ namespace CourseWork.Service.Implementations
 		private readonly IRepository<Collection> _collectionRepository;
 		private readonly ICloudStorageService _cloudStorageService;
 
-		public ItemService(IRepository<Item> itemRepository, 
+		public ItemService(IRepository<Item> itemRepository,
 						   IRepository<Collection> collectionRepository,
 						   ICloudStorageService cloudStorageService)
 		{

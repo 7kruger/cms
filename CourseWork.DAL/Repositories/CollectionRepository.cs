@@ -10,7 +10,7 @@ namespace CourseWork.DAL.Repositories
 	{
 		private readonly ApplicationDbContext _db;
 
-		public CollectionRepository(ApplicationDbContext db) 
+		public CollectionRepository(ApplicationDbContext db)
 		{
 			_db = db;
 		}

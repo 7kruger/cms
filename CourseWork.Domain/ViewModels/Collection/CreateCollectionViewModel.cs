@@ -1,8 +1,5 @@
 ﻿using CourseWork.Domain.Enum;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 
 namespace CourseWork.Domain.ViewModels.Collection
 {

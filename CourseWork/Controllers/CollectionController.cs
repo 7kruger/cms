@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace CourseWork.Controllers
 {
 	[Authorize]
-    public class CollectionController : Controller
+	public class CollectionController : Controller
 	{
 		private readonly ICollectionService _collectionService;
 

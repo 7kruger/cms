@@ -1,7 +1,6 @@
 ﻿using CourseWork.Domain.Enum;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace CourseWork.Domain.Entities
 {

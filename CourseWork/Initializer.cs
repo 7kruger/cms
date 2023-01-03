@@ -3,7 +3,6 @@ using CourseWork.DAL.Repositories;
 using CourseWork.Domain.Entities;
 using CourseWork.Service.Implementations;
 using CourseWork.Service.Interfaces;
-using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace CourseWork

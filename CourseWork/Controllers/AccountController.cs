@@ -1,5 +1,4 @@
-﻿using CourseWork.DAL;
-using CourseWork.Domain.ViewModels.Account;
+﻿using CourseWork.Domain.ViewModels.Account;
 using CourseWork.Service.Interfaces;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;

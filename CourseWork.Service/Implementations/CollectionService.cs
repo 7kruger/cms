@@ -2,26 +2,25 @@
 using CourseWork.Domain.Entities;
 using CourseWork.Domain.Enum;
 using CourseWork.Domain.Response;
+using CourseWork.Domain.ViewModels.Collection;
 using CourseWork.Service.Interfaces;
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using CourseWork.Domain.ViewModels.Collection;
-using Microsoft.AspNetCore.Http;
 
 namespace CourseWork.Service.Implementations
 {
-    public class CollectionService : ICollectionService
+	public class CollectionService : ICollectionService
 	{
 		private readonly IRepository<Collection> _collectionRepository;
 		private readonly IRepository<Item> _itemRepository;
 		private readonly ICloudStorageService _cloudStorageService;
 
-		public CollectionService(IRepository<Collection> repository, 
-								 IRepository<Item> itemRepository, 
+		public CollectionService(IRepository<Collection> repository,
+								 IRepository<Item> itemRepository,
 								 ICloudStorageService cloudStorageService)
 		{
 			_collectionRepository = repository;

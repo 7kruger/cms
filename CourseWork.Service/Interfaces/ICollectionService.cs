@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CourseWork.Service.Interfaces
 {
-    public interface ICollectionService
+	public interface ICollectionService
 	{
 		Task<IBaseResponse<List<Collection>>> GetCollections();
 		Task<IBaseResponse<List<Collection>>> SearchByValue(string value);

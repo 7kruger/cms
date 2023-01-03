@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace CourseWork.Domain.Entities
+﻿namespace CourseWork.Domain.Entities
 {
 	public class Like
 	{

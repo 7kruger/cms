@@ -1,6 +1,5 @@
 ﻿using CourseWork.Service.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
 namespace CourseWork.Controllers

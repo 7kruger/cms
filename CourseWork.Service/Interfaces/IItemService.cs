@@ -2,9 +2,7 @@
 using CourseWork.Domain.Response;
 using CourseWork.Domain.ViewModels.Item;
 using Microsoft.AspNetCore.Http;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CourseWork.Service.Interfaces

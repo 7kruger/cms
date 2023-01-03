@@ -1,16 +1,11 @@
 ﻿using CourseWork.Service.Interfaces;
-using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
 using Dropbox.Api;
 using Dropbox.Api.Files;
-using Dropbox.Api.Users;
+using Microsoft.AspNetCore.Http;
+using System;
 using System.IO;
-using System.Xml.Linq;
 using System.Linq;
-using System.IO.Enumeration;
+using System.Threading.Tasks;
 
 namespace CourseWork.Service.Implementations
 {
@@ -54,7 +49,7 @@ namespace CourseWork.Service.Implementations
 					await DeleteImage(folder, filename);
 					return await UploadImage(image, folder, srcId);
 				}
-				
+
 				return await UploadImage(image, folder, srcId);
 			}
 			catch (Exception)

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace CourseWork.Service.Interfaces
 {
-    public interface IAccountService
+	public interface IAccountService
 	{
 		Task<IBaseResponse<ClaimsIdentity>> Register(RegisterViewModel model);
 		Task<IBaseResponse<ClaimsIdentity>> Login(LoginViewModel model);

@@ -3,6 +3,7 @@ using CourseWork.Domain.Entities;
 using CourseWork.Domain.Enum;
 using CourseWork.Domain.Response;
 using CourseWork.Service.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Text.Json;
@@ -23,7 +24,10 @@ namespace CourseWork.Service.Implementations
 		{
 			try
 			{
-				var likes = (await _likeRepository.GetAll()).Where(l => l.SrcId == id);
+				var likes = await _likeRepository.GetAll()
+					.Where(l => l.SrcId == id)
+					.ToListAsync();
+
 				bool isCurrentUserLiked = false;
 				if (likes.Count() > 1)
 				{
@@ -94,7 +98,8 @@ namespace CourseWork.Service.Implementations
 		{
 			try
 			{
-				var like = (await _likeRepository.GetAll()).FirstOrDefault(l => l.SrcId == id && l.UserName == username);
+				var like = await _likeRepository.GetAll()
+					.FirstOrDefaultAsync(l => l.SrcId == id && l.UserName == username);
 
 				if (like == null)
 				{

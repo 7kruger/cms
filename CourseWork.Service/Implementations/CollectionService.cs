@@ -32,7 +32,7 @@ namespace CourseWork.Service.Implementations
 		{
 			try
 			{
-				var collections = await _collectionRepository.GetAll();
+				var collections = await _collectionRepository.GetAll().ToListAsync();
 
 				if (collections.Count == 0)
 				{
@@ -63,7 +63,7 @@ namespace CourseWork.Service.Implementations
 		{
 			try
 			{
-				var collections = await _collectionRepository.GetAll();
+				var collections = await _collectionRepository.GetAll().ToListAsync();
 
 				if (collections == null)
 				{
@@ -98,7 +98,7 @@ namespace CourseWork.Service.Implementations
 		{
 			try
 			{
-				var collection = (await _collectionRepository.GetAll()).FirstOrDefault(c => c.Id == id);
+				var collection = await _collectionRepository.GetAll().FirstOrDefaultAsync(c => c.Id == id);
 
 				if (collection == null)
 				{
@@ -109,7 +109,7 @@ namespace CourseWork.Service.Implementations
 					};
 				}
 
-				var items = await _itemRepository.GetAll();
+				var items = await _itemRepository.GetAll().ToListAsync();
 
 				var data = new CollectionViewModel
 				{
@@ -178,7 +178,7 @@ namespace CourseWork.Service.Implementations
 		{
 			try
 			{
-				var collection = (await _collectionRepository.GetAll()).FirstOrDefault(c => c.Id == id);
+				var collection = await _collectionRepository.GetAll().FirstOrDefaultAsync(c => c.Id == id);
 
 				if (collection == null)
 				{
@@ -189,7 +189,9 @@ namespace CourseWork.Service.Implementations
 					};
 				}
 
-				var items = (await _itemRepository.GetAll()).Where(i => selectedItems.Contains(i.Id)).ToList();
+				var items = await _itemRepository.GetAll()
+					.Where(i => selectedItems.Contains(i.Id))
+					.ToListAsync();
 
 				collection.Name = model.Name;
 				collection.Description = model.Description;
@@ -225,7 +227,7 @@ namespace CourseWork.Service.Implementations
 		{
 			try
 			{
-				var collection = (await _collectionRepository.GetAll()).FirstOrDefault(c => c.Id == id);
+				var collection = await _collectionRepository.GetAll().FirstOrDefaultAsync(c => c.Id == id);
 
 				if (collection == null)
 				{

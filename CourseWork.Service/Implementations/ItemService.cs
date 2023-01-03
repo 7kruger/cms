@@ -5,9 +5,9 @@ using CourseWork.Domain.Response;
 using CourseWork.Domain.ViewModels.Item;
 using CourseWork.Service.Interfaces;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace CourseWork.Service.Implementations
@@ -31,7 +31,7 @@ namespace CourseWork.Service.Implementations
 		{
 			try
 			{
-				var items = await _itemRepository.GetAll();
+				var items = await _itemRepository.GetAll().ToListAsync();
 
 				if (items == null)
 				{
@@ -62,7 +62,7 @@ namespace CourseWork.Service.Implementations
 		{
 			try
 			{
-				var item = (await _itemRepository.GetAll()).FirstOrDefault(i => i.Id == id);
+				var item = await _itemRepository.GetAll().FirstOrDefaultAsync(i => i.Id == id);
 
 				if (item == null)
 				{
@@ -73,7 +73,7 @@ namespace CourseWork.Service.Implementations
 					};
 				}
 
-				var collectionName = (await _collectionRepository.GetAll()).FirstOrDefault(c => c.Id == item.CollectionId)?.Name;
+				var collectionName = (await _collectionRepository.GetAll().FirstOrDefaultAsync(c => c.Id == item.CollectionId))?.Name;
 
 				var data = new ItemViewModel
 				{
@@ -140,7 +140,7 @@ namespace CourseWork.Service.Implementations
 		{
 			try
 			{
-				var item = (await _itemRepository.GetAll()).FirstOrDefault(i => i.Id == model.Id);
+				var item = await _itemRepository.GetAll().FirstOrDefaultAsync(i => i.Id == model.Id);
 
 				if (item == null)
 				{
@@ -181,7 +181,7 @@ namespace CourseWork.Service.Implementations
 		{
 			try
 			{
-				var item = (await _itemRepository.GetAll()).FirstOrDefault(i => i.Id == id);
+				var item = await _itemRepository.GetAll().FirstOrDefaultAsync(i => i.Id == id);
 
 				if (item == null)
 				{

@@ -5,9 +5,9 @@ using CourseWork.Domain.Helpers;
 using CourseWork.Domain.Response;
 using CourseWork.Domain.ViewModels.Account;
 using CourseWork.Service.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -26,7 +26,7 @@ namespace CourseWork.Service.Implementations
 		{
 			try
 			{
-				var user = (await _userRepository.GetAll()).FirstOrDefault(u => u.Name == model.Name);
+				var user = await _userRepository.GetAll().FirstOrDefaultAsync(u => u.Name == model.Name);
 
 				if (user != null)
 				{
@@ -69,7 +69,7 @@ namespace CourseWork.Service.Implementations
 		{
 			try
 			{
-				var user = (await _userRepository.GetAll()).FirstOrDefault(u => u.Name == model.Name);
+				var user = await _userRepository.GetAll().FirstOrDefaultAsync(u => u.Name == model.Name);
 
 				if (user == null)
 				{
@@ -109,7 +109,7 @@ namespace CourseWork.Service.Implementations
 		{
 			try
 			{
-				var user = (await _userRepository.GetAll()).FirstOrDefault(x => x.Name == model.Name);
+				var user = await _userRepository.GetAll().FirstOrDefaultAsync(x => x.Name == model.Name);
 				if (user == null)
 				{
 					return new BaseResponse<bool>()

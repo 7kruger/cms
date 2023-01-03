@@ -1,12 +1,12 @@
 ﻿using CourseWork.Domain.Entities;
-using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace CourseWork.DAL.Interfaces
 {
 	public interface ICommentRepository
 	{
-		Task<List<Comment>> GetAll();
+		IQueryable<Comment> GetAll();
 		Task Create(Comment comment);
 		Task Delete(Comment comment);
 	}

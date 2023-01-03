@@ -1,10 +1,12 @@
-﻿@{
+﻿@model CourseWork.Domain.ViewModels.Profile.ProfileViewModel
+
+@{
 	ViewData["Title"] = "Профиль";
 }
 
 <div class="row">
 	<div class="col-md-6 col-lg-4">
-		@if (User.IsInRole("Admin"))
+		@if (User.IsInRole("admin"))
 		{
 			<a class="list-group-item list-group-item-action list-group-item-danger" href="/Admin">Админка</a>
 		}
@@ -16,11 +18,25 @@
 		<a class="list-group-item list-group-item-action list-group-item-light" href="#">Редактирование профиля</a>
 	</div>
 	<div class="col-md-6  text-center">
-		<img class="avatar" src="~/images/avatar.png" alt="avatar_logo">
-		<h3>@User.Identity.Name</h3>
-		<p>Создано коллекций: @ViewData["CollectionsCount"]</p>
-		<p>Создано айтемов: @ViewData["ItemsCount"]</p>
-		<p>Количество лайков: @ViewData["LikesCount"]</p>
+		<div>
+			<img class="avatar lazy"
+				 src="data:image/gif;base64,R0lGODlhBwAFAIAAAP///wAAACH5BAEAAAEALAAAAAAHAAUAAAIFjI+puwUAOw=="
+				 data-src="@Model.ImgRef"
+				 onError="this.src='/images/avatar.png'"
+				 alt="avatar_logo">
+		</div>
+		<h3>@Model.Username</h3>
+		<p>Создано коллекций: @Model.CollectionsCount</p>
+		<p>Создано айтемов: @Model.ItemsCount</p>
+		<p>Получено лайков: @Model.LikesCount</p>
 	</div>
 </div>
+
+@section Scripts{
+	<script>
+		var lazyLoadInstance = new LazyLoad({
+			elements_selector: ".lazy"
+		});
+	</script>
+}
 

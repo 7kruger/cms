@@ -76,8 +76,8 @@ body {
 }
 
 .avatar {
-    height: 150px;
-    width: 150px;
+    max-height: 150px;
+    max-width: 150px;
     border-radius: 100px;
     box-shadow: 0 0 17px #666;
 }

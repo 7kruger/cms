@@ -1,7 +1,6 @@
 ﻿using CourseWork.DAL.Interfaces;
 using CourseWork.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace CourseWork.DAL.Repositories
@@ -15,9 +14,9 @@ namespace CourseWork.DAL.Repositories
 			_db = db;
 		}
 
-		public async Task<List<Like>> GetAll()
+		public IQueryable<Like> GetAll()
 		{
-			return await _db.Likes.ToListAsync();
+			return _db.Likes;
 		}
 
 		public async Task Create(Like like)

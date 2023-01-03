@@ -19,7 +19,7 @@ namespace CourseWork.Controllers
         {
             if (!User.Identity.IsAuthenticated)
                 return RedirectToAction("Login", "Account");
-            if (!User.IsInRole("dmin"))
+            if (!User.IsInRole("admin"))
                 return RedirectToAction("Index", "Home");
             return View(await db.Users.ToListAsync());
         }

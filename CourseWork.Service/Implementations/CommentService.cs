@@ -3,6 +3,7 @@ using CourseWork.Domain.Entities;
 using CourseWork.Domain.Enum;
 using CourseWork.Domain.Response;
 using CourseWork.Service.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,10 +24,10 @@ namespace CourseWork.Service.Implementations
 		{
 			try
 			{
-				var comments = (await _commentRepository.GetAll())
+				var comments = await _commentRepository.GetAll()
 					.Where(c => c.SrcId == id)
 					.OrderByDescending(c => c.Date)
-					.ToList();
+					.ToListAsync();
 
 				return new BaseResponse<List<Comment>>
 				{

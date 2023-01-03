@@ -11,5 +11,6 @@ namespace CourseWork.Domain.Entities
 		public bool IsBlocked { get; set; }
 		public DateTime RegistrationDate { get; set; }
 		public Role Role { get; set; }
+		public Profile Profile { get; set; }
 	}
 }

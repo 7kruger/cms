@@ -1,7 +1,7 @@
 ﻿using CourseWork.DAL.Interfaces;
 using CourseWork.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace CourseWork.DAL.Repositories
@@ -15,9 +15,9 @@ namespace CourseWork.DAL.Repositories
 			_db = db;
 		}
 
-		public async Task<List<Collection>> GetAll()
+		public IQueryable<Collection> GetAll()
 		{
-			return await _db.Collections.Include(i => i.Items).ToListAsync();
+			return _db.Collections.Include(i => i.Items);
 		}
 
 		public async Task Create(Collection entity)

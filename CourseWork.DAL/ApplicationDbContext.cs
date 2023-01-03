@@ -17,6 +17,7 @@ namespace CourseWork.DAL
 		public DbSet<Comment> Comments { get; set; }
 		public DbSet<Like> Likes { get; set; }
 		public DbSet<User> Users { get; set; }
+		public DbSet<Profile> Profiles { get; set; }
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
@@ -30,7 +31,39 @@ namespace CourseWork.DAL
 				IsBlocked = false,
 			};
 
-			modelBuilder.Entity<User>().HasData(new User[] { admin });
+			var profile = new Profile
+			{
+				Id = 1,
+				ImgRef = "avatar.png",
+				UserId = admin.Id,
+			};
+
+			modelBuilder.Entity<User>(builder =>
+			{
+				builder.ToTable("Users").HasKey(x => x.Id);
+
+				builder.HasData(admin);
+
+				builder.Property(x => x.Id).ValueGeneratedOnAdd();
+
+				builder.Property(x => x.Password).IsRequired();
+				builder.Property(x => x.Name).HasMaxLength(100).IsRequired();
+
+				builder.HasOne(x => x.Profile)
+					.WithOne(x => x.User)
+					.HasPrincipalKey<User>(x => x.Id)
+					.OnDelete(DeleteBehavior.Cascade);
+			});
+
+			modelBuilder.Entity<Profile>(builder =>
+			{
+				builder.ToTable("Profiles").HasKey(x => x.Id);
+
+				builder.Property(x => x.Id).ValueGeneratedOnAdd();
+				builder.Property(x => x.ImgRef).IsRequired(false);
+
+				builder.HasData(profile);
+			});
 
 			base.OnModelCreating(modelBuilder);
 		}

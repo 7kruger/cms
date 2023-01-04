@@ -22,12 +22,14 @@ namespace CourseWork.DAL.Repositories
 
 		public async Task Create(Profile entity)
 		{
-			throw new System.NotImplementedException();
+			await _db.Profiles.AddAsync(entity);
+			await _db.SaveChangesAsync();
 		}
 
 		public async Task Update(Profile entity)
 		{
-			throw new System.NotImplementedException();
+			_db.Update(entity);
+			await _db.SaveChangesAsync();
 		}
 
 		public async Task Delete(Profile entity)

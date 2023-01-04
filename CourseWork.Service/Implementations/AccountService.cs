@@ -16,10 +16,12 @@ namespace CourseWork.Service.Implementations
 	public class AccountService : IAccountService
 	{
 		private readonly IRepository<User> _userRepository;
+		private readonly IProfileService _profileService;
 
-		public AccountService(IRepository<User> userRepository)
+		public AccountService(IRepository<User> userRepository, IProfileService profileService)
 		{
 			_userRepository = userRepository;
+			_profileService = profileService;
 		}
 
 		public async Task<IBaseResponse<ClaimsIdentity>> Register(RegisterViewModel model)
@@ -46,6 +48,7 @@ namespace CourseWork.Service.Implementations
 				};
 
 				await _userRepository.Create(user);
+				await _profileService.Create(user.Name);
 
 				var result = GetClaimsIdentity(user);
 
@@ -76,7 +79,7 @@ namespace CourseWork.Service.Implementations
 					return new BaseResponse<ClaimsIdentity>
 					{
 						StatusCode = StatusCode.NotFound,
-						Description = "Пользователя не найден"
+						Description = "Пользователя с таким именем не существует"
 					};
 				}
 				if (user.Password != HashPasswordHelper.HashPassword(model.Password))

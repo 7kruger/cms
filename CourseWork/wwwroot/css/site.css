@@ -1,7 +1,4 @@
-﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-for details on configuring this project to bundle and minify static web assets. */
-
-* {
+﻿* {
     margin: 0;
     padding: 0;
 }
@@ -12,7 +9,6 @@ a.navbar-brand {
   word-break: break-all;
 }
 
-/* Provide sufficient contrast against white background */
 a {
   color: #0366d6;
 }
@@ -29,8 +25,6 @@ a {
   border-color: #1861ac;
 }
 
-/* Sticky footer styles
--------------------------------------------------- */
 html {
   font-size: 14px;
 }
@@ -56,15 +50,12 @@ button.accept-policy {
   line-height: inherit;
 }
 
-/* Sticky footer styles
--------------------------------------------------- */
 html {
   position: relative;
   min-height: 100%;
 }
 
 body {
-  /* Margin bottom by footer height */
   margin-bottom: 60px;
 }
 .footer {
@@ -72,20 +63,7 @@ body {
   bottom: 0;
   width: 100%;
   white-space: nowrap;
-  line-height: 60px; /* Vertically center the text there */
-}
-
-.avatar {
-    max-height: 150px;
-    max-width: 150px;
-    border-radius: 100px;
-    box-shadow: 0 0 17px #666;
-}
-
-.avatar-mini {
-    height: 50px;
-    width: 50px;
-    border-radius: 100px;
+  line-height: 60px;
 }
 
 .collection-image {
@@ -138,14 +116,36 @@ textarea {
 .parent {
     border-radius: 3px;
     overflow: hidden;
-    height: 300px;
-    max-height: 300px;
 }
 
-    .parent img {
+    .parent .image {
         width: 100%;
         display: block;
         background-image: url(data:image/gif;base64,R0lGODlhCgAIAIABAN3d3f///yH5BAEAAAEALAAAAAAKAAgAAAINjAOnyJv2oJOrVXrzKQA7);
         height: 300px;
         max-height: 300px;
     }
+
+    .parent .avatar {
+        width: 150px;
+        height: 150px;
+        max-height: 150px;
+        max-height: 150px;
+        display: block;
+        background-image: url(data:image/gif;base64,R0lGODlhCgAIAIABAN3d3f///yH5BAEAAAEALAAAAAAKAAgAAAINjAOnyJv2oJOrVXrzKQA7);
+        border-radius: 100px;
+        box-shadow: 0 0 17px #666;
+    }
+
+/*.avatar {
+    max-height: 150px;
+    max-width: 150px;
+    border-radius: 100px;
+    box-shadow: 0 0 17px #666;
+}
+
+.avatar-mini {
+    height: 50px;
+    width: 50px;
+    border-radius: 100px;
+}*/

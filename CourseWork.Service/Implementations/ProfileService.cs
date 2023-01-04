@@ -4,9 +4,9 @@ using CourseWork.Domain.Enum;
 using CourseWork.Domain.Response;
 using CourseWork.Domain.ViewModels.Profile;
 using CourseWork.Service.Interfaces;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -18,16 +18,22 @@ namespace CourseWork.Service.Implementations
 		private readonly IRepository<Collection> _collectionRepository;
 		private readonly IRepository<Item> _itemRepository;
 		private readonly ILikeRepository _likeRepository;
+		private readonly IRepository<User> _userRepository;
+		private readonly ICloudStorageService _cloudStorageService;
 
 		public ProfileService(IRepository<Profile> profileRepository,
 							  IRepository<Collection> collectionRepository,
 							  IRepository<Item> itemRepository,
-							  ILikeRepository likeRepository)
+							  ILikeRepository likeRepository,
+							  IRepository<User> userRepository,
+							  ICloudStorageService cloudStorageService)
 		{
 			_profileRepository = profileRepository;
 			_collectionRepository = collectionRepository;
 			_itemRepository = itemRepository;
 			_likeRepository = likeRepository;
+			_userRepository = userRepository;
+			_cloudStorageService = cloudStorageService;
 		}
 
 		public async Task<IBaseResponse<ProfileViewModel>> Get(string name)
@@ -52,6 +58,7 @@ namespace CourseWork.Service.Implementations
 
 				var profileViewModel = new ProfileViewModel
 				{
+					Id = profile.Id,
 					Username = profile.User.Name,
 					ImgRef = profile.ImgRef,
 					CollectionsCount = collectionsCount,
@@ -74,24 +81,59 @@ namespace CourseWork.Service.Implementations
 				};
 			}
 		}
-		public Task<IBaseResponse<bool>> Create(Profile profile)
+
+		public async Task<IBaseResponse<bool>> Update(ProfileViewModel model, IFormFile image)
 		{
-			throw new System.NotImplementedException();
+			try
+			{
+				var profile = await _profileRepository.GetAll().FirstOrDefaultAsync(p => p.User.Name == model.Username);
+
+				if (profile == null)
+				{
+					return new BaseResponse<bool>
+					{
+						StatusCode = StatusCode.OK,
+						Description = "Профиль не найден"
+					};
+				}
+
+				if (image != null)
+				{
+					profile.ImgRef = await _cloudStorageService.UpdateAsync(image, "/profiles", model.Id.ToString());
+				}
+
+				await _profileRepository.Update(profile);
+
+				return new BaseResponse<bool>
+				{
+					StatusCode = StatusCode.OK,
+					Data = true
+				};
+			}
+			catch (Exception ex)
+			{
+				return new BaseResponse<bool>
+				{
+					StatusCode = StatusCode.InternalServerError,
+					Description = $"[ProfileService] : {ex.Message}"
+				};
+			}
 		}
 
-		public Task<IBaseResponse<bool>> Delete(int id)
+		public async Task Create(string username)
 		{
-			throw new System.NotImplementedException();
-		}
+			var user = await _userRepository.GetAll().FirstOrDefaultAsync(u => u.Name == username);
 
-		public Task<IBaseResponse<IEnumerable<ProfileViewModel>>> GetAll()
-		{
-			throw new System.NotImplementedException();
-		}
+			if (user != null)
+			{
+				var profile = new Profile
+				{
+					ImgRef = "avatar.png",
+					UserId = user.Id,
+				};
 
-		public Task<IBaseResponse<bool>> Update(Profile profile)
-		{
-			throw new System.NotImplementedException();
+				await _profileRepository.Create(profile);
+			}
 		}
 	}
 }

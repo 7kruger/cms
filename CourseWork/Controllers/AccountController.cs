@@ -57,6 +57,20 @@ namespace CourseWork.Controllers
 			return View(model);
 		}
 
+		[HttpGet]
+		public async Task<IActionResult> ChangePassword(int id)
+		{
+
+			return View();
+		}
+
+		[HttpPost]
+		public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
+		{
+
+			return View();
+		}
+
 		private async Task Authenticate(ClaimsIdentity identy)
 		{
 			await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,

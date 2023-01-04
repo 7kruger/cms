@@ -134,21 +134,8 @@ textarea {
         display: block;
         background-image: url(data:image/gif;base64,R0lGODlhCgAIAIABAN3d3f///yH5BAEAAAEALAAAAAAKAAgAAAINjAOnyJv2oJOrVXrzKQA7);
         border-radius: 100px;
-        box-shadow: 0 0 17px #666;
+        border: 1px solid black;
     }
-
-/*.avatar {
-    max-height: 150px;
-    max-width: 150px;
-    border-radius: 100px;
-    box-shadow: 0 0 17px #666;
-}
-
-.avatar-mini {
-    height: 50px;
-    width: 50px;
-    border-radius: 100px;
-}*/
 
 .validation {
     color: #9e0d00;

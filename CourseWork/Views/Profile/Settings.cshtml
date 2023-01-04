@@ -7,7 +7,7 @@
 <h2 class="text-center">Настройка профиля</h2>
 <div class="container text-center custom-group-form">
 
-	<div class="d-flex justify-content-center">
+	<div class="d-flex justify-content-center m-4">
 		<div class="parent">
 			<img class="avatar lazy"
 				 src="data:image/gif;base64,R0lGODlhBwAFAIAAAP///wAAACH5BAEAAAEALAAAAAAHAAUAAAIFjI+puwUAOw=="
@@ -18,7 +18,6 @@
 	</div>
 
 	<form asp-action="Settings" asp-controller="Profile" enctype="multipart/form-data" method="post">
-
 		<div>
 			<input type="text" asp-for="Username" value="@Model.Username" hidden />
 			<div class="form-group">

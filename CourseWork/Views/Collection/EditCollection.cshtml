@@ -6,26 +6,24 @@
 }
 
 <h1 class="text-center">Редактирование коллекции</h1>
-<div class="container text-center">
+<div class="container text-center custom-group-form">
 	<form asp-action="EditCollection" asp-controller="Collection" enctype="multipart/form-data" method="post">
-		<div class="container text-center custom-group-form">
-			@*<input type="hidden" id="collectionId" value="@Model.Id" />*@
+		<div class="mb-2">
+			<div class="validation" asp-validation-summary="All"></div>
 
 			<div class="form-group">
 				<label asp-for="Name">Название коллекции</label><br />
 				<input class="form-control" asp-for="Name" placeholder="Название коллекции" />
-				<span asp-validation-for="Name" />
 			</div>
 
 			<div class="form-group">
 				<label asp-for="Description">Описание коллекции</label><br />
 				<textarea class="form-control" asp-for="Description"></textarea>
-				<span asp-validation-for="Description" />
 			</div>
 
 			<div class="form-group">
 				<label asp-for="ImgRef">Обложка коллекции</label>
-				<input asp-for="ImgRef" type="file"/><br /><br />
+				<input asp-for="ImgRef" type="file" /><br /><br />
 			</div>
 
 			<div class="form-group">
@@ -38,8 +36,7 @@
 					<option value="Coins">Coins</option>
 					<option value="Other">Other</option>
 				</select>
-				<span asp-validation-for="Theme" />
-			</div><br><br>
+			</div>
 		</div>
 
 		@if (Model.FreeItems.Count != 0)
@@ -85,8 +82,4 @@
 
 	</form>
 </div>
-
-@section Scripts {
-	<script src="~/js/editCollection.js"></script>
-}
 

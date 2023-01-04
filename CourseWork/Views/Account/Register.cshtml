@@ -6,25 +6,23 @@
 
 <div class="container text-center custom-group-form">
 	<form asp-action="Register" asp-controller="Account" asp-anti-forgery="true">
-		<div class="validation" asp-validation-summary="ModelOnly"></div>
+		<div class="validation" asp-validation-summary="All"></div>
 
 		<div class="form-group">
 			<label asp-for="Name">Введите логин</label><br />
 			<input class="form-control" type="text" asp-for="Name" placeholder="Имя" />
-			<span asp-validation-for="Name" />
 		</div>
 		<div class="form-group">
 			<label asp-for="Password">Введите пароль</label><br />
 			<input class="form-control" asp-for="Password" placeholder="Пароль" />
-			<span asp-validation-for="Password" />
 		</div>
 		<div class="form-group">
 			<label asp-for="ConfirmPassword">Повторите пароль</label><br />
 			<input class="form-control" asp-for="ConfirmPassword" placeholder="Повторите пароль" />
-			<span asp-validation-for="ConfirmPassword" />
 		</div>
+
 		<div>
-			<input class="btn btn-outline-primary" type="submit" value="Регистрация" />
+			<button class="btn btn-outline-primary" type="submit" value="Регистрация" />
 		</div>
 	</form>
 	<p>Уже есть аккаунт? - <a asp-action="Login" asp-controller="Account">авторизуйтесь</a>!</p>

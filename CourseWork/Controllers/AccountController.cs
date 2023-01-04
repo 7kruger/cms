@@ -58,18 +58,22 @@ namespace CourseWork.Controllers
 		}
 
 		[HttpGet]
-		public async Task<IActionResult> ChangePassword(int id)
-		{
-
-			return View();
-		}
+		public IActionResult ChangePassword() => View();
 
 		[HttpPost]
 		public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
 		{
-
-			return View();
-		}
+			if (ModelState.IsValid)
+			{
+				var response = await _accountService.ChangePassword(model);
+				if (response.StatusCode == Domain.Enum.StatusCode.OK)
+				{
+					return RedirectToAction("Index", "Profile");
+				}
+				ModelState.AddModelError(string.Empty, response.Description);
+			}
+            return View(model);
+        }
 
 		private async Task Authenticate(ClaimsIdentity identy)
 		{

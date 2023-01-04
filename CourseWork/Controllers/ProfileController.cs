@@ -47,7 +47,7 @@ namespace CourseWork.Controllers
 			{
 				return RedirectToAction("Index");
 			}
-			return View("Error");
+			return View("Error", response.Data);
 		}
 
 		private string GetCurrentUsername() => User.Identity.Name;

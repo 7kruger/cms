@@ -8,6 +8,7 @@ namespace CourseWork.Domain.ViewModels.Account
 		public string Name { get; set; }
 
 		[Required(ErrorMessage = "Не указан пароль")]
+		[MinLength(3, ErrorMessage = "Минимальная длина пароля 3 символа")]
 		[DataType(DataType.Password)]
 		public string Password { get; set; }
 	}

@@ -30,7 +30,10 @@ namespace CourseWork
 					options.AccessDeniedPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
 				});
 
+			services.AddRazorPages();
 			services.AddControllersWithViews();
+
+			services.AddMvc();
 
 			services.InitializeRepositories();
 			services.InitializeServices();
@@ -60,6 +63,8 @@ namespace CourseWork
 				endpoints.MapControllerRoute(
 					name: "default",
 					pattern: "{controller=Home}/{action=Index}/{id?}");
+				endpoints.MapRazorPages();
+				endpoints.MapFallbackToPage("/index");
 			});
 		}
 	}

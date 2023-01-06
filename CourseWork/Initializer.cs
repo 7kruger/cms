@@ -3,6 +3,8 @@ using CourseWork.DAL.Repositories;
 using CourseWork.Domain.Entities;
 using CourseWork.Service.Implementations;
 using CourseWork.Service.Interfaces;
+using CourseWork.Services.Implementations;
+using CourseWork.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace CourseWork
@@ -28,6 +30,7 @@ namespace CourseWork
 			services.AddScoped<ICloudStorageService, DropboxService>();
 			services.AddScoped<IAccountService, AccountService>();
 			services.AddScoped<IProfileService, ProfileService>();
+			services.AddScoped<IMainPageViewModelService, MainPageViewModelService>();
 		}
 	}
 }

@@ -1,0 +1,44 @@
+﻿@page "/"
+@model CourseWork.Pages.IndexModel
+@{
+	ViewData["Title"] = "Главная страница";
+}
+
+<div>
+	<form asp-page="/" method="get">
+		<input class="form-control me-2 m-2"
+			   type="search"
+			   placeholder="Поиск"
+			   aria-label="Search"
+			   name="value"
+			   asp-for="@Model.IndexViewModel.SearchString">
+		<button class="btn btn-outline-primary m-2" type="submit">Search</button>
+	</form>
+</div>
+
+
+@if (Model.IndexViewModel.Collections.Any())
+{
+	<h3 class="text-center text-dark">Недавние</h3>
+	<div class="row">
+		@foreach (var col in Model.IndexViewModel.Collections)
+		{
+			<partial name="_collectionPartial" for="@col" />
+		}
+	</div>
+	<div>
+		<partial name="_paginationPartial" for="@Model.IndexViewModel.Pagination" />
+	</div>
+}
+else
+{
+	<h3 class="text-center text-dark">Список коллекций пуст</h3>
+}
+
+@section Scripts {
+	<script>
+		var lazyLoadInstance = new LazyLoad({
+			elements_selector: ".lazy"
+		});
+	</script>
+}

@@ -1,0 +1,21 @@
+﻿@model CourseWork.Domain.Entities.Collection
+
+<div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+    <div class="card m-2">
+        <div class="parent">
+            <img class="lazy image"
+                 src="data:image/gif;base64,R0lGODlhBwAFAIAAAP///wAAACH5BAEAAAEALAAAAAAHAAUAAAIFjI+puwUAOw=="
+                 data-src="@Model.ImgRef"
+                 onError="this.src='/images/imgnotfound.jpg'"
+                 alt="Image">
+        </div>
+
+        <div class="card-body">
+            <h5 class="card-title">@Model.Name</h5>
+            <p class="card-text">@Model.Description.Substring(0, Math.Min(Model.Description.Length, 50))</p>
+            <div class="d-flex align-items-end">
+                <a href="/Collection/GetCollection/@Model.Id" class="btn btn-primary">Посмотреть коллекцию</a>
+            </div>
+        </div>
+    </div>
+</div>

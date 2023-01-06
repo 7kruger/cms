@@ -2,11 +2,11 @@
 {
 	public enum Theme
 	{
-		Books,
-		Signs,
-		Silverware,
-		Pictures,
-		Coins,
-		Other
+		Books = 1,
+		Signs = 2,
+		Silverware = 3,
+		Pictures = 4,
+		Coins = 5,
+		Other = 6
 	}
 }

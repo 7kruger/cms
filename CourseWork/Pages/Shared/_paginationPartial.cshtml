@@ -1,0 +1,29 @@
+﻿@model CourseWork.ViewModels.Index.Pagination
+
+@{
+	var prevRouteData = Context.Request.Query.ToDictionary(x => x.Key, x => x.Value.ToString());
+	if (prevRouteData.ContainsKey("pageId"))
+		prevRouteData.Remove("pageId");
+	prevRouteData.Add("pageId", (Model.PageNumber - 1).ToString());
+	var nextRouteData = Context.Request.Query.ToDictionary(x => x.Key, x => x.Value.ToString());
+	if (nextRouteData.ContainsKey("pageId"))
+		nextRouteData.Remove("pageId");
+	nextRouteData.Add("pageId", (Model.PageNumber + 1).ToString());
+}
+
+@{
+	var prevDisabled = !Model.HasPreviousPage ? "disabled" : string.Empty;
+	var nextDisabled = !Model.HasNextPage ? "disabled" : string.Empty;
+}
+
+<a asp-all-route-data="prevRouteData"
+   class="btn btn-outline-dark @prevDisabled">
+	<i class="glyphicon glyphicon-chevron-left"></i>
+	Назад
+</a>
+<a asp-all-route-data="nextRouteData"
+   class="btn btn-outline-dark @nextDisabled">
+	Вперед
+	<i class="glyphicon glyphicon-chevron-right"></i>
+</a>
+

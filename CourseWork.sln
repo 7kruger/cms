@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CourseWork.Domain", "Course
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Service", "Service", "{63AF8055-4319-48F7-91DB-21096AEB1BE6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CourseWork.Service", "CourseWork.Service\CourseWork.Service.csproj", "{5139B105-9F44-4DA4-A89C-985D8A90D418}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CourseWork.Service", "CourseWork.Service\CourseWork.Service.csproj", "{5139B105-9F44-4DA4-A89C-985D8A90D418}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

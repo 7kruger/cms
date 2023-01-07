@@ -18,6 +18,7 @@ namespace CourseWork.DAL
 		public DbSet<Like> Likes { get; set; }
 		public DbSet<User> Users { get; set; }
 		public DbSet<Profile> Profiles { get; set; }
+		public DbSet<Tag> Tags { get; set; }
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{

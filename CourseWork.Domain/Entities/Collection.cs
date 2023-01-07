@@ -13,10 +13,7 @@ namespace CourseWork.Domain.Entities
 		public Theme Theme { get; set; }
 		public string ImgRef { get; set; }
 		public DateTime Date { get; set; }
-		public virtual List<Item> Items { get; set; }
-		public Collection()
-		{
-			Items = new List<Item>();
-		}
+		public List<Item> Items { get; set; } = new List<Item>();
+		public List<Tag> Tags { get; set; } = new List<Tag>();
 	}
 }

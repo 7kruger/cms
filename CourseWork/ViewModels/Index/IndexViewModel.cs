@@ -1,4 +1,5 @@
 ﻿using CourseWork.Domain.Entities;
+using CourseWork.Domain.Enum;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 
@@ -9,7 +10,7 @@ namespace CourseWork.ViewModels.Index
 		public List<Collection> Collections { get; set; }
 		public Pagination Pagination { get; set; }
 		public List<SelectListItem> Themes { get; set; }
-		public int? ThemeFilterApplied { get; set; }
+		public Theme? ThemeFilterApplied { get; set; }
 		public string SearchString { get; set; }
 	}
 }

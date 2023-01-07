@@ -1,3 +1,4 @@
+using CourseWork.Domain.Enum;
 using CourseWork.Services.Interfaces;
 using CourseWork.ViewModels.Index;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -16,9 +17,9 @@ namespace CourseWork.Pages
 
 		public IndexViewModel IndexViewModel { get; set; } = new IndexViewModel();
 
-		public async Task OnGetAsync(IndexViewModel model, string value, int? pageId, int? themeId)
+		public async Task OnGetAsync(int? pageId, Theme? theme, string search)
 		{
-			IndexViewModel = await _mainPageViewModelService.GetIndexViewModel(pageId ?? 1, Constants.ITEMS_PER_PAGE, value, model, themeId);
+			IndexViewModel = await _mainPageViewModelService.GetIndexViewModel(pageId ?? 1, Constants.ITEMS_PER_PAGE, search, theme);
 		}
 	}
 }

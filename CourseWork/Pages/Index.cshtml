@@ -5,13 +5,20 @@
 }
 
 <div>
-	<form asp-page="/" method="get">
+	<form method="get">
 		<input class="form-control me-2 m-2"
-			   type="search"
+			   type="text"
 			   placeholder="Поиск"
 			   aria-label="Search"
-			   name="value"
-			   asp-for="@Model.IndexViewModel.SearchString">
+			   name="search"
+			   asp-for="@Model.IndexViewModel.SearchString"
+			   value="@Model.IndexViewModel.SearchString">
+		<select
+				name="theme"
+				asp-for="@Model.IndexViewModel.ThemeFilterApplied"
+				asp-items="@Model.IndexViewModel.Themes"
+				class="form-group">
+		</select>
 		<button class="btn btn-outline-primary m-2" type="submit">Search</button>
 	</form>
 </div>

@@ -20,7 +20,7 @@ namespace CourseWork.Services.Implementations
 			_collectionRepository = collectionRepository;
 		}
 
-		public async Task<IndexViewModel> GetIndexViewModel(int page, int pageSize, string searchString, IndexViewModel model, int? themeId)
+		public async Task<IndexViewModel> GetIndexViewModel(int page, int pageSize, string searchString, Theme? theme)
 		{
 			var collections = await _collectionRepository.GetAll()
 				.OrderByDescending(x => x.Date)
@@ -33,6 +33,11 @@ namespace CourseWork.Services.Implementations
 					.ToList();
 			}
 
+			if (theme != null)
+			{
+				collections = collections.Where(c => c.Theme == theme).ToList();
+			}
+
 			var count = collections.Count;
 			var items = collections.Skip((page - 1) * pageSize).Take(pageSize).ToList();
 
@@ -42,7 +47,7 @@ namespace CourseWork.Services.Implementations
 				Pagination = pagination,
 				Collections = items,
 				Themes = GetThemes().ToList(),
-				ThemeFilterApplied = themeId ?? 0,
+				ThemeFilterApplied = theme != null ? theme : null,
 				SearchString = string.IsNullOrWhiteSpace(searchString) ? string.Empty : searchString
 			};
 

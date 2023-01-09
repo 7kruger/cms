@@ -17,7 +17,9 @@ namespace CourseWork.DAL.Repositories
 
 		public IQueryable<Collection> GetAll()
 		{
-			return _db.Collections.Include(i => i.Items);
+			return _db.Collections
+				.Include(i => i.Items)
+				.Include(t => t.Tags);
 		}
 
 		public async Task Create(Collection entity)

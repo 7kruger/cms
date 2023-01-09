@@ -18,14 +18,17 @@ namespace CourseWork.Service.Implementations
 		private readonly IRepository<Collection> _collectionRepository;
 		private readonly IRepository<Item> _itemRepository;
 		private readonly ICloudStorageService _cloudStorageService;
+		private readonly IRepository<Tag> _tagRepository;
 
 		public CollectionService(IRepository<Collection> repository,
 								 IRepository<Item> itemRepository,
-								 ICloudStorageService cloudStorageService)
+								 ICloudStorageService cloudStorageService,
+								 IRepository<Tag> tagRepository)
 		{
 			_collectionRepository = repository;
 			_itemRepository = itemRepository;
 			_cloudStorageService = cloudStorageService;
+			_tagRepository = tagRepository;
 		}
 
 		public async Task<IBaseResponse<List<Collection>>> GetCollections()
@@ -111,6 +114,9 @@ namespace CourseWork.Service.Implementations
 
 				var items = await _itemRepository.GetAll().ToListAsync();
 
+				var allTags = await _tagRepository.GetAll().ToListAsync();
+				var tagsInCollection = collection.Tags;
+
 				var data = new CollectionViewModel
 				{
 					Id = collection.Id,
@@ -122,6 +128,8 @@ namespace CourseWork.Service.Implementations
 					Date = collection.Date,
 					Author = collection.Author,
 					FreeItems = items,
+					AllTags = allTags,
+					Tags = tagsInCollection,
 				};
 
 				return new BaseResponse<CollectionViewModel>
@@ -174,7 +182,7 @@ namespace CourseWork.Service.Implementations
 			}
 		}
 
-		public async Task<IBaseResponse<Collection>> Edit(string id, CollectionViewModel model, string[] selectedItems, IFormFile image)
+		public async Task<IBaseResponse<Collection>> Edit(string id, CollectionViewModel model, string[] selectedItems, string[] tags, IFormFile image)
 		{
 			try
 			{
@@ -193,11 +201,15 @@ namespace CourseWork.Service.Implementations
 					.Where(i => selectedItems.Contains(i.Id))
 					.ToListAsync();
 
+				var tagList = await GetTags(tags);
+
 				collection.Name = model.Name;
 				collection.Description = model.Description;
 				collection.Theme = model.Theme;
 				collection.Items.Clear();
 				collection.Items.AddRange(items);
+				collection.Tags.Clear();
+				collection.Tags.AddRange(tagList);
 
 				// если картинка не пустая то обновить, а если пустая то останется старая картинка
 				if (image != null)
@@ -256,6 +268,35 @@ namespace CourseWork.Service.Implementations
 					Description = $"[DeleteCollection] : {ex.Message}"
 				};
 			}
+		}
+
+		private async Task<List<Tag>> GetTags(string[] selectedTags)
+		{
+			if (selectedTags == null)
+			{
+				return new List<Tag>();
+			}
+
+			var tags = selectedTags.Select(x =>
+			{
+				x = x.ToLower();
+				x = x.Replace(" ", "_");
+				return x;
+			}).ToList();
+
+			var allTags = await _tagRepository.GetAll().ToListAsync();
+
+			var result = allTags.Where(t => tags.Contains(t.Name)).ToList();
+
+			tags.ForEach(x =>
+			{
+				if (allTags.FirstOrDefault(t => t.Name == x) == null)
+				{
+					result.Add(new Tag() { Name = x });
+				}
+			});
+
+			return result;
 		}
 	}
 }

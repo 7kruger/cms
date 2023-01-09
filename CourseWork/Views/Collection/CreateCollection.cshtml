@@ -4,41 +4,52 @@
 	ViewData["Title"] = "Создание коллекции";
 }
 
-<h1 class="text-center">Создать коллекцию</h1>
-<div class="container text-center custom-group-form">
+<h1 class="text-center m-5">Создать коллекцию</h1>
+<div class="container">
 	<form asp-action="CreateCollection" asp-controller="Collection" enctype="multipart/form-data" method="post">
 		<div class="validation" asp-validation-summary="All"></div>
 
-		<div class="form-group">
-			<label asp-for="Name">Название коллекции</label><br />
-			<input class="form-control" type="text" asp-for="Name" />
+		<div class="row m-0 mb-3">
+			<label asp-for="Name" class="col-12 col-md-4">Название коллекции</label>
+			<div class="col-12 col-md-8">
+				<input class="form-control" type="text" asp-for="Name" placeholder="Название коллекции" />
+			</div>
 		</div>
 
-		<div class="form-group">
-			<label asp-for="Description">Описание коллекции</label><br />
-			<textarea class="form-control" asp-for="Description"></textarea>
+		<div class="row m-0 mb-3">
+			<label asp-for="Description" class="col-12 col-md-4">Описание коллекции</label>
+			<div class ="col-12 col-md-8">
+				<textarea class="form-control" 
+						  asp-for="Description" 
+						  style="min-height: 150px; max-height: 150px"
+						  placeholder="Описание коллекции">
+				</textarea>
+			</div>
 		</div>
 
-		<div class="form-group">
-			<p>Обложка коллекции</p>
-			<input type="file" name="image" /><br /><br />
+		<div class="row m-0 mb-3">
+			<label asp-for="Theme" class="col-12 col-md-4">Тема коллекции</label><br />
+			<div class="col-12 col-md-8">
+				<select class="form-control" asp-for="Theme">
+					<option value="Books">Books</option>
+					<option value="Signs">Signs</option>
+					<option value="Silverware">Silverware</option>
+					<option value="Pictures">Pictures</option>
+					<option value="Coins">Coins</option>
+					<option value="Other">Other</option>
+				</select>
+			</div>
 		</div>
 
-		<div class="form-group">
-			<label asp-for="Theme">Тема коллекции</label><br />
-			<select class="form-select form-control" aria-label=".form-select-lg example" asp-for="Theme">
-				<option value="Books">Books</option>
-				<option value="Signs">Signs</option>
-				<option value="Silverware">Silverware</option>
-				<option value="Pictures">Pictures</option>
-				<option value="Coins">Coins</option>
-				<option value="Other">Other</option>
-			</select>
+		<div class="row m-0 mb-3">
+			<label class="col-12 col-md-4">Обложка коллекции</label>
+			<div class="col-12 col-md-8">
+				<input name="image" type="file" />
+			</div>
 		</div>
 
-		<div class="form-group">
+		<div class="text-center mt-5">
 			<button class="btn btn-outline-primary">Добавить</button>
 		</div>
 	</form>
 </div>
-

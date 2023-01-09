@@ -3,28 +3,6 @@
     padding: 0;
 }
 
-a.navbar-brand {
-  white-space: normal;
-  text-align: center;
-  word-break: break-all;
-}
-
-a {
-  color: #0366d6;
-}
-
-.btn-primary {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
-}
-
-.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
-}
-
 html {
   font-size: 14px;
 }
@@ -32,22 +10,6 @@ html {
   html {
     font-size: 16px;
   }
-}
-
-.border-top {
-  border-top: 1px solid #e5e5e5;
-}
-.border-bottom {
-  border-bottom: 1px solid #e5e5e5;
-}
-
-.box-shadow {
-  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
-}
-
-button.accept-policy {
-  font-size: 1rem;
-  line-height: inherit;
 }
 
 html {
@@ -58,6 +20,7 @@ html {
 body {
   margin-bottom: 60px;
 }
+
 .footer {
   position: absolute;
   bottom: 0;
@@ -66,27 +29,14 @@ body {
   line-height: 60px;
 }
 
-.collection-image {
-    height: 300px;
-    width: 300px;
-}
-
 textarea {
     height: 170px;
-    width: 185px;
     max-height: 170px;
+    width: 185px;
 }
 
 .custom-group-form {
     width: 300px;
-}
-
-.comment {
-    margin: 5px;
-}
-
-.collections {
-    margin: 4px;
 }
 
 .table-container {
@@ -139,4 +89,22 @@ textarea {
 
 .validation {
     color: #9e0d00;
+}
+
+.my-cursor {
+    cursor: pointer;
+}
+
+.readonly-input {
+    border: 0px;
+    color: black;
+}
+
+fieldset {
+    border: 1px solid #adb5bd;
+    padding: 20px;
+}
+
+legend {
+    width: inherit;
 }

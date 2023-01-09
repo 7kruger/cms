@@ -5,81 +5,161 @@
 	ViewData["Title"] = "Редактирование коллекции";
 }
 
-<h1 class="text-center">Редактирование коллекции</h1>
-<div class="container text-center custom-group-form">
+<h1 class="text-center mt-5">Редактирование коллекции</h1>
+<div class="container">
 	<form asp-action="EditCollection" asp-controller="Collection" enctype="multipart/form-data" method="post">
 		<div class="mb-2">
 			<div class="validation" asp-validation-summary="All"></div>
 
-			<div class="form-group">
-				<label asp-for="Name">Название коллекции</label><br />
-				<input class="form-control" asp-for="Name" placeholder="Название коллекции" />
-			</div>
+			<fieldset class="mb-3">
+				<legend>Основная информация</legend>
 
-			<div class="form-group">
-				<label asp-for="Description">Описание коллекции</label><br />
-				<textarea class="form-control" asp-for="Description"></textarea>
-			</div>
+				<div class="row m-0 mb-2">
+					<label asp-for="Name" class="col-12 col-md-4">Название коллекции</label>
+					<div class="col-12 col-md-8">
+						<input class="form-control" asp-for="Name" placeholder="Название коллекции" />
+					</div>
+				</div>
 
-			<div class="form-group">
-				<label asp-for="ImgRef">Обложка коллекции</label>
-				<input name="image" type="file" /><br /><br />
-			</div>
+				<div class="row m-0 mb-2">
+					<label asp-for="Description" class="col-12 col-md-4">Описание коллекции</label>
+					<div class="col-12 col-md-8">
+						<textarea class="form-control" asp-for="Description" style="min-height: 150px; max-height: 150px"></textarea>
+					</div>
+				</div>
 
-			<div class="form-group">
-				<label asp-for="Theme">Тема коллекции</label><br />
-				<select class="form-control" asp-for="Theme">
-					<option value="Books">Books</option>
-					<option value="Signs">Signs</option>
-					<option value="Silverware">Silverware</option>
-					<option value="Pictures">Pictures</option>
-					<option value="Coins">Coins</option>
-					<option value="Other">Other</option>
-				</select>
-			</div>
+				<div class="row m-0 mb-2">
+					<label asp-for="Theme" class="col-12 col-md-4">Тема коллекции</label><br />
+					<div class="col-12 col-md-8">
+						<select class="form-control" asp-for="Theme">
+							<option value="Books">Books</option>
+							<option value="Signs">Signs</option>
+							<option value="Silverware">Silverware</option>
+							<option value="Pictures">Pictures</option>
+							<option value="Coins">Coins</option>
+							<option value="Other">Other</option>
+						</select>
+					</div>
+				</div>
+			</fieldset>
+
+			<fieldset class="mb-3">
+				<legend>Обложка</legend>
+
+				<div class="row m-0 mb-2">
+					<label class="col-12 col-md-4">Обложка коллекции</label>
+					<div class="col-12 col-md-8">
+						<input name="image" type="file" />
+					</div>
+				</div>
+			</fieldset>
+
+			<fieldset class="mb-3">
+				<legend>Теги</legend>
+
+				<div class="container text-center" style="width: 300px;">
+					<div class="row m-0 mb-2">
+						<input class="form-control col mr=2" type="text" id="tagInput" list="help" placeholder="введите тег" />
+						<div class="btn btn-primary col-4 ml-2 my-cursor" id="addTag">add tag</div>
+					</div>
+					<div id="tagList">
+						@foreach (var item in Model.Tags)
+						{
+							<div class='d-flex justify-content-center m-2'>
+								<input type='text' name='tags' class='m-1 readonly-input' value='@item.Name' readonly />
+								<div class='btn btn-danger m-1 my-cursor' id='remove'>remove</div>
+							</div>
+						}
+					</div>
+
+					<datalist id="help">
+						@foreach (var item in Model.AllTags)
+						{
+							<option value="@item.Name"></option>
+						}
+					</datalist>
+
+				</div>
+			</fieldset>
 		</div>
 
-		@if (Model.FreeItems.Count != 0)
-		{
-			<div style="overflow: auto;">
-				<table class="table table-sm">
-					<thead>
-						<tr>
-							<th scope="col">Выбрать</th>
-							<th scope="col">Название айтема</th>
-							<th scope="col">Автор</th>
-							<th scope="col">Содержание</th>
-							<th scope="col">Дата создания</th>
-						</tr>
-					</thead>
-					<tbody>
-						@foreach (var item in Model.FreeItems)
-						{
-							<tr>
-								<td>
-									<input type="checkbox" name="selectedItems" value="@item.Id"
-								   @(Model.Items.Contains(item) ? "checked=\"checked\"" : "") />
-								</td>
-								<td>@item.Name</td>
-								<td>@item.Author</td>
-								<td>@item.Content</td>
-								<td>@item.Date</td>
-							</tr>
-						}
-					</tbody>
-				</table>
-			</div>
-		}
-		else
-		{
-			<p>Нет доступных айтемов <a class="link-info" href="/Item/CreateItem">Создать</a></p>
-		}
+		<fieldset style="padding: 20px;" class="mt-3 mb-3">
+			<legend>Айтемы</legend>
 
-		<div class="d-flex justify-content-center">
+			@if (Model.FreeItems.Count != 0)
+			{
+				<div style="overflow: auto;">
+					<table class="table table-sm">
+						<thead>
+							<tr>
+								<th scope="col">Выбрать</th>
+								<th scope="col">Название айтема</th>
+								<th scope="col">Автор</th>
+								<th scope="col">Содержание</th>
+								<th scope="col">Дата создания</th>
+							</tr>
+						</thead>
+						<tbody>
+							@foreach (var item in Model.FreeItems)
+							{
+								<tr>
+									<td>
+										<input type="checkbox" name="selectedItems" value="@item.Id"
+									   @(Model.Items.Contains(item) ? "checked=\"checked\"" : "") />
+									</td>
+									<td>@item.Name</td>
+									<td>@item.Author</td>
+									<td>@item.Content</td>
+									<td>@item.Date</td>
+								</tr>
+							}
+						</tbody>
+					</table>
+				</div>
+			}
+			else
+			{
+				<p>Нет доступных айтемов <a class="link-info" href="/Item/CreateItem">Создать</a></p>
+			}
+		</fieldset>
+
+		<div class="d-flex justify-content-center mt-3">
 			<button class="btn btn-outline-primary ml-2">Сохранить</button>
 			<a class="btn btn-outline-danger ml-3" href="/Collection/DeleteCollection/@Model.Id">Удалить</a>
 		</div>
 
 	</form>
 </div>
+
+@section Scripts {
+	<script>
+		$("#addTag").on("click", () => {
+			let tag = $("#tagInput").val();
+
+			if (!tag.includes("#")) {
+
+				let div = $("<div class='d-flex justify-content-center m-2'></div>");
+				let input = $("<input type='text' name='tags' class='m-1 readonly-input' value='" + tag + "' readonly />")
+				let removeBtn = $("<div class='btn btn-danger m-1 my-cursor' id='remove'>remove</div>");
+
+				div.append(input);
+				div.append(removeBtn);
+
+				$("#tagList").append(div);
+
+				$("#tagInput").val("");
+			} else {
+				Swal.fire({
+					icon: "error",
+					title: "Oops...",
+					text: "Тег не должен содержать символ '#'",
+				});
+			}
+		});
+
+		$(document).on("click", "#remove", function () {
+			$(this).parent().remove();
+		});
+	</script>
+}
 

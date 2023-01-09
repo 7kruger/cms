@@ -19,6 +19,7 @@ namespace CourseWork
 			services.AddScoped<ICommentRepository, CommentRepository>();
 			services.AddScoped<IRepository<User>, UserRepository>();
 			services.AddScoped<IRepository<Profile>, ProfileRepository>();
+			services.AddScoped<IRepository<Tag>, TagRepository>();
 		}
 
 		public static void InitializeServices(this IServiceCollection services)

@@ -51,6 +51,13 @@
 		<p>Автор: @Model.Author</p>
 		<p>Тема: @Model.Theme</p>
 		<p>Описание: @Model.Description</p>
+		<div>
+			Теги:
+			@foreach (var item in Model.Tags)
+			{
+				<a href="#">#@item.Name</a>
+			}
+		</div>
 	</div>
 
 

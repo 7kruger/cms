@@ -13,7 +13,7 @@ namespace CourseWork.Service.Interfaces
 		Task<IBaseResponse<List<Collection>>> SearchByValue(string value);
 		Task<IBaseResponse<CollectionViewModel>> GetCollection(string id);
 		Task<IBaseResponse<Collection>> Create(CreateCollectionViewModel model, string username, IFormFile image);
-		Task<IBaseResponse<Collection>> Edit(string id, CollectionViewModel model, string[] selectedItems, IFormFile image);
+		Task<IBaseResponse<Collection>> Edit(string id, CollectionViewModel model, string[] selectedItems, string[] tags, IFormFile image);
 		Task<IBaseResponse<bool>> Delete(string id);
 	}
 }

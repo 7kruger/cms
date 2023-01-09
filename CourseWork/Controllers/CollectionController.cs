@@ -60,14 +60,14 @@ namespace CourseWork.Controllers
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> EditCollection(CollectionViewModel model, string[] selectedItems, IFormFile image)
+		public async Task<IActionResult> EditCollection(CollectionViewModel model, string[] selectedItems, IFormFile image, string[] tags)
 		{
 			if (!ModelState.IsValid)
 			{
 				return View(model);
 			}
 
-			var response = await _collectionService.Edit(model.Id, model, selectedItems, image);
+			var response = await _collectionService.Edit(model.Id, model, selectedItems, tags, image);
 			if (response.StatusCode == Domain.Enum.StatusCode.OK)
 			{
 				return Redirect($"/Collection/GetCollection/{response.Data.Id}");

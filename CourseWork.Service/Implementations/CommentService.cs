@@ -1,6 +1,7 @@
 ﻿using CourseWork.DAL.Interfaces;
 using CourseWork.Domain.Entities;
 using CourseWork.Domain.Enum;
+using CourseWork.Domain.Models;
 using CourseWork.Domain.Response;
 using CourseWork.Service.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -14,30 +15,45 @@ namespace CourseWork.Service.Implementations
 	public class CommentService : ICommentService
 	{
 		private readonly ICommentRepository _commentRepository;
+		private readonly IRepository<User> _userRepository;
 
-		public CommentService(ICommentRepository commentRepository)
+		public CommentService(ICommentRepository commentRepository, IRepository<User> userRepository)
 		{
 			_commentRepository = commentRepository;
+			_userRepository = userRepository;
 		}
 
-		public async Task<IBaseResponse<List<Comment>>> LoadComments(string id)
+		public async Task<IBaseResponse<List<CommentModel>>> LoadComments(string id, string username, bool isAdmin)
 		{
 			try
 			{
-				var comments = await _commentRepository.GetAll()
+				var all = await _commentRepository.GetAll()
 					.Where(c => c.SrcId == id)
 					.OrderByDescending(c => c.Date)
 					.ToListAsync();
 
-				return new BaseResponse<List<Comment>>
+				var comments = all.Select(x =>
+				{
+					var canUserDeleteComment = (username == x.User.Name || isAdmin) ? true : false;
+					return new CommentModel()
+					{
+						Id = x.Id,
+						UserName = x.User.Name,
+						Content = x.Content,
+						Date = x.Date,
+						CanUserDeleteComment = canUserDeleteComment,
+					};
+				}).ToList();
+
+				return new BaseResponse<List<CommentModel>>
 				{
 					StatusCode = StatusCode.OK,
-					Data = comments
+					Data = comments,
 				};
 			}
 			catch (Exception ex)
 			{
-				return new BaseResponse<List<Comment>>
+				return new BaseResponse<List<CommentModel>>
 				{
 					StatusCode = StatusCode.InternalServerError,
 					Description = $"[LoadComments] : {ex.Message}"
@@ -51,7 +67,7 @@ namespace CourseWork.Service.Implementations
 				var comment = new Comment
 				{
 					Content = content,
-					UserName = username,
+					User = await _userRepository.GetAll().FirstOrDefaultAsync(u => u.Name == username),
 					Date = DateTime.Now,
 					SrcId = id,
 				};
@@ -74,9 +90,37 @@ namespace CourseWork.Service.Implementations
 			}
 		}
 
-		public async Task<IBaseResponse<bool>> DeleteComment(string id, string username)
+		public async Task<IBaseResponse<bool>> DeleteComment(int id)
 		{
-			throw new NotImplementedException();
+			try
+			{
+				var comment = await _commentRepository.GetAll().FirstOrDefaultAsync(c => c.Id == id);
+
+				if (comment == null)
+				{
+					return new BaseResponse<bool>
+					{
+						StatusCode = StatusCode.NotFound,
+						Description = "Не удалось удалить коммент"
+					};
+				}
+
+				await _commentRepository.Delete(comment);
+
+				return new BaseResponse<bool>
+				{
+					StatusCode = StatusCode.OK,
+					Data = true,
+				};
+			}
+			catch (Exception ex)
+			{
+				return new BaseResponse<bool>
+				{
+					StatusCode = StatusCode.InternalServerError,
+					Description = $"[DeleteComment] : {ex.Message}"
+				};
+			}
 		}
 	}
 }

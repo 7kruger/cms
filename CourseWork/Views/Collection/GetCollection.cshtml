@@ -4,7 +4,6 @@
 	ViewData["Title"] = "Collection";
 }
 
-
 <div class="row">
 	<div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 text-center">
 		<div class="parent">
@@ -19,15 +18,15 @@
 			<div class="col-6 d-flex justify-content-end">
 				@if (User.Identity.IsAuthenticated)
 				{
-					<a id="imgA" href="#">
-						<img class="like" src="~/images/nolike.png" id="like" alt="" loading="lazy" />
-					</a>
+					<div id="imgA" href="#" class="my-cursor">
+						<img class="like" src="~/images/heart-fill.svg" id="like">
+					</div>
 				}
 				else
 				{
-					<a id="imgA" href="#" class="like-disabled">
-						<img class="like" src="~/images/nolike.png" id="like" alt="" loading="lazy" />
-					</a>
+					<div id="imgA" href="#" class="like-disabled">
+						<img class="like" src="~/images/heart.svg" id="like"/>
+					</div>
 				}
 			</div>
 			<div class="col-6 d-flex justify-content-start">
@@ -45,11 +44,11 @@
 	</div>
 	<div class="col-xs-12 col-sm-12 col-md-6 col-lg-8 col-md-offset-6">
 		<input type="hidden" id="srcId" value="@Model.Id" />
-		<h1>@Model.Name</h1>
-		<h3>О коллекции</h3>
+		<p><h1>@Model.Name</h1></p>
+		<h4>О коллекции</h4>
 		<small class="text-secondary">Дата создания: @Model.Date</small>
 		<p>Автор: @Model.Author</p>
-		<p>Тема: @Model.Theme</p>
+		<p>Тема: <a style="text-decoration: none;" href="/?theme=@Model.Theme">@Model.Theme</a></p>
 		<p>Описание: @Model.Description</p>
 		<div>
 			Теги:
@@ -60,30 +59,10 @@
 		</div>
 	</div>
 
-
-	<div class="container">
-		<h3 class="text-center">Айтемы</h3>
-
-		@if (Model.Items.Count == 0)
-		{
-			<h4 class="text-center">Коллекция пуста</h4>
-		}
-		else
-		{
-			@foreach (var item in Model.Items)
-			{
-				<a class="list-group-item list-group-item-action list-group-item-light" href="/Item/GetItem/@item.Id">@item.Name</a>
-			}
-		}
-	</div>
-
-
+	<partial name="itemsPartial" for="@Model.Items" />
 </div>
 
-
-<hr />
-@await Html.PartialAsync("CommentsPartial")
-
+<partial name="CommentsPartial" />
 
 @section Scripts {
 	<script src="~/js/comments.js"></script>

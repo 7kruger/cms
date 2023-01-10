@@ -1,8 +1,6 @@
-﻿using CourseWork.Domain.Entities;
-using CourseWork.Domain.Response;
+﻿using CourseWork.Domain.Response;
 using CourseWork.Domain.ViewModels.Profile;
 using Microsoft.AspNetCore.Http;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace CourseWork.Service.Interfaces

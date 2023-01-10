@@ -23,7 +23,7 @@ namespace CourseWork.Controllers
 			{
 				return Ok(response.Data);
 			}
-			return Ok(StatusCode(404));
+			return StatusCode(404);
 		}
 
 		[HttpPost]
@@ -47,7 +47,7 @@ namespace CourseWork.Controllers
 			{
 				return Ok();
 			}
-			return Ok(StatusCode(404));
+			return StatusCode(404);
 		}
 
 		private string GetCurrentUsername() => User.Identity.Name;

@@ -50,6 +50,17 @@ namespace CourseWork.Controllers
 			return View("Error", response.Data);
 		}
 
+		[HttpGet]
+		public async Task<IActionResult> ShowProfile(string name)
+		{
+			var response = await _profileService.Get(name);
+			if (response.StatusCode == Domain.Enum.StatusCode.OK)
+			{
+				return Ok(response.Data);
+			}
+			return Ok();
+		}
+
 		private string GetCurrentUsername() => User.Identity.Name;
 	}
 }

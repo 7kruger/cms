@@ -61,6 +61,7 @@ namespace CourseWork.Service.Implementations
 					Id = profile.Id,
 					Username = profile.User.Name,
 					ImgRef = profile.ImgRef,
+					RegistrationDate = profile.User.RegistrationDate,
 					CollectionsCount = collectionsCount,
 					ItemsCount = itemsCount,
 					LikesCount = likesCount

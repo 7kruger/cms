@@ -4,8 +4,8 @@ let removeLikeBtn = document.querySelector("#removeLike");
 let srcId = document.querySelector("#srcId").value;
 let liked = false;
 
-const likeImageurl = "/images/like.png";
-const defaultImageurl = "/images/nolike.png";
+const likeImageurl = "/images/heart-fill.svg";
+const defaultImageurl = "/images/heart.svg";
 
 loadInfo();
 

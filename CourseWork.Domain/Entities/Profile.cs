@@ -1,4 +1,6 @@
-﻿namespace CourseWork.Domain.Entities
+﻿using System;
+
+namespace CourseWork.Domain.Entities
 {
 	public class Profile
 	{

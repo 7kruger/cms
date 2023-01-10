@@ -1,114 +1,147 @@
-﻿let comments = document.querySelector("#comments");
-
-loadComments();
-
-document.querySelector("#sendComment").addEventListener("click", () => {
-    addComment();
+﻿$(document).ready(() => {
+	loadComments();
 });
 
-async function loadComments() {
+$("#comments").on("click", "#showProfile", function () {
+	const name = $(this).text();
+	console.log(name);
+	showProfile(name);
+});
 
-    clearComments();
-    let srcId = document.querySelector("#srcId").value;
+$("#comments").on("click", "#deleteComment", function () {
+	const id = $(this).parent().parent().attr('id');
+	console.log(id);
+	deleted = deleteComment(id);
+	if (deleted) {
+		$(this).parent().parent().remove();
+	}
+});
 
-    try {
-        const response = await fetch(`/api/loadcomments?id=${srcId}`, {
-            method: "get",
-            headers: {
-                "content-type": "application/json"
-            }
-        });
+$("#sendComment").on("click", () => {
+	addComment();
+});
 
-        if (response.ok) {
+const addComment = () => {
+	let comment = $("#comment").val();
+	const srcId = $("#srcId").val();
 
-            const data = await response.json();
-
-            data.forEach(index => {
-                //мне самому плохо от этого франкенштейна
-
-                let div = document.createElement("div");
-                let small = document.createElement("small");
-                let strong = document.createElement("strong");
-                div.setAttribute("class", "list-group-item list-group-item-light comment");
-                let p = document.createElement("p");
-
-                let d = new Date(Date.parse(index.date)).toUTCString();
-                const date = getDate(d);
-
-                strong.textContent = `Автор - "${index.userName}"     ${date}`;
-                small.appendChild(strong);
-                div.appendChild(small);
-                p.textContent = `${index.content}`;
-                div.appendChild(p);
-
-                comments.appendChild(div);
-            });
-        } else {
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Не удалось загрузить комментарии',
-            })
-        }
-    } catch (e) {
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'Something went wrong!',
-        })
-    }   
+	$.ajax({
+		type: "post",
+		url: "/api/addcomment",
+		data: { content: comment, id: srcId },
+	}).done((data) => {
+		$("#comment").val("");
+		loadComments();
+	}).fail((e) => {
+		Swal.fire({
+			icon: 'error',
+			title: 'Oops...',
+			text: 'Не удалось добавить комментарий',
+		});
+	});
 }
 
-async function addComment() {
+const loadComments = () => {
+	clearComments();
+	const srcId = $("#srcId").val();
 
-    let srcId = document.querySelector("#srcId").value;
-    let comment = document.querySelector("#comment").value;
+	$.ajax({
+		type: "get",
+		url: "/api/loadcomments",
+		async: false,
+		data: { id: srcId },
+	}).done((comments) => {
+		let container = $("<div></div>");
 
-    const formData = new FormData();
-    formData.append("id", srcId);
-    formData.append("content", comment);
+		comments.forEach(x => {
+			let div = $("<div class='mb-2 list-group-item list-group-item-light' id='" + x.id + "'></div>");
 
-    try {
-        const response = await fetch("/api/addcomment", {
-            method: "post",
-            body: formData
-        });
+			let deletePartial = "";
+			if (x.canUserDeleteComment) {
+				deletePartial = "<div id='deleteComment' class='my-cursor'><img src='/images/remove.svg'></div>";
+			}
 
-        if (response.ok) {
-            document.getElementById("comment").value = "";
-            loadComments();
-        } else {
-            Swal.fire({
-                html: "<h1>Не удалось добавить комментарий</h1>"
-            });
-        }
-    } catch (e) {
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'Something went wrong!',
-        })
-    }
+			let header = $("<div class='d-flex justify-content-between mb-3'>"
+				+ "<div><strong id='showProfile' class='my-cursor'>" + x.userName + "</strong> " + getDate(x.date) + "</div>"
+				+ deletePartial
+				+ "</div>");
 
-    
-    
+			let content = $("<p>" + x.content + "</p>");
+
+			div.append(header);
+			div.append(content);
+			container.append(div);
+		});
+
+		$("#comments").append(container);
+
+	}).fail((e) => {
+		Swal.fire({
+			icon: 'error',
+			title: 'Oops...',
+			text: 'Не удалось загрузить комментарии',
+		});
+	});
 }
 
-function clearComments() {
-    var container = document.querySelector("#comments");
-
-    while (container.firstChild) {
-        container.removeChild(container.firstChild);
-    }
+const clearComments = () => {
+	$("#comments").empty();
 }
 
-function getDate(date) {
+const getDate = (d) => {
 
-    let newDate = "";
+	let date = new Date(Date.parse(d)).toUTCString();
 
-    for (var i = 0; i < date.length - 7; i++) {
-        newDate += date[i]
-    }
+	let newDate = "";
 
-    return newDate;
+	for (var i = 0; i < date.length - 7; i++) {
+		newDate += date[i]
+	}
+
+	return newDate;
+}
+
+const showProfile = (name) => {
+	$.ajax({
+		type: "get",
+		url: "/profile/showprofile",
+		data: { name: name },
+	}).done((data) => {
+		let date = getDate(data.registrationDate);
+		Swal.fire({
+			html: `<p>Имя: ${data.username}</p>`
+				+ `<p>Дата регистрации: ${getDate(data.registrationDate)}</p>`
+				+ `<p>Создано коллекций: ${data.collectionsCount}</p>`
+				+ `<p>Создано айтемов: ${data.itemsCount}</p>`
+				+ `<p>Получено лайков: ${data.likesCount}</p>`
+		});
+	}).fail(e => {
+		Swal.fire({
+			icon: 'error',
+			title: 'Oops...',
+			text: 'Не удалось открыть профиль пользователя',
+		});
+	});
+}
+
+const deleteComment = (id) => {
+	let deleted = false;
+
+	$.ajax({
+		type: "post",
+		url: "/api/deletecomment",
+		async: false,
+		data: { id: id },
+
+	}).done(() => {
+		deleted = true;
+	}).fail(e => {
+		Swal.fire({
+			icon: 'error',
+			title: 'Oops...',
+			text: 'Не удалось удалить комментарий',
+		});
+	});
+
+	return deleted;
 }

@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CourseWork.DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230107130631_MigrateDb")]
-    partial class MigrateDb
+    [Migration("20230110161156_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -66,9 +66,9 @@ namespace CourseWork.DAL.Migrations
 
             modelBuilder.Entity("CourseWork.Domain.Entities.Comment", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Content")
@@ -80,10 +80,12 @@ namespace CourseWork.DAL.Migrations
                     b.Property<string>("SrcId")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserName")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Comments");
                 });
@@ -216,7 +218,7 @@ namespace CourseWork.DAL.Migrations
                             IsBlocked = false,
                             Name = "admin",
                             Password = "fb001dfcffd1c899f3297871406242f097aecf1a5342ccf3ebcd116146188e4b",
-                            RegistrationDate = new DateTime(2023, 1, 7, 18, 6, 30, 719, DateTimeKind.Local).AddTicks(9421),
+                            RegistrationDate = new DateTime(2023, 1, 10, 21, 11, 56, 215, DateTimeKind.Local).AddTicks(5688),
                             Role = 1
                         });
                 });
@@ -249,6 +251,15 @@ namespace CourseWork.DAL.Migrations
                         .HasForeignKey("TagsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("CourseWork.Domain.Entities.Comment", b =>
+                {
+                    b.HasOne("CourseWork.Domain.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("CourseWork.Domain.Entities.Item", b =>

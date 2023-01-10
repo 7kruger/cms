@@ -16,15 +16,12 @@
 
 		<div class="row m-3">
 			<div class="col-6 d-flex justify-content-end">
-				@{
-					string disabled = "class=my-cursor";
-					if (!User.Identity.IsAuthenticated)
-					{
-						disabled = "class='like-disabled'";
-					}
+
+				@{ 
+					string attr = User.Identity.IsAuthenticated ? "class=my-cursor id=like" : string.Empty; 
 				}
-				<div @disabled>
-					<img class="like" src="~/images/heart.svg" id="like" />
+				<div @attr >
+					<img class="like" src="~/images/heart.svg" />
 				</div>
 
 			</div>

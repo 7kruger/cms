@@ -24,10 +24,10 @@ const loadLikes = () => {
 		const obj = JSON.parse(data)
 		$("#likesCount").html(obj.likesCount);
 		if (obj.liked) {
-			$("#like").attr("src", "/images/heart-fill.svg");
+			$("#like").children().attr("src", "/images/heart-fill.svg");
 			liked = true;
 		} else {
-			$("#like").attr("src", "/images/heart.svg");
+			$("#like").children().attr("src", "/images/heart.svg");
 			liked = false;
 		}
 	}).fail((e) => {

@@ -4,13 +4,11 @@
 
 $("#comments").on("click", "#showProfile", function () {
 	const name = $(this).text();
-	console.log(name);
 	showProfile(name);
 });
 
 $("#comments").on("click", "#deleteComment", function () {
 	const id = $(this).parent().parent().attr('id');
-	console.log(id);
 	deleted = deleteComment(id);
 	if (deleted) {
 		$(this).parent().parent().remove();
@@ -23,7 +21,6 @@ $("#sendComment").on("click", () => {
 
 const addComment = () => {
 	let comment = $("#comment").val();
-	const srcId = $("#srcId").val();
 
 	$.ajax({
 		type: "post",
@@ -42,8 +39,9 @@ const addComment = () => {
 }
 
 const loadComments = () => {
-	clearComments();
 	const srcId = $("#srcId").val();
+
+	clearComments();
 
 	$.ajax({
 		type: "get",
@@ -58,13 +56,13 @@ const loadComments = () => {
 
 			let deletePartial = "";
 			if (x.canUserDeleteComment) {
-				deletePartial = "<div id='deleteComment' class='my-cursor'><img src='/images/remove.svg'></div>";
+				deletePartial = "<div id='deleteComment' class='my-cursor'><img src='/images/trash.svg'></div>";
 			}
 
 			let header = $("<div class='d-flex justify-content-between mb-3'>"
-				+ "<div><strong id='showProfile' class='my-cursor'>" + x.userName + "</strong> " + getDate(x.date) + "</div>"
-				+ deletePartial
-				+ "</div>");
+								+ "<div><strong id='showProfile' class='my-cursor'>" + x.userName + "</strong> " + getDate(x.date) + "</div>"
+								+ deletePartial
+							+ "</div>");
 
 			let content = $("<p>" + x.content + "</p>");
 
@@ -107,7 +105,6 @@ const showProfile = (name) => {
 		url: "/profile/showprofile",
 		data: { name: name },
 	}).done((data) => {
-		let date = getDate(data.registrationDate);
 		Swal.fire({
 			html: `<p>Имя: ${data.username}</p>`
 				+ `<p>Дата регистрации: ${getDate(data.registrationDate)}</p>`

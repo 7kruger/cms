@@ -1,108 +1,72 @@
-﻿const imgLike = document.querySelector("#like");
-let setLikeBtn = document.querySelector("#setLike");
-let removeLikeBtn = document.querySelector("#removeLike");
-let srcId = document.querySelector("#srcId").value;
-let liked = false;
+﻿let liked = false;
 
-const likeImageurl = "/images/heart-fill.svg";
-const defaultImageurl = "/images/heart.svg";
+$(document).ready(() => {
+	loadLikes();
+});
 
-loadInfo();
+$("#like").on("click", () => {
+	if (liked) {
+		removeLike();
+	} else {
+		setLike();
+	}
+});
 
-async function loadInfo() {
+const loadLikes = () => {
+	const srcId = $("#srcId").val();
 
-    try {
-        const response = await fetch(`/api/loadlikes?id=${srcId}`, {
-            method: "get",
-            headers: {
-                "content-type": "application/json"
-            }
-        })
-
-        if (response.ok) {
-
-            const data = await response.json();
-
-            let likesCount = document.querySelector("#likesCount");
-            likesCount.textContent = data.likesCount;
-
-            if (data.liked) {
-                liked = true;
-                imgLike.src = likeImageurl;
-            }
-            else {
-                liked = false;
-                imgLike.src = defaultImageurl;
-            }
-        } else {
-            Swal.fire({
-                html: "<h1>Не удалось загрузить лайки</h1>"
-            });
-        }
-    } catch (e) {
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'Something went wrong!',
-        })
-    }
-
-    
+	$.ajax({
+		type: "get",
+		url: "/api/loadlikes",
+		async: false,
+		data: { id: srcId }
+	}).done((data) => {
+		const obj = JSON.parse(data)
+		$("#likesCount").html(obj.likesCount);
+		if (obj.liked) {
+			$("#like").attr("src", "/images/heart-fill.svg");
+			liked = true;
+		} else {
+			$("#like").attr("src", "/images/heart.svg");
+			liked = false;
+		}
+	}).fail((e) => {
+		Swal.fire({
+			html: "<h1>Не удалось загрузить лайки</h1>"
+		});
+	});
 }
 
-async function addLike() {
+const setLike = () => {
+	const srcId = $("#srcId").val();
 
-    const formData = new FormData();
-    formData.append("id", srcId);
-
-    try {
-        const response = await fetch("/api/addlike", {
-            method: "post",
-            body: formData
-        });
-
-        if (response.ok) {
-            loadInfo();
-        }
-    } catch (e) {
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'Something went wrong!',
-        })
-    }
-    
+	$.ajax({
+		type: "post",
+		url: "/api/addlike",
+		async: false,
+		data: { id: srcId }
+	}).done((data) => {
+		loadLikes();
+	}).fail((e) => {
+		Swal.fire({
+			html: "<h1>Не удалось поставить лайк</h1>"
+		});
+	});
 }
 
-async function removeLike() {
+const removeLike = () => {
+	const srcId = $("#srcId").val();
 
-    const formData = new FormData();
-    formData.append("id", srcId);
-
-    try {
-        const response = await fetch("/api/removelike", {
-            method: "post",
-            body: formData
-        });
-
-        if (response.ok) {
-            loadInfo();
-        }
-    } catch (e) {
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'Something went wrong!',
-        })
-    }    
-}
-
-document.querySelector("#imgA").onclick = () => {
-
-    if (liked) {
-        removeLike();
-    }
-    else {
-        addLike();
-    }
+	$.ajax({
+		type: "post",
+		url: "/api/removelike",
+		async: false,
+		data: { id: srcId }
+	}).done((data) => {
+		loadLikes();
+	}).fail((e) => {
+		Swal.fire({
+			html: "<h1>Не удалось убрать лайк</h1>"
+		});
+	});
 }

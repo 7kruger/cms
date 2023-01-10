@@ -29,7 +29,7 @@ namespace CourseWork.Service.Implementations
 					.ToListAsync();
 
 				bool isCurrentUserLiked = false;
-				if (likes.Count() > 1)
+				if (likes.Any())
 				{
 					isCurrentUserLiked = likes.Where(l => l.UserName == username) == null ? false : true;
 				}

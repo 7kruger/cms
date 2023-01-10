@@ -16,21 +16,20 @@
 
 		<div class="row m-3">
 			<div class="col-6 d-flex justify-content-end">
-				@if (User.Identity.IsAuthenticated)
-				{
-					<div id="imgA" href="#" class="my-cursor">
-						<img class="like" src="~/images/heart-fill.svg" id="like">
-					</div>
+				@{
+					string disabled = "class=my-cursor";
+					if (!User.Identity.IsAuthenticated)
+					{
+						disabled = "class='like-disabled'";
+					}
 				}
-				else
-				{
-					<div id="imgA" href="#" class="like-disabled">
-						<img class="like" src="~/images/heart.svg" id="like"/>
-					</div>
-				}
+				<div @disabled>
+					<img class="like" src="~/images/heart.svg" id="like" />
+				</div>
+
 			</div>
 			<div class="col-6 d-flex justify-content-start">
-				<h1 id="likesCount"></h1>
+				<h1 id="likesCount">0</h1>
 			</div>
 		</div>
 
@@ -65,8 +64,8 @@
 <partial name="CommentsPartial" />
 
 @section Scripts {
-	<script src="~/js/comments.js"></script>
 	<script src="~/js/likes.js"></script>
+	<script src="~/js/comments.js"></script>
 	<script>
 		var lazyLoadInstance = new LazyLoad({
 			elements_selector: ".lazy"

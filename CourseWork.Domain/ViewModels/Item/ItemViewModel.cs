@@ -20,5 +20,7 @@ namespace CourseWork.Domain.ViewModels.Item
 		public DateTime Date { get; set; }
 		public string ImgRef { get; set; }
 		public string CollectionName { get; set; }
+		public long LikesCount { get; set; }
+		public long CommentsCount { get; set; }
 	}
 }

@@ -19,9 +19,9 @@ namespace CourseWork.Controllers
 
 		[HttpGet]
 		[AllowAnonymous]
-		public async Task<IActionResult> GetCollection(string id)
+		public async Task<IActionResult> GetCollection(string id, int? pageId)
 		{
-			var response = await _collectionService.GetCollection(id);
+			var response = await _collectionService.GetCollection(id, pageId ?? 1);
 			if (response.StatusCode == Domain.Enum.StatusCode.OK)
 			{
 				return View(response.Data);

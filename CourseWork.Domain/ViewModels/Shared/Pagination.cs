@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CourseWork.ViewModels.Index
+namespace CourseWork.Domain.ViewModels.Shared
 {
 	public class Pagination
 	{

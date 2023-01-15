@@ -86,7 +86,7 @@
 		<fieldset style="padding: 20px;" class="mt-3 mb-3">
 			<legend>Айтемы</legend>
 
-			@if (Model.FreeItems.Count != 0)
+			@if (Model.FreeItems.Any())
 			{
 				<div style="overflow: auto;">
 					<table class="table table-sm">
@@ -105,7 +105,7 @@
 								<tr>
 									<td>
 										<input type="checkbox" name="selectedItems" value="@item.Id"
-									   @(Model.Items.Contains(item) ? "checked=\"checked\"" : "") />
+									   @(Model.Items.FirstOrDefault(i => i.Id == item.Id) != null ? "checked=\"checked\"" : "") />
 									</td>
 									<td>@item.Name</td>
 									<td>@item.Author</td>

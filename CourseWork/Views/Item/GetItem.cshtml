@@ -17,18 +17,14 @@
 
 		<div class="row m-3">
 			<div class="col-6 d-flex justify-content-end">
-				@if (User.Identity.IsAuthenticated)
-				{
-					<a id="imgA" href="#">
-						<img class="like" src="~/images/nolike.png" id="like" alt="" loading="lazy" />
-					</a>
+
+				@{ 
+					string attr = User.Identity.IsAuthenticated ? "class=my-cursor id=like" : string.Empty; 
 				}
-				else
-				{
-					<a id="imgA" href="#" class="like-disabled">
-						<img class="like" src="~/images/nolike.png" id="like" alt="" loading="lazy" />
-					</a>
-				}
+				<div @attr >
+					<img class="like" src="~/images/heart.svg" />
+				</div>
+
 			</div>
 			<div class="col-6 d-flex justify-content-start">
 				<h1 id="likesCount"></h1>
@@ -52,7 +48,6 @@
 		<p>Содержание: @Model.Content</p>
 	</div>
 
-
 	<div class="container">
 		<h3 class="text-center"></h3>
 
@@ -64,8 +59,7 @@
 
 </div>
 
-<hr />
-@await Html.PartialAsync("CommentsPartial")
+<partial name="CommentsPartial" />
 
 
 @section Scripts {

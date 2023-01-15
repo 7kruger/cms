@@ -15,12 +15,13 @@ $("#comments").on("click", "#deleteComment", function () {
 	}
 });
 
-$("#sendComment").on("click", () => {
+$(document).on("click", "#sendComment", function () {
 	addComment();
-});
+})
 
 const addComment = () => {
 	let comment = $("#comment").val();
+	const srcId = $("#srcId").val();
 
 	$.ajax({
 		type: "post",

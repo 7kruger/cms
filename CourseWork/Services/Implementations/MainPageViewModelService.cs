@@ -1,6 +1,7 @@
 ﻿using CourseWork.DAL.Interfaces;
 using CourseWork.Domain.Entities;
 using CourseWork.Domain.Enum;
+using CourseWork.Domain.ViewModels.Shared;
 using CourseWork.Services.Interfaces;
 using CourseWork.ViewModels.Index;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -28,7 +29,7 @@ namespace CourseWork.Services.Implementations
 
 			if (!string.IsNullOrWhiteSpace(searchString))
 			{
-				collections = collections.Where(c => c.Name.Contains(searchString) 
+				collections = collections.Where(c => c.Name.Contains(searchString)
 					|| c.Author.Contains(searchString) || c.Description.Contains(searchString))
 					.ToList();
 			}

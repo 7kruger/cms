@@ -51,6 +51,7 @@ namespace CourseWork.Controllers
 		}
 
 		[HttpGet]
+		[AllowAnonymous]
 		public async Task<IActionResult> ShowProfile(string name)
 		{
 			var response = await _profileService.Get(name);

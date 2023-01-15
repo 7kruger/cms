@@ -1,5 +1,6 @@
 ﻿using CourseWork.Domain.Entities;
 using CourseWork.Domain.Enum;
+using CourseWork.Domain.ViewModels.Shared;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -26,11 +27,12 @@ namespace CourseWork.Domain.ViewModels.Collection
 
 		public string ImgRef { get; set; }
 
-		public List<CourseWork.Domain.Entities.Item> Items { get; set; }
+		public List<CourseWork.Domain.ViewModels.Item.ItemViewModel> Items { get; set; }
 
 		public List<CourseWork.Domain.Entities.Item> FreeItems { get; set; }
 
 		public List<Tag> Tags { get; set; }
 		public List<Tag> AllTags { get; set; }
+		public Pagination Pagination { get; set; }
 	}
 }

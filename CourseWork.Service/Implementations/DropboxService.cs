@@ -11,6 +11,8 @@ namespace CourseWork.Service.Implementations
 {
 	public class DropboxService : ICloudStorageService
 	{
+		private const string imgnotfound = "/images/imgnotfound.jpg";
+
 		private const string refreshToken = "refresh_token";
 		private const string appKey = "app_key";
 		private const string appSecret = "app_secret";
@@ -28,11 +30,11 @@ namespace CourseWork.Service.Implementations
 					}
 				}
 
-				return "imgnotfound.jpg";
+				return imgnotfound;
 			}
 			catch (Exception)
 			{
-				return "imgnotfound.jpg";
+				return imgnotfound;
 			}
 		}
 
@@ -47,14 +49,13 @@ namespace CourseWork.Service.Implementations
 				if (isExists)
 				{
 					await DeleteImage(folder, filename);
-					return await UploadImage(image, folder, srcId);
 				}
 
 				return await UploadImage(image, folder, srcId);
 			}
 			catch (Exception)
 			{
-				return "imgnotfound";
+				return imgnotfound;
 			}
 		}
 

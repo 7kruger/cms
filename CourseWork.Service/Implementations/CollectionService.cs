@@ -1,8 +1,11 @@
 ﻿using CourseWork.DAL.Interfaces;
+using CourseWork.DAL.Repositories;
 using CourseWork.Domain.Entities;
 using CourseWork.Domain.Enum;
 using CourseWork.Domain.Response;
 using CourseWork.Domain.ViewModels.Collection;
+using CourseWork.Domain.ViewModels.Item;
+using CourseWork.Domain.ViewModels.Shared;
 using CourseWork.Service.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -19,16 +22,25 @@ namespace CourseWork.Service.Implementations
 		private readonly IRepository<Item> _itemRepository;
 		private readonly ICloudStorageService _cloudStorageService;
 		private readonly IRepository<Tag> _tagRepository;
+		private readonly ILikeRepository _likeRepository;
+		private readonly ICommentRepository _commentRepository;
+		private readonly IItemService _itemService;
 
 		public CollectionService(IRepository<Collection> repository,
 								 IRepository<Item> itemRepository,
 								 ICloudStorageService cloudStorageService,
-								 IRepository<Tag> tagRepository)
+								 IRepository<Tag> tagRepository,
+								 ILikeRepository likeRepository,
+								 ICommentRepository commentRepository,
+								 IItemService itemService)
 		{
 			_collectionRepository = repository;
 			_itemRepository = itemRepository;
 			_cloudStorageService = cloudStorageService;
 			_tagRepository = tagRepository;
+			_likeRepository = likeRepository;
+			_commentRepository = commentRepository;
+			_itemService = itemService;
 		}
 
 		public async Task<IBaseResponse<List<Collection>>> GetCollections()
@@ -112,7 +124,8 @@ namespace CourseWork.Service.Implementations
 					};
 				}
 
-				var items = await _itemRepository.GetAll().ToListAsync();
+				var allItems = await _itemRepository.GetAll().ToListAsync();
+				var items = GetItemViewModels(collection).ToList();
 
 				var allTags = await _tagRepository.GetAll().ToListAsync();
 				var tagsInCollection = collection.Tags;
@@ -124,13 +137,73 @@ namespace CourseWork.Service.Implementations
 					Description = collection.Description,
 					Theme = collection.Theme,
 					ImgRef = collection.ImgRef,
-					Items = collection.Items,
 					Date = collection.Date,
 					Author = collection.Author,
-					FreeItems = items,
+					AllTags = allTags,
+					Tags = tagsInCollection,
+					FreeItems = allItems,
+					Items = items,
+				};
+
+				return new BaseResponse<CollectionViewModel>
+				{
+					StatusCode = StatusCode.OK,
+					Data = data
+				};
+			}
+			catch (Exception ex)
+			{
+				return new BaseResponse<CollectionViewModel>
+				{
+					StatusCode = StatusCode.InternalServerError,
+					Description = $"[GetCollection] : {ex.Message}"
+				};
+			}
+		}
+
+		public async Task<IBaseResponse<CollectionViewModel>> GetCollection(string id, int itemsPageId)
+		{
+			try
+			{
+				var collection = await _collectionRepository.GetAll().FirstOrDefaultAsync(c => c.Id == id);
+
+				if (collection == null)
+				{
+					return new BaseResponse<CollectionViewModel>
+					{
+						StatusCode = StatusCode.NotFound,
+						Description = "Коллекция не найдена"
+					};
+				}
+
+				var allItems = await _itemRepository.GetAll().ToListAsync();
+				var allTags = await _tagRepository.GetAll().ToListAsync();
+				var tagsInCollection = collection.Tags;
+
+				var data = new CollectionViewModel
+				{
+					Id = collection.Id,
+					Name = collection.Name,
+					Description = collection.Description,
+					Theme = collection.Theme,
+					ImgRef = collection.ImgRef,
+					Date = collection.Date,
+					Author = collection.Author,
+					FreeItems = allItems,
 					AllTags = allTags,
 					Tags = tagsInCollection,
 				};
+
+				var items = GetItemViewModels(collection)
+							.Skip((itemsPageId - 1) * 6)
+							.Take(6)
+							.ToList();
+
+				var count = collection.Items.Count;
+				var pagination = new Pagination(count, itemsPageId, 6);
+
+				data.Pagination = pagination;
+				data.Items = items;
 
 				return new BaseResponse<CollectionViewModel>
 				{
@@ -270,6 +343,27 @@ namespace CourseWork.Service.Implementations
 			}
 		}
 
+		/* private methods */
+		private IEnumerable<ItemViewModel> GetItemViewModels(Collection collection)
+		{
+			var items = collection.Items.Select(x =>
+			{
+				return new ItemViewModel()
+				{
+					Id = x.Id,
+					Name = x.Name,
+					Author = x.Author,
+					Content = x.Content,
+					Date = x.Date,
+					ImgRef = x.ImgRef,
+					CollectionId = x.CollectionId,
+					LikesCount = _likeRepository.GetAll().Where(l => l.SrcId == x.Id).Count(),
+					CommentsCount = _commentRepository.GetAll().Where(c => c.SrcId == x.Id).Count(),
+				};
+			}).OrderByDescending(i => i.Date);
+
+			return items;
+		}
 		private async Task<List<Tag>> GetTags(string[] selectedTags)
 		{
 			if (selectedTags == null)

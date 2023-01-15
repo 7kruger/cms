@@ -1,37 +1,13 @@
-﻿@using CourseWork.Domain.Entities
-@using System
-@model IEnumerable<Item>
+﻿@using System
+@using CourseWork.Domain.ViewModels.Item;
+@model IEnumerable<ItemViewModel>
 
 @{
 	ViewData["Title"] = "Items";
 }
 
-<h3 class="text-center text-dark">All items</h3>
-<div class="row">
-	@foreach (var col in Model)
-	{
-		<div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
-			<div class="card m-2">
+<partial name="itemsPartial" for="@Model"/>
 
-				<div class="parent">
-					<img class="lazy image"
-					 src="data:image/gif;base64,R0lGODlhBwAFAIAAAP///wAAACH5BAEAAAEALAAAAAAHAAUAAAIFjI+puwUAOw=="
-					 data-src="@col.ImgRef"
-					 onError="this.src='/images/imgnotfound.jpg'"
-					 alt="Image">
-				</div>
-
-				<div class="card-body">
-					<h5 class="card-title">@col.Name</h5>
-					<p class="card-text">@col.Content.Substring(0, Math.Min(col.Content.Length, 50))</p>
-					<div class="d-flex align-items-end">
-						<a href="/Item/GetItem/@col.Id" class="btn btn-primary">Посмотреть item</a>
-					</div>
-				</div>
-			</div>
-		</div>
-	}
-</div>
 
 @section Scripts {
 	<script>

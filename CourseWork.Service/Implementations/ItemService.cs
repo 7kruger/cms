@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace CourseWork.Service.Implementations
@@ -17,17 +18,23 @@ namespace CourseWork.Service.Implementations
 		private readonly IRepository<Item> _itemRepository;
 		private readonly IRepository<Collection> _collectionRepository;
 		private readonly ICloudStorageService _cloudStorageService;
+		private readonly ILikeRepository _likeRepository;
+		private readonly ICommentRepository _commentRepository;
 
 		public ItemService(IRepository<Item> itemRepository,
 						   IRepository<Collection> collectionRepository,
-						   ICloudStorageService cloudStorageService)
+						   ICloudStorageService cloudStorageService,
+						   ILikeRepository likeRepository,
+						   ICommentRepository commentRepository)
 		{
 			_itemRepository = itemRepository;
 			_collectionRepository = collectionRepository;
 			_cloudStorageService = cloudStorageService;
+			_likeRepository = likeRepository;
+			_commentRepository = commentRepository;
 		}
 
-		public async Task<IBaseResponse<List<Item>>> GetItems()
+		public async Task<IBaseResponse<List<ItemViewModel>>> GetItems()
 		{
 			try
 			{
@@ -35,22 +42,39 @@ namespace CourseWork.Service.Implementations
 
 				if (items == null)
 				{
-					return new BaseResponse<List<Item>>
+					return new BaseResponse<List<ItemViewModel>>
 					{
 						StatusCode = StatusCode.NotFound,
 						Description = "Найдено 0 элементов"
 					};
 				}
 
-				return new BaseResponse<List<Item>>
+				var data = items.Select(x =>
+				{
+					return new ItemViewModel()
+					{
+						Id = x.Id,
+						Name = x.Name,
+						Author = x.Author,
+						Content = x.Content,
+						Date = x.Date,
+						ImgRef = x.ImgRef,
+						CollectionId = x.CollectionId,
+						LikesCount = _likeRepository.GetAll().Where(l => l.SrcId == x.Id).Count(),
+						CommentsCount  = _commentRepository.GetAll().Where(c => c.SrcId == x.Id).Count(),
+					};
+                }).OrderByDescending(i => i.Date)
+				  .ToList();
+
+				return new BaseResponse<List<ItemViewModel>>
 				{
 					StatusCode = StatusCode.OK,
-					Data = items
+					Data = data
 				};
 			}
 			catch (Exception ex)
 			{
-				return new BaseResponse<List<Item>>
+				return new BaseResponse<List<ItemViewModel>>
 				{
 					StatusCode = StatusCode.InternalServerError,
 					Description = $"[GetItems] : {ex.Message}"
@@ -85,6 +109,7 @@ namespace CourseWork.Service.Implementations
 					Date = item.Date,
 					ImgRef = item.ImgRef,
 					CollectionName = collectionName,
+					LikesCount = _likeRepository.GetAll().Where(l=> l.SrcId == item.Id).Count()
 				};
 
 				return new BaseResponse<ItemViewModel>

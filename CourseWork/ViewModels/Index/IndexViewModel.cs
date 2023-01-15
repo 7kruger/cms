@@ -1,5 +1,6 @@
 ﻿using CourseWork.Domain.Entities;
 using CourseWork.Domain.Enum;
+using CourseWork.Domain.ViewModels.Shared;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 

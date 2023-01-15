@@ -54,8 +54,46 @@
 			}
 		</div>
 	</div>
-
-	<partial name="itemsPartial" for="@Model.Items" />
+</div>
+<div class="mt-5 mb-lg-3 collection-content-container">
+	@if (Model.Items.Any())
+	{
+		<h3 class="text-center">Содержимое колллекции</h3>
+		<div class="row">
+			@foreach (var item in Model.Items)
+			{
+				<div class="col-xs-12 col-sm-6 col-md-6 col-lg-4 p-2">
+					<a href="/Item/GetItem/@item.Id" >
+						<div class="gallery-item" style="border: 1px solid black; padding: 0;">
+							<div class="object-fit">
+								<img src="data:image/gif;base64,R0lGODlhBwAFAIAAAP///wAAACH5BAEAAAEALAAAAAAHAAUAAAIFjI+puwUAOw=="
+							 data-src="@item.ImgRef"
+							 alt="image"
+							 class="lazy">
+							</div>
+							<div class="gallery-item-info">
+								<ul>
+									<li class="gallery-item-likes">
+										<span class="visualy-hidden">Likes: <i class="fa-solid fa-heart"></i> @item.LikesCount</span>
+									</li>
+									<li class="gallery-items-comments">
+										<span class="visualy-hidden">Comments: <i class="fa-solid fa-comment"></i> @item.CommentsCount</span>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</a>
+				</div>
+			}
+		</div>
+		<div>
+			<partial name="_paginationPartial" for="@Model.Pagination">
+		</div>
+	}
+	else
+	{
+		<h3 class="text-center">No items</h3>
+	}
 </div>
 
 <partial name="CommentsPartial" />

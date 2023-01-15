@@ -9,7 +9,7 @@ namespace CourseWork.Service.Interfaces
 {
 	public interface IItemService
 	{
-		Task<IBaseResponse<List<Item>>> GetItems();
+		Task<IBaseResponse<List<ItemViewModel>>> GetItems();
 		Task<IBaseResponse<ItemViewModel>> GetItem(string id);
 		Task<IBaseResponse<Item>> Create(CreateItemViewModel model, string username, IFormFile image);
 		Task<IBaseResponse<Item>> Edit(ItemViewModel model, IFormFile image);

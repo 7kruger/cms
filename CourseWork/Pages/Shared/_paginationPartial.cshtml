@@ -1,4 +1,4 @@
-﻿@model CourseWork.ViewModels.Index.Pagination
+﻿@model CourseWork.Domain.ViewModels.Shared.Pagination
 
 @{
 	var prevRouteData = Context.Request.Query.ToDictionary(x => x.Key, x => x.Value.ToString());
@@ -16,14 +16,21 @@
 	var nextDisabled = !Model.HasNextPage ? "disabled" : string.Empty;
 }
 
+<a asp-route-pageId="1"
+   class="pagination-icon btn btn-outline-dark @prevDisabled">
+	<i class="fa-solid fa-angles-left"></i>
+</a>
 <a asp-all-route-data="prevRouteData"
-   class="btn btn-outline-dark @prevDisabled">
-	<i class="glyphicon glyphicon-chevron-left"></i>
-	Назад
+   class="pagination-icon btn btn-outline-dark @prevDisabled">
+	<i class="fa-solid fa-chevron-left"></i>
 </a>
 <a asp-all-route-data="nextRouteData"
-   class="btn btn-outline-dark @nextDisabled">
-	Вперед
-	<i class="glyphicon glyphicon-chevron-right"></i>
+   class="pagination-icon btn btn-outline-dark @nextDisabled">
+	<i class="fa-solid fa-chevron-right"></i>
 </a>
+<a asp-route-pageId="@Model.TotalPages"
+   class="pagination-icon btn btn-outline-dark @nextDisabled">
+	<i class="fa-solid fa-angles-right"></i>
+</a>
+<p>Страница: @Model.PageNumber из @Model.TotalPages</p>
 

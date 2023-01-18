@@ -21,26 +21,40 @@ namespace CourseWork.Services.Implementations
 			_collectionRepository = collectionRepository;
 		}
 
-		public async Task<IndexViewModel> GetIndexViewModel(int page, int pageSize, string searchString, Theme? theme)
+		public async Task<IndexViewModel> GetIndexViewModel(int page, int pageSize, string searchString, Theme? theme, SortState? sort)
 		{
-			var collections = await _collectionRepository.GetAll()
-				.OrderByDescending(x => x.Date)
-				.ToListAsync();
+			var collections = _collectionRepository.GetAll();
 
 			if (!string.IsNullOrWhiteSpace(searchString))
 			{
 				collections = collections.Where(c => c.Name.Contains(searchString)
-					|| c.Author.Contains(searchString) || c.Description.Contains(searchString))
-					.ToList();
+					|| c.Author.Contains(searchString) || c.Description.Contains(searchString));
 			}
 
 			if (theme != null)
 			{
-				collections = collections.Where(c => c.Theme == theme).ToList();
+				collections = collections.Where(c => c.Theme == theme);
 			}
 
-			var count = collections.Count;
-			var items = collections.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+			switch (sort)
+			{
+				case SortState.NameAsc:
+					collections = collections.OrderBy(c => c.Name);
+					break;
+				case SortState.NameDesc:
+					collections = collections.OrderByDescending(c => c.Name);
+					break;
+				case SortState.DateDesc:
+					collections = collections.OrderBy(c => c.Name);
+					break;
+				default:
+					// методы сортировки при Sort.Default, Sort.DateDesc и когда сортировка не выбрана одинкавы
+					collections = collections.OrderByDescending(c => c.Date);
+					break;
+			}
+
+			var count = collections.Count();
+			var items = await collections.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
 
 			var pagination = new Pagination(count, page, pageSize);
 			var indexViewModel = new IndexViewModel()
@@ -49,6 +63,8 @@ namespace CourseWork.Services.Implementations
 				Collections = items,
 				Themes = GetThemes().ToList(),
 				ThemeFilterApplied = theme != null ? theme : null,
+				SortStates = GetSortStates().ToList(),
+				SortFilterApplied = sort != null ? sort : null,
 				SearchString = string.IsNullOrWhiteSpace(searchString) ? string.Empty : searchString
 			};
 
@@ -69,6 +85,20 @@ namespace CourseWork.Services.Implementations
 			};
 
 			return themes;
+		}
+
+		private IEnumerable<SelectListItem> GetSortStates()
+		{
+			var sortStates = new List<SelectListItem>()
+			{
+				new SelectListItem() { Value = SortState.Default.ToString(), Text = "По умолчанию", Selected = true },
+				new SelectListItem() { Value = SortState.NameAsc.ToString(), Text = "По имени (А -> Я)", Selected = false },
+				new SelectListItem() { Value = SortState.NameDesc.ToString(), Text = "По имени (Я -> А)", Selected = false },
+				new SelectListItem() { Value = SortState.DateAsc.ToString(), Text = "Сначала новые", Selected = false },
+				new SelectListItem() { Value = SortState.NameDesc.ToString(), Text = "Сначала старые", Selected = false },
+			};
+
+			return sortStates;
 		}
 	}
 }

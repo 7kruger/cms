@@ -27,6 +27,10 @@ textarea {
     width: 185px;
 }
 
+.custom-group-form {
+    width: 300px;
+}
+
 .table-container {
     height: 350px;
     max-height: 350px;
@@ -41,11 +45,6 @@ textarea {
     pointer-events: none;
     cursor: default;
 }
-
-/*.custom-border {
-    border: 1px solid #ccc !important;
-    border-radius: 13px;
-}*/
 
 .validation {
     color: #9e0d00;

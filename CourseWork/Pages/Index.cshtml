@@ -6,23 +6,50 @@
 
 <div>
 	<form method="get">
-		<input class="form-control me-2 m-2"
-			   type="text"
-			   placeholder="Поиск"
-			   aria-label="Search"
-			   name="search"
-			   asp-for="@Model.IndexViewModel.SearchString"
-			   value="@Model.IndexViewModel.SearchString">
-		<select
-				name="theme"
-				asp-for="@Model.IndexViewModel.ThemeFilterApplied"
-				asp-items="@Model.IndexViewModel.Themes"
-				class="form-group">
-		</select>
-		<button class="btn btn-outline-primary m-2" type="submit">Search</button>
+		<div class="text-center d-flex">
+			<input class="form-control me-2 m-2"
+				   type="text"
+				   placeholder="Поиск"
+				   aria-label="Search"
+				   name="search"
+				   asp-for="@Model.IndexViewModel.SearchString"
+				   value="@Model.IndexViewModel.SearchString">
+			<a class="btn btn-primary m-2" 
+			   data-bs-toggle="collapse" 
+			   href="#collapseExample" 
+			   role="button" 
+			   aria-expanded="false"
+			   aria-controls="collapseExample">
+				Filters
+			</a>
+			<button class="btn btn-outline-primary m-2" type="submit">Search</button>
+		</div>
+		
+		<div class="collapse" id="collapseExample">
+			<div class="card card-body ml-2 mr-2">
+				<div class="d-flex justify-content-start">
+
+					<div class="m-2">
+						Сортировка:
+						<select name="sortState"
+								asp-for="@Model.IndexViewModel.SortFilterApplied"
+								asp-items="@Model.IndexViewModel.SortStates">
+						</select>
+					</div>
+
+					<div class="m-2">
+						Тема:
+						<select name="theme"
+								asp-for="@Model.IndexViewModel.ThemeFilterApplied"
+								asp-items="@Model.IndexViewModel.Themes">
+						</select>
+					</div>
+
+				</div>
+			</div>
+		</div>
 	</form>
 </div>
-
 
 @if (Model.IndexViewModel.Collections.Any())
 {

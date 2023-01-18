@@ -17,9 +17,9 @@ namespace CourseWork.Pages
 
 		public IndexViewModel IndexViewModel { get; set; } = new IndexViewModel();
 
-		public async Task OnGetAsync(int? pageId, Theme? theme, string search)
+		public async Task OnGetAsync(int? pageId, Theme? theme, SortState? sortState, string search)
 		{
-			IndexViewModel = await _mainPageViewModelService.GetIndexViewModel(pageId ?? 1, Constants.ITEMS_PER_PAGE, search, theme);
+			IndexViewModel = await _mainPageViewModelService.GetIndexViewModel(pageId ?? 1, Constants.ITEMS_PER_PAGE, search, theme, sortState);
 		}
 	}
 }

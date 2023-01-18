@@ -1,14 +1,25 @@
 ﻿@model CourseWork.Domain.ViewModels.Shared.Pagination
 
 @{
+	var firstPageData = Context.Request.Query.ToDictionary(x => x.Key, x => x.Value.ToString());
+	if (firstPageData.ContainsKey("pageId"))
+		firstPageData.Remove("pageId");
+	firstPageData.Add("pageId", "1");
+
 	var prevRouteData = Context.Request.Query.ToDictionary(x => x.Key, x => x.Value.ToString());
 	if (prevRouteData.ContainsKey("pageId"))
 		prevRouteData.Remove("pageId");
 	prevRouteData.Add("pageId", (Model.PageNumber - 1).ToString());
+
 	var nextRouteData = Context.Request.Query.ToDictionary(x => x.Key, x => x.Value.ToString());
 	if (nextRouteData.ContainsKey("pageId"))
 		nextRouteData.Remove("pageId");
 	nextRouteData.Add("pageId", (Model.PageNumber + 1).ToString());
+
+	var lastPageData = Context.Request.Query.ToDictionary(x => x.Key, x => x.Value.ToString());
+	if (lastPageData.ContainsKey("pageId"))
+		lastPageData.Remove("pageId");
+	lastPageData.Add("pageId", Model.TotalPages.ToString());
 }
 
 @{
@@ -16,7 +27,7 @@
 	var nextDisabled = !Model.HasNextPage ? "disabled" : string.Empty;
 }
 
-<a asp-route-pageId="1"
+<a asp-all-route-data="firstPageData"
    class="pagination-icon btn btn-outline-dark @prevDisabled">
 	<i class="fa-solid fa-angles-left"></i>
 </a>
@@ -28,7 +39,7 @@
    class="pagination-icon btn btn-outline-dark @nextDisabled">
 	<i class="fa-solid fa-chevron-right"></i>
 </a>
-<a asp-route-pageId="@Model.TotalPages"
+<a asp-all-route-data="lastPageData"
    class="pagination-icon btn btn-outline-dark @nextDisabled">
 	<i class="fa-solid fa-angles-right"></i>
 </a>

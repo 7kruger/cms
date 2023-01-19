@@ -6,8 +6,8 @@
 
 <div class="row">
 	<div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 text-center">
-		<div class="parent">
-			<img class="image lazy"
+		<div class="object-fit">
+			<img class="cover lazy"
 				 src="data:image/gif;base64,R0lGODlhBwAFAIAAAP///wAAACH5BAEAAAEALAAAAAAHAAUAAAIFjI+puwUAOw=="
 				 data-src="@Model.ImgRef"
 				 onError="this.src='/images/imgnotfound.jpg'"
@@ -62,14 +62,14 @@
 		<div class="row">
 			@foreach (var item in Model.Items)
 			{
-				<div class="col-xs-12 col-sm-6 col-md-6 col-lg-4 p-2">
+				<div class="col-10 col-sm-6 col-md-6 col-lg-4 p-2">
 					<a href="/Item/GetItem/@item.Id" >
-						<div class="gallery-item" style="border: 1px solid black; padding: 0;">
+						<div class="gallery-item">
 							<div class="object-fit">
 								<img src="data:image/gif;base64,R0lGODlhBwAFAIAAAP///wAAACH5BAEAAAEALAAAAAAHAAUAAAIFjI+puwUAOw=="
 							 data-src="@item.ImgRef"
 							 alt="image"
-							 class="lazy">
+							 class="item-cover lazy">
 							</div>
 							<div class="gallery-item-info">
 								<ul>

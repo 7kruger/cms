@@ -5,7 +5,7 @@
 }
 
 <div class="row">
-	<div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 text-center">
+	<div class="col-10 col-sm-10 col-md-6 col-lg-4 text-center">
 		<div class="object-fit">
 			<img class="cover lazy"
 				 src="data:image/gif;base64,R0lGODlhBwAFAIAAAP///wAAACH5BAEAAAEALAAAAAAHAAUAAAIFjI+puwUAOw=="
@@ -40,18 +40,19 @@
 	</div>
 	<div class="col-xs-12 col-sm-12 col-md-6 col-lg-8 col-md-offset-6">
 		<input type="hidden" id="srcId" value="@Model.Id" />
-		<p><h1>@Model.Name</h1></p>
-		<h4>О коллекции</h4>
-		<small class="text-secondary">Дата создания: @Model.Date</small>
-		<p>Автор: @Model.Author</p>
-		<p>Тема: <a style="text-decoration: none;" href="/?theme=@Model.Theme">@Model.Theme</a></p>
-		<p>Описание: @Model.Description</p>
-		<div>
-			Теги:
-			@foreach (var item in Model.Tags)
-			{
-				<a href="#">#@item.Name</a>
-			}
+		<p><h1 class="text-dark">@Model.Name</h1></p>
+		<div class="mt-5">
+			<small class="text-secondary">Дата создания: @Model.Date</small>
+			<p><strong class="text-dark">Автор:</strong> <a class="my-cursor" id="showProfile">@Model.Author</a></p>
+			<p><strong class="text-dark">Тема:</strong> <a style="text-decoration: none;" href="/?theme=@Model.Theme">@Model.Theme</a></p>
+			<p><strong class="text-dark">Описание:</strong> @Model.Description</p>
+			<div>
+				<strong class="text-dark">Теги:</strong>
+				@foreach (var item in Model.Tags)
+				{
+					<a href="/?hashtag=@item.Name">#@item.Name</a>
+				}
+			</div>
 		</div>
 	</div>
 </div>
@@ -99,6 +100,7 @@
 <partial name="CommentsPartial" />
 
 @section Scripts {
+	<script src="~/js/showProfile.js"></script>
 	<script src="~/js/likes.js"></script>
 	<script src="~/js/comments.js"></script>
 	<script>

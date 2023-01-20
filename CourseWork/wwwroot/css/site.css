@@ -98,6 +98,8 @@ legend {
 }
 
 .object-fit .avatar {
+    height: 150px;
+    width: 150px;
     object-fit: cover;
     object-position: center;
     background-image: url(data:image/gif;base64,R0lGODlhCgAIAIABAN3d3f///yH5BAEAAAEALAAAAAAKAAgAAAINjAOnyJv2oJOrVXrzKQA7);
@@ -222,6 +224,10 @@ legend {
         height: 218.32px;
     }
 
+    .object-fit .cover {
+        height: 420px;
+    }
+
     .pagination-icon {
         width: 37px;
         height: 33.5px;
@@ -233,5 +239,9 @@ legend {
     .object-fit .item-cover {
         height: 250px;
         width: 250px;
+    }
+
+    .object-fit .cover {
+        height: 441.67px;
     }
 }

@@ -4,6 +4,7 @@ using CourseWork.Domain.Enum;
 using CourseWork.Domain.ViewModels.Shared;
 using CourseWork.Services.Interfaces;
 using CourseWork.ViewModels.Index;
+using Dropbox.Api.Team;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -14,14 +15,16 @@ namespace CourseWork.Services.Implementations
 {
 	public class MainPageViewModelService : IMainPageViewModelService
 	{
-		public readonly IRepository<Collection> _collectionRepository;
+		private readonly IRepository<Collection> _collectionRepository;
+		private readonly IRepository<Tag> _tagRepository;
 
-		public MainPageViewModelService(IRepository<Collection> collectionRepository)
+		public MainPageViewModelService(IRepository<Collection> collectionRepository, IRepository<Tag> tagRepository)
 		{
 			_collectionRepository = collectionRepository;
+			_tagRepository = tagRepository;
 		}
 
-		public async Task<IndexViewModel> GetIndexViewModel(int page, int pageSize, string searchString, Theme? theme, SortState? sort)
+		public async Task<IndexViewModel> GetIndexViewModel(int page, int pageSize, string searchString, Theme? theme, SortState? sort, string? hashtag)
 		{
 			var collections = _collectionRepository.GetAll();
 
@@ -51,6 +54,12 @@ namespace CourseWork.Services.Implementations
 					// методы сортировки при Sort.Default, Sort.DateDesc и когда сортировка не выбрана одинкавы
 					collections = collections.OrderByDescending(c => c.Date);
 					break;
+			}
+
+			if (!string.IsNullOrWhiteSpace(hashtag))
+			{
+				var t = await _tagRepository.GetAll().FirstOrDefaultAsync(t => t.Name == hashtag);
+				collections = collections.Where(c => c.Tags.Contains(t));
 			}
 
 			var count = collections.Count();

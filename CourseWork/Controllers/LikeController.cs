@@ -1,9 +1,11 @@
 ﻿using CourseWork.Service.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace CourseWork.Controllers
 {
+	[Authorize]
 	[Route("api")]
 	public class LikeController : Controller
 	{
@@ -14,6 +16,7 @@ namespace CourseWork.Controllers
 			_likeService = likeService;
 		}
 
+		[AllowAnonymous]
 		[HttpGet]
 		[Route("LoadLikes")]
 		public async Task<IActionResult> LoadLikes(string id)

@@ -4,7 +4,6 @@ using CourseWork.Domain.Enum;
 using CourseWork.Domain.ViewModels.Shared;
 using CourseWork.Services.Interfaces;
 using CourseWork.ViewModels.Index;
-using Dropbox.Api.Team;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -51,7 +50,6 @@ namespace CourseWork.Services.Implementations
 					collections = collections.OrderBy(c => c.Name);
 					break;
 				default:
-					// методы сортировки при Sort.Default, Sort.DateDesc и когда сортировка не выбрана одинкавы
 					collections = collections.OrderByDescending(c => c.Date);
 					break;
 			}

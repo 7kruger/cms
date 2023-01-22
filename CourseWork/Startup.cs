@@ -1,4 +1,7 @@
 using CourseWork.DAL;
+using CourseWork.DAL.Repositories;
+using CourseWork.Middlewares;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -56,6 +59,7 @@ namespace CourseWork
 			app.UseRouting();
 
 			app.UseAuthentication();
+			app.UseMiddleware<CheckUserStatusMiddleware>();
 			app.UseAuthorization();
 
 			app.UseEndpoints(endpoints =>

@@ -89,6 +89,13 @@ namespace CourseWork.Service.Implementations
 						Description = "Неверный логин или пароль"
 					};
 				}
+				if (user.IsBlocked)
+				{
+					return new BaseResponse<ClaimsIdentity>
+					{
+						Description = "Пользователь заблокирован"
+					};
+				}
 
 				var result = GetClaimsIdentity(user);
 

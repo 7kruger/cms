@@ -32,6 +32,7 @@ namespace CourseWork
 			services.AddScoped<IAccountService, AccountService>();
 			services.AddScoped<IProfileService, ProfileService>();
 			services.AddScoped<IMainPageViewModelService, MainPageViewModelService>();
+			services.AddScoped<IAdminService, AdminService>();
 		}
 	}
 }

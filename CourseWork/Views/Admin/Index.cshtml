@@ -1,0 +1,64 @@
+﻿@using CourseWork.Domain.Entities;
+@model List<User>
+
+@{
+	ViewData["Title"] = "AdminPage";
+}
+
+<div class="container text-center">
+	<form asp-action="UsersForm" asp-controller="Admin" method="post">
+		<button class="btn btn-outline-success" name="type" value="Unlock">Unlock</button>
+		<button class="btn btn-outline-warning" name="type" value="Block">Block</button>
+		<button class="btn btn-outline-warning" name="type" value="AddToAdmin">Add to admin</button>
+		<button class="btn btn-outline-danger" name="type" value="RemoveFromAdmin">Remove from admin</button>
+		<button class="btn btn-outline-danger" name="type" value="Delete">Delete</button><br /><br />
+
+		<div style="overflow: auto;">
+			<table class="table table-sm">
+				<thead>
+					<tr>
+						<th scope="col">Выбрать все <input type="checkbox" onClick="toggle(this)" /></th>
+						<th scope="col">ID</th>
+						<th scope="col">Имя</th>
+						<th scope="col">Дата регистрации</th>
+						<th scope="col">Статус</th>
+						<th scope="col">Роль</th>
+					</tr>
+				</thead>
+				<tbody>
+					@foreach (User user in Model)
+					{
+						<tr>
+							<td><input type="checkbox" name="selectedUsers" value="@user.Id" /></td>
+							<td><p>@user.Id</p></td>
+							<td><p>@user.Name</p></td>
+							<td><p>@user.RegistrationDate.ToString()</p></td>
+							<td>
+								@if (!user.IsBlocked)
+								{
+									<p>Активный</p>
+								}
+								else
+								{
+									<p>Заблокирован</p>
+								}
+
+							</td>
+							<td>
+								@if (user.Role == CourseWork.Domain.Enum.Role.Admin)
+								{
+									<p>Админ</p>
+								}
+								else
+								{
+									<p>Пользователь</p>
+								}
+							</td>
+						</tr>
+					}
+				</tbody>
+			</table>
+		</div>
+	</form>
+</div>
+

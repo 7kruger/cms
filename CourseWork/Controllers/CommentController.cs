@@ -34,7 +34,7 @@ namespace CourseWork.Controllers
 			var response = await _commentService.AddComment(id, GetCurrentUsername(), content);
 			if (response.StatusCode == Domain.Enum.StatusCode.OK)
 			{
-				return Ok();
+				return Ok(response.Data);
 			}
 			return StatusCode(404);
 		}

@@ -1,4 +1,8 @@
-﻿$(document).ready(() => {
+﻿let commentsCount = 0;
+const numToShow = 5;
+const btn = $("#showMore");
+
+$(document).ready(() => {
 	loadComments();
 });
 
@@ -12,7 +16,16 @@ $("#comments").on("click", "#deleteComment", function () {
 
 $(document).on("click", "#sendComment", function () {
 	addComment();
-})
+});
+
+$(document).on("click", "#showMore", function () {
+	let list = $("#comments").children().children()
+	let nowShowing = list.filter(":visible").length;
+	list.slice(nowShowing - 1, nowShowing + numToShow).fadeIn();
+	if (nowShowing + 5 >= commentsCount) {
+		$("#showMore").hide();
+    }
+});
 
 const addComment = () => {
 	let comment = $("#comment").val();
@@ -24,7 +37,9 @@ const addComment = () => {
 		data: { content: comment, id: srcId },
 	}).done((data) => {
 		$("#comment").val("");
-		loadComments();
+		let div = $("#comments").children();
+		let com = commentPartial(data, true);
+		div.first().before(com);
 	}).fail((e) => {
 		Swal.fire({
 			icon: 'error',
@@ -46,29 +61,18 @@ const loadComments = () => {
 		data: { id: srcId },
 	}).done((comments) => {
 		let container = $("<div></div>");
+		commentsCount = comments.length;
 
-		comments.forEach(x => {
-			let div = $("<div class='mb-2 list-group-item list-group-item-light' id='" + x.id + "'></div>");
+		if (commentsCount > numToShow) {
+			btn.show();
+        }
 
-			let deletePartial = "";
-			if (x.canUserDeleteComment) {
-				deletePartial = "<div id='deleteComment' class='my-cursor'><img src='/images/trash.svg'></div>";
-			}
-
-			let header = $("<div class='d-flex justify-content-between mb-3'>"
-								+ "<div><strong id='showProfile' class='my-cursor'>" + x.userName + "</strong> " + getDate(x.date) + "</div>"
-								+ deletePartial
-							+ "</div>");
-
-			let content = $("<p>" + x.content + "</p>");
-
-			div.append(header);
-			div.append(content);
+        for (let i = 0; i < comments.length; i++) {
+			let div = commentPartial(comments[i], numToShow > i);
 			container.append(div);
-		});
+        }
 
 		$("#comments").append(container);
-
 	}).fail((e) => {
 		Swal.fire({
 			icon: 'error',
@@ -76,6 +80,33 @@ const loadComments = () => {
 			text: 'Не удалось загрузить комментарии',
 		});
 	});
+}
+
+const commentPartial = (x, visible) => {
+	let div = $("<div class='mb-2 list-group-item list-group-item-light' id='" + x.id + "'></div>");
+
+	let deletePartial = "";
+	if (x.canUserDeleteComment) {
+		deletePartial = "<div id='deleteComment' class='my-cursor'><img src='/images/trash.svg'></div>";
+	}
+
+	let header = $("<div class='d-flex justify-content-between mb-3'>"
+		+ "<div><strong id='showProfile' class='my-cursor'>" + x.userName + "</strong> " + getDate(x.date) + "</div>"
+		+ deletePartial
+		+ "</div>");
+
+	let content = $("<p>" + x.content + "</p>");
+
+	div.append(header);
+	div.append(content);
+
+	if (visible) {
+		div.show();
+	} else {
+		div.hide();
+	}
+
+	return div;
 }
 
 const clearComments = () => {

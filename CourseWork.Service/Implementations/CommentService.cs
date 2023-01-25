@@ -60,29 +60,38 @@ namespace CourseWork.Service.Implementations
 				};
 			}
 		}
-		public async Task<IBaseResponse<bool>> AddComment(string id, string username, string content)
+		public async Task<IBaseResponse<CommentModel>> AddComment(string id, string username, string content)
 		{
 			try
 			{
-				var comment = new Comment
+				await _commentRepository.Create(new Comment
 				{
 					Content = content,
 					User = await _userRepository.GetAll().FirstOrDefaultAsync(u => u.Name == username),
 					Date = DateTime.Now,
 					SrcId = id,
-				};
+				});
 
-				await _commentRepository.Create(comment);
+				var comment = await _commentRepository.GetAll()
+									.OrderBy(x => x.Date)
+									.LastOrDefaultAsync(x => x.User.Name == username);
 
-				return new BaseResponse<bool>
+				return new BaseResponse<CommentModel>
 				{
 					StatusCode = StatusCode.OK,
-					Data = true
+					Data = new CommentModel
+					{
+						Id = comment.Id,
+						Content = comment.Content,
+						UserName = comment.User.Name,
+						Date = comment.Date,
+						CanUserDeleteComment = true,
+					}
 				};
 			}
 			catch (Exception ex)
 			{
-				return new BaseResponse<bool>
+				return new BaseResponse<CommentModel>
 				{
 					StatusCode = StatusCode.InternalServerError,
 					Description = $"[AddComment] : {ex.Message}"

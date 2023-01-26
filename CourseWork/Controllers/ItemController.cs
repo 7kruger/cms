@@ -3,6 +3,7 @@ using CourseWork.Service.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace CourseWork.Controllers
@@ -39,6 +40,17 @@ namespace CourseWork.Controllers
 				return View(response.Data);
 			}
 			return View("Error", response.Description);
+		}
+
+		[HttpGet]
+		public async Task<IActionResult> MyItems(int? pageId)
+		{
+			var response = await _itemService.GetItems();
+			if (response.StatusCode == Domain.Enum.StatusCode.OK)
+			{
+				return View(response.Data.Where(x => x.Author == GetCurrentUsername()));
+			}
+			return View("Error");
 		}
 
 		[HttpGet]

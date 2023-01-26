@@ -17,13 +17,14 @@ namespace CourseWork.Pages
 
 		public IndexViewModel IndexViewModel { get; set; } = new IndexViewModel();
 
-		public async Task OnGetAsync(int? pageId, Theme? theme, SortState? sortState, string search, string hashtag)
+		public async Task OnGetAsync(int? pageId, 
+									 Theme? theme, 
+									 SortState? sortState, 
+									 SearchIn? searchIn,
+									 string search, 
+									 string hashtag)
 		{
-			IndexViewModel = await _mainPageViewModelService.GetIndexViewModel(pageId ?? 1, Constants.ITEMS_PER_PAGE, search, theme, sortState, hashtag);
-		}
-
-		public async Task OnGetHashtag(string tag)
-		{
+			IndexViewModel = await _mainPageViewModelService.GetIndexViewModel(pageId ?? 1, search, theme, sortState, searchIn, hashtag);
 		}
 	}
 }

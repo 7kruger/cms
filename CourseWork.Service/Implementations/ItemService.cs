@@ -59,11 +59,12 @@ namespace CourseWork.Service.Implementations
 						Content = x.Content,
 						Date = x.Date,
 						ImgRef = x.ImgRef,
+						Tags = x.Tags,
 						CollectionId = x.CollectionId,
 						LikesCount = _likeRepository.GetAll().Where(l => l.SrcId == x.Id).Count(),
-						CommentsCount  = _commentRepository.GetAll().Where(c => c.SrcId == x.Id).Count(),
+						CommentsCount = _commentRepository.GetAll().Where(c => c.SrcId == x.Id).Count(),
 					};
-                }).OrderByDescending(i => i.Date)
+				}).OrderByDescending(i => i.Date)
 				  .ToList();
 
 				return new BaseResponse<List<ItemViewModel>>
@@ -109,7 +110,7 @@ namespace CourseWork.Service.Implementations
 					Date = item.Date,
 					ImgRef = item.ImgRef,
 					CollectionName = collectionName,
-					LikesCount = _likeRepository.GetAll().Where(l=> l.SrcId == item.Id).Count()
+					LikesCount = _likeRepository.GetAll().Where(l => l.SrcId == item.Id).Count()
 				};
 
 				return new BaseResponse<ItemViewModel>

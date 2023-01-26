@@ -81,6 +81,15 @@ legend {
     background-image: url(data:image/gif;base64,R0lGODlhCgAIAIABAN3d3f///yH5BAEAAAEALAAAAAAKAAgAAAINjAOnyJv2oJOrVXrzKQA7);
 }
 
+.object-fit .collection-content-item-cover {
+    border: 1px solid black;
+    padding: 0;
+    object-fit: cover;
+    object-position: center;
+    width: 100%;
+    background-image: url(data:image/gif;base64,R0lGODlhCgAIAIABAN3d3f///yH5BAEAAAEALAAAAAAKAAgAAAINjAOnyJv2oJOrVXrzKQA7);
+}
+
 .object-fit .item-cover {
     border: 1px solid black;
     padding: 0;
@@ -152,12 +161,16 @@ legend {
         height: 322px;
     }
 
-    .object-fit .cover {
-        height: 350px;
+    .object-fit .item-cover {
+        height: 364px;
     }
 
-    .object-fit .item-cover {
-        height: 310.21px;
+    .object-fit .cover {
+        height: 445px;
+    }
+
+    .object-fit .collection-content-item-cover {
+        height: 312.21px;
     }
 }
 
@@ -167,12 +180,16 @@ legend {
         height: 332px;
     }
 
-    .object-fit .cover {
-        height: 350px;
+    .object-fit .item-cover {
+        height: 364px;
     }
 
-    .object-fit .item-cover {
-        height: 310.21px;
+    .object-fit .cover {
+        height: 445px;
+    }
+
+    .object-fit .collection-content-item-cover {
+        height: 312.21px;
     }
 }
 
@@ -182,12 +199,16 @@ legend {
         height: 271.99px;
     }
 
-    .object-fit .cover {
-        height: 289.99px;
+    .object-fit .item-cover {
+        height: 303.99px;
     }
 
-    .object-fit .item-cover {
-        height: 258.6px;
+    .object-fit .cover {
+        height: 370px;
+    }
+
+    .object-fit .collection-content-item-cover {
+        height: 260.6px;
     }
 }
 
@@ -197,12 +218,16 @@ legend {
         height: 312px;
     }
 
+    .object-fit .item-cover {
+        height: 344px;
+    }
+
     .object-fit .cover {
         height: 330px;
     }
 
-    .object-fit .item-cover {
-        height: 293.71px;
+    .object-fit .collection-content-item-cover {
+        height: 295.71px;
     }
 }
 
@@ -210,6 +235,10 @@ legend {
 @media screen and (max-width: 767px) {
     .object-fit .collection-cover {
         height: 404px;
+    }
+
+    .object-fit .item-cover {
+        height: 256px;
     }
 
     .object-fit .cover {
@@ -220,8 +249,8 @@ legend {
         justify-content: center;
     }
 
-    .object-fit .item-cover {
-        height: 218.32px;
+    .object-fit .collection-content-item-cover {
+        height: 220.32px;
     }
 
     .object-fit .cover {
@@ -236,9 +265,13 @@ legend {
 
 /* xs */
 @media screen and (max-width: 575px) {
-    .object-fit .item-cover {
+    .object-fit .collection-content-item-cover {
         height: 250px;
         width: 250px;
+    }
+
+    .object-fit .item-cover {
+        height: 300px;
     }
 
     .object-fit .cover {

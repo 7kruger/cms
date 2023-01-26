@@ -1,0 +1,43 @@
+﻿@using CourseWork.Domain.ViewModels.Shared;
+@model IEnumerable<CourseWork.Domain.Entities.Collection>
+
+@{
+    ViewData["Title"] = "MyCollections";
+}
+
+@{
+	var pageSize = Constants.COLLECTIONS_PER_PAGE;
+	var query = Context.Request.Query.ToDictionary(x => x.Key, x => x.Value.ToString())
+										.GetValueOrDefault("pageId");
+	int pageId = string.IsNullOrWhiteSpace(query) ? 1 : int.Parse(query);
+
+	var collections = Model.Skip((pageId - 1) * pageSize).Take(pageSize);
+	var pagination = new Pagination(Model.Count(), pageId, pageSize);
+}
+
+@if (Model.Any())
+{
+	<h1 class="text-center m-4">Мои коллекции</h1>
+	<div class="row">
+		@foreach (var col in collections)
+		{
+			<partial name="_collectionPartial" for="@col" />
+		}
+	</div>
+	<div class="ml-2">
+		<partial name="_paginationPartial" for="@pagination" />
+	</div>
+}
+else
+{
+	<h3 class="text-center text-dark">Ничего не найдено</h3>
+} 
+
+@section Scripts {
+	<script>
+		var lazyLoadInstance = new LazyLoad({
+			elements_selector: ".lazy"
+		});
+	</script>
+}
+

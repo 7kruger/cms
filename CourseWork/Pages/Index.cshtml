@@ -14,20 +14,29 @@
 				   name="search"
 				   asp-for="@Model.IndexViewModel.SearchString"
 				   value="@Model.IndexViewModel.SearchString">
-			<a class="btn btn-primary m-2" 
-			   data-bs-toggle="collapse" 
-			   href="#collapseExample" 
-			   role="button" 
+			<a class="btn btn-primary m-2"
+			   data-bs-toggle="collapse"
+			   href="#collapseExample"
+			   role="button"
 			   aria-expanded="false"
 			   aria-controls="collapseExample">
 				Filters
 			</a>
 			<button class="btn btn-outline-primary m-2" type="submit">Search</button>
 		</div>
-		
+
 		<div class="collapse" id="collapseExample">
 			<div class="card card-body ml-2 mr-2">
 				<div class="d-flex justify-content-start">
+
+					<div class="m-2">
+						Искать среди:
+						<select name="searchIn"
+								asp-for="@Model.IndexViewModel.SearchInFilterApplied">
+							<option value="Collections">Коллекций</option>
+							<option value="Items">Айтемов</option>
+						</select>
+					</div>
 
 					<div class="m-2">
 						Сортировка:
@@ -64,9 +73,42 @@
 		<partial name="_paginationPartial" for="@Model.IndexViewModel.Pagination" />
 	</div>
 }
+else if (Model.IndexViewModel.Items.Any())
+{
+	<div class="row">
+		@foreach (var item in Model.IndexViewModel.Items)
+		{
+			<div class="col-10 col-sm-6 col-md-6 col-lg-4 p-2">
+				<a href="/Item/GetItem/@item.Id">
+					<div class="gallery-item">
+						<div class="object-fit">
+							<img src="data:image/gif;base64,R0lGODlhBwAFAIAAAP///wAAACH5BAEAAAEALAAAAAAHAAUAAAIFjI+puwUAOw=="
+						 data-src="@item.ImgRef"
+						 alt="image"
+						 class="item-cover lazy">
+						</div>
+						<div class="gallery-item-info">
+							<ul>
+								<li class="gallery-item-likes">
+									<span class="visualy-hidden">Likes: <i class="fa-solid fa-heart"></i> @item.LikesCount</span>
+								</li>
+								<li class="gallery-items-comments">
+									<span class="visualy-hidden">Comments: <i class="fa-solid fa-comment"></i> @item.CommentsCount</span>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</a>
+			</div>
+		}
+	</div>
+	<div class="ml-2">
+		<partial name="_paginationPartial" for="@Model.IndexViewModel.Pagination" />
+	</div>
+}
 else
 {
-	<h3 class="text-center text-dark">Список коллекций пуст</h3>
+	<h3 class="text-center text-dark">Ничего не найдено</h3>
 }
 
 @section Scripts {

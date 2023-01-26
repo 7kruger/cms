@@ -5,7 +5,7 @@
 }
 
 <div class="row">
-	<div class="col-10 col-sm-10 col-md-6 col-lg-4 text-center">
+	<div class="col-10 col-sm-10 col-md-6 col-lg-5 text-center">
 		<div class="object-fit">
 			<img class="cover lazy"
 				 src="data:image/gif;base64,R0lGODlhBwAFAIAAAP///wAAACH5BAEAAAEALAAAAAAHAAUAAAIFjI+puwUAOw=="
@@ -38,7 +38,7 @@
 			</div>
 		}
 	</div>
-	<div class="col-xs-12 col-sm-12 col-md-6 col-lg-8 col-md-offset-6">
+	<div class="col-xs-12 col-sm-12 col-md-6 col-lg-7  col-md-offset-6">
 		<input type="hidden" id="srcId" value="@Model.Id" />
 		<p><h1 class="text-dark">@Model.Name</h1></p>
 		<div class="mt-5">
@@ -70,7 +70,7 @@
 								<img src="data:image/gif;base64,R0lGODlhBwAFAIAAAP///wAAACH5BAEAAAEALAAAAAAHAAUAAAIFjI+puwUAOw=="
 							 data-src="@item.ImgRef"
 							 alt="image"
-							 class="item-cover lazy">
+							 class="collection-content-item-cover lazy">
 							</div>
 							<div class="gallery-item-info">
 								<ul>
@@ -93,7 +93,7 @@
 	}
 	else
 	{
-		<h3 class="text-center">No items</h3>
+		<h3 class="text-center mb-5">Коллекция пустая</h3>
 	}
 </div>
 

@@ -41,16 +41,15 @@
 	</div>
 	<div class="col-xs-12 col-sm-12 col-md-6 col-lg-7 col-md-offset-6">
 		<input type="hidden" id="srcId" value="@Model.Id" />
-		<h1>@Model.Name</h1>
-		<h3>Об айтеме</h3>
-		<small class="text-secondary">Дата создания: @Model.Date</small>
-		<p>Автор: @Model.Author</p>
-		<p>Содержание: @Model.Content</p>
+		<p><h1 class="text-dark">@Model.Name</h1></p>
+		<div class="mt-5">
+			<small class="text-secondary">Дата создания: @Model.Date</small>
+			<p><strong class="text-dark">Автор:</strong> <a class="my-cursor" id="showProfile">@Model.Author</a></p>
+			<p><strong class="text-dark">Описание:</strong> @Model.Content</p>
+		</div>
 	</div>
 
-	<div class="container">
-		<h3 class="text-center"></h3>
-
+	<div class="container mt-4 mb-4">
 		@if (!string.IsNullOrWhiteSpace(Model.CollectionId))
 		{
 			<h4>Айтем находится в коллекции <a href="/Collection/GetCollection/@Model.CollectionId">@Model.CollectionName</a></h4>
@@ -63,6 +62,7 @@
 
 
 @section Scripts {
+	<script src="~/js//showProfile.js"></script>
 	<script src="~/js/comments.js"></script>
 	<script src="~/js/likes.js"></script>
 	<script>

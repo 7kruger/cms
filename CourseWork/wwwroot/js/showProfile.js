@@ -11,8 +11,9 @@ const showProfile = (name) => {
 		data: { name: name },
 	}).done((data) => {
 		Swal.fire({
-			html: `<div class="object-fit">`
-					+ `<img style="height: 150px; width: 150px;" src="/images/person.svg" alt="avatar">`
+			html: `<div style="object-fit: cover; object-position: center; margin: 15px;">`
+						+ `<img style="height: 150px; width: 150px; object-fit: cover; object-position: center; border-radius: 100px; box-shadow: 0 0 17px #666;"`
+								+`src="${data.imgRef}" onError="/images/person.svg" alt="avatar">`
 				+ `</div>`
 				+ `<p>Имя: ${data.username}</p>`
 				+ `<p>Дата регистрации: ${getDate(data.registrationDate)}</p>`

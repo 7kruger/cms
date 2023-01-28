@@ -111,7 +111,8 @@ legend {
     width: 150px;
     object-fit: cover;
     object-position: center;
-    background-image: url(data:image/gif;base64,R0lGODlhCgAIAIABAN3d3f///yH5BAEAAAEALAAAAAAKAAgAAAINjAOnyJv2oJOrVXrzKQA7);
+    border-radius: 100px;
+    box-shadow: 0 0 17px #666;
 }
 
 .gallery-item {

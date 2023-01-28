@@ -129,7 +129,7 @@ namespace CourseWork.Service.Implementations
 			{
 				var profile = new Profile
 				{
-					ImgRef = "avatar.png",
+					ImgRef = "person.svg",
 					UserId = user.Id,
 				};
 

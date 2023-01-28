@@ -1,5 +1,4 @@
 ﻿using CourseWork.DAL.Interfaces;
-using CourseWork.DAL.Repositories;
 using CourseWork.Domain.Entities;
 using CourseWork.Domain.Enum;
 using CourseWork.Domain.Response;
@@ -124,7 +123,9 @@ namespace CourseWork.Service.Implementations
 					};
 				}
 
-				var allItems = await _itemRepository.GetAll().ToListAsync();
+				var allItems = await _itemRepository.GetAll()
+													.Where(x => string.IsNullOrWhiteSpace(x.CollectionId) || x.Collection == collection)
+													.ToListAsync();
 				var items = GetItemViewModels(collection).ToList();
 
 				var allTags = await _tagRepository.GetAll().ToListAsync();
@@ -176,7 +177,9 @@ namespace CourseWork.Service.Implementations
 					};
 				}
 
-				var allItems = await _itemRepository.GetAll().ToListAsync();
+				var allItems = await _itemRepository.GetAll()
+													.Where(x => string.IsNullOrWhiteSpace(x.CollectionId))
+													.ToListAsync();
 				var allTags = await _tagRepository.GetAll().ToListAsync();
 				var tagsInCollection = collection.Tags;
 

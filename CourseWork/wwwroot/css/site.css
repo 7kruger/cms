@@ -159,26 +159,26 @@ legend {
 /* xxl */
 @media screen and (min-width: 1400px) {
     .object-fit .collection-cover {
-        height: 322px;
+        height: 398px;
     }
 
     .object-fit .item-cover {
-        height: 364px;
+        height: 424px;
     }
 
     .object-fit .cover {
-        height: 445px;
+        height: 526px;
     }
 
     .object-fit .collection-content-item-cover {
-        height: 312.21px;
+        height: 363.52px;
     }
 }
 
 /* xl */
 @media screen and (max-width: 1399px) {
     .object-fit .collection-cover {
-        height: 332px;
+        height: 338px;
     }
 
     .object-fit .item-cover {
@@ -186,18 +186,18 @@ legend {
     }
 
     .object-fit .cover {
-        height: 445px;
+        height: 451px;
     }
 
     .object-fit .collection-content-item-cover {
-        height: 312.21px;
+        height: 311.93px;
     }
 }
 
 /* lg */
 @media screen and (max-width: 1199px) {
     .object-fit .collection-cover {
-        height: 271.99px;
+        height: 277.99px;
     }
 
     .object-fit .item-cover {
@@ -205,18 +205,18 @@ legend {
     }
 
     .object-fit .cover {
-        height: 370px;
+        height: 376px;
     }
 
     .object-fit .collection-content-item-cover {
-        height: 260.6px;
+        height: 260.32px;
     }
 }
 
 /* md */
 @media screen and (max-width: 991px) {
     .object-fit .collection-cover {
-        height: 312px;
+        height: 318px;
     }
 
     .object-fit .item-cover {
@@ -224,18 +224,18 @@ legend {
     }
 
     .object-fit .cover {
-        height: 330px;
+        height: 336px;
     }
 
     .object-fit .collection-content-item-cover {
-        height: 295.71px;
+        height: 295.29px;
     }
 }
 
 /* sm */
 @media screen and (max-width: 767px) {
     .object-fit .collection-cover {
-        height: 404px;
+        height: 413px;
     }
 
     .object-fit .item-cover {
@@ -243,7 +243,7 @@ legend {
     }
 
     .object-fit .cover {
-        height: 510px;
+        height: 429px;
     }
 
     .row {
@@ -251,11 +251,7 @@ legend {
     }
 
     .object-fit .collection-content-item-cover {
-        height: 220.32px;
-    }
-
-    .object-fit .cover {
-        height: 420px;
+        height: 219.68px;
     }
 
     .pagination-icon {
@@ -272,7 +268,7 @@ legend {
     }
 
     .object-fit .item-cover {
-        height: 300px;
+        height: 420px;
     }
 
     .object-fit .cover {

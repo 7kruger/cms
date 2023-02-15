@@ -20,7 +20,7 @@ namespace CourseWork
 		public IConfiguration Configuration { get; }
 		public void ConfigureServices(IServiceCollection services)
 		{
-			string connection = Configuration.GetConnectionString("HostDB");
+			string connection = Configuration.GetConnectionString("LocalDB");
 			services.AddDbContext<ApplicationDbContext>(options =>
 				options.UseSqlServer(connection));
 

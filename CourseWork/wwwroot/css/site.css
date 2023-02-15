@@ -3,23 +3,18 @@
     padding: 0;
 }
 
-html {
-  font-size: 14px;
-}
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-html {
-  position: relative;
-  min-height: 100%;
+.dark-mode, .dark-mode div, .dark-mode .card-text,
+.dark-mode .icon-white, .dark-mode p, .dark-mode h1,
+.dark-mode h2, .dark-mode h3, .dark-mode h4, .dark-mode h5,
+.dark-mode h6, .dark-mode label, .dark-mode [scope="col"],
+.dark-mode option, .dark-mode td, .dark-mode tr,
+.dark-mode strong {
+    color: #adb5bd;
 }
 
-body {
-  margin-bottom: 60px;
-}
+    .dark-mode .gallery-item-info, .dark-mode .gallery-item-info .icon-white {
+        color: white;
+    }
 
 textarea {
     height: 170px;

@@ -27,21 +27,28 @@
 	var nextDisabled = !Model.HasNextPage ? "disabled" : string.Empty;
 }
 
-<a asp-all-route-data="firstPageData"
-   class="pagination-icon btn btn-outline-dark @prevDisabled">
-	<i class="fa-solid fa-angles-left"></i>
-</a>
-<a asp-all-route-data="prevRouteData"
-   class="pagination-icon btn btn-outline-dark @prevDisabled">
-	<i class="fa-solid fa-chevron-left"></i>
-</a>
-<a asp-all-route-data="nextRouteData"
-   class="pagination-icon btn btn-outline-dark @nextDisabled">
-	<i class="fa-solid fa-chevron-right"></i>
-</a>
-<a asp-all-route-data="lastPageData"
-   class="pagination-icon btn btn-outline-dark @nextDisabled">
-	<i class="fa-solid fa-angles-right"></i>
-</a>
-<p>Страница: @Model.PageNumber из @Model.TotalPages</p>
+<div>
+	<div>
+		<a asp-all-route-data="firstPageData"
+		   class="pagination-icon btn btn-outline-dark @prevDisabled">
+			<i class="fa-solid fa-angles-left"></i>
+		</a>
+		<a asp-all-route-data="prevRouteData"
+		   class="pagination-icon btn btn-outline-dark @prevDisabled">
+			<i class="fa-solid fa-chevron-left"></i>
+		</a>
+		<a asp-all-route-data="nextRouteData"
+		   class="pagination-icon btn btn-outline-dark @nextDisabled">
+			<i class="fa-solid fa-chevron-right"></i>
+		</a>
+		<a asp-all-route-data="lastPageData"
+		   class="pagination-icon btn btn-outline-dark @nextDisabled">
+			<i class="fa-solid fa-angles-right"></i>
+		</a>
+	</div>
+	<div>
+		<p>Страница: @Model.PageNumber из @Model.TotalPages</p>
+	</div>
+</div>
+
 

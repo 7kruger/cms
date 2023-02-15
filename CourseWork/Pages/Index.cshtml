@@ -26,12 +26,13 @@
 		</div>
 
 		<div class="collapse" id="collapseExample">
-			<div class="card card-body ml-2 mr-2">
-				<div class="d-flex justify-content-start">
+			<div class="card card-body ms-2 me-2">
+				<div class="d-flex flex-column flex-sm-row justify-content-start">
 
 					<div class="m-2">
 						Искать среди:
-						<select name="searchIn"
+						<select class="form-control"
+								name="searchIn"
 								asp-for="@Model.IndexViewModel.SearchInFilterApplied">
 							<option value="Collections">Коллекций</option>
 							<option value="Items">Айтемов</option>
@@ -40,7 +41,8 @@
 
 					<div class="m-2">
 						Сортировка:
-						<select name="sortState"
+						<select class="form-control"
+								name="sortState"
 								asp-for="@Model.IndexViewModel.SortFilterApplied"
 								asp-items="@Model.IndexViewModel.SortStates">
 						</select>
@@ -48,7 +50,8 @@
 
 					<div class="m-2">
 						Тема:
-						<select name="theme"
+						<select class="form-control"
+								name="theme"
 								asp-for="@Model.IndexViewModel.ThemeFilterApplied"
 								asp-items="@Model.IndexViewModel.Themes">
 						</select>
@@ -60,7 +63,6 @@
 	</form>
 </div>
 
-<h3 class="text-center text-dark" id="message"></h3>
 @if (Model.IndexViewModel.Collections.Any())
 {
 	<div class="row">
@@ -69,7 +71,7 @@
 			<partial name="_collectionPartial" for="@col" />
 		}
 	</div>
-	<div class="ml-2">
+	<div class="ms-2">
 		<partial name="_paginationPartial" for="@Model.IndexViewModel.Pagination" />
 	</div>
 }

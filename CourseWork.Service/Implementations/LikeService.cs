@@ -25,7 +25,7 @@ namespace CourseWork.Service.Implementations
 			try
 			{
 				var likes = await _likeRepository.GetAll()
-					.Where(l => l.SrcId == id)
+					.Where(l => l.SrcId == id && l.UserName == username)
 					.ToListAsync();
 
 				bool isCurrentUserLiked = false;

@@ -87,7 +87,7 @@ const commentPartial = (x, visible) => {
 
 	let deletePartial = "";
 	if (x.canUserDeleteComment) {
-		deletePartial = "<div id='deleteComment' class='my-cursor'><img src='/images/trash.svg'></div>";
+		deletePartial = "<div id='deleteComment' class='my-cursor'><i class='fa-solid fa-trash'></i></div>";
 	}
 
 	let header = $("<div class='d-flex justify-content-between mb-3'>"

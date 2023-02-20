@@ -97,6 +97,30 @@
 	}
 </div>
 
+<div class="modal fade" id="showUserInfoModal" tabindex="-1" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h1 class="modal-title fs-5" id="exampleModalLabel">Информация о пользователе</h1>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body text-center">
+				<div>
+					<div class="object-fit mb-3">
+						<img id="avatar" class="avatar lazy" />
+					</div>
+					<h3 id="username"></h3>
+					<p id="collectionsCount"></p>
+					<p id="itemsCount"></p>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+			</div>
+		</div>
+	</div>
+</div>
+
 <partial name="CommentsPartial" />
 
 @section Scripts {

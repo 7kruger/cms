@@ -3,6 +3,8 @@ using CourseWork.Service.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -45,14 +47,24 @@ namespace CourseWork.Controllers
 		public IActionResult CreateCollection() => View();
 
 		[HttpPost]
-		public async Task<IActionResult> CreateCollection(CreateCollectionViewModel model, IFormFile image)
+		public async Task<IActionResult> CreateCollection(CreateCollectionViewModel model, string image)
 		{
 			if (!ModelState.IsValid)
 			{
 				return View(model);
 			}
 
-			var response = await _collectionService.Create(model, GetCurrentUsername(), image);
+			IFormFile file = null;
+
+			if (!string.IsNullOrWhiteSpace(image))
+			{
+				image = image.Replace("data:image/jpeg;base64,", string.Empty);
+				var fileBytes = Convert.FromBase64String(image);
+				var ms = new MemoryStream(fileBytes);
+				file = new FormFile(ms, 0,fileBytes.Length,GetCurrentUsername(), GetCurrentUsername()+".jpg");
+			}
+
+			var response = await _collectionService.Create(model, GetCurrentUsername(), file);
 			if (response.StatusCode == Domain.Enum.StatusCode.OK)
 			{
 				return Redirect($"/Collection/EditCollection/{response.Data.Id}");
@@ -72,14 +84,24 @@ namespace CourseWork.Controllers
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> EditCollection(CollectionViewModel model, string[] selectedItems, IFormFile image, string[] tags)
+		public async Task<IActionResult> EditCollection(CollectionViewModel model, string[] selectedItems, string image, string[] tags)
 		{
 			if (!ModelState.IsValid)
 			{
 				return View(model);
 			}
 
-			var response = await _collectionService.Edit(model.Id, model, selectedItems, tags, image);
+			IFormFile file = null;
+
+			if (!string.IsNullOrWhiteSpace(image))
+			{
+				image = image.Replace("data:image/jpeg;base64,", string.Empty);
+				var fileBytes = Convert.FromBase64String(image);
+				var ms = new MemoryStream(fileBytes);
+				file = new FormFile(ms, 0, fileBytes.Length, GetCurrentUsername(), GetCurrentUsername() + ".jpg");
+			}
+
+			var response = await _collectionService.Edit(model.Id, model, selectedItems, tags, file);
 			if (response.StatusCode == Domain.Enum.StatusCode.OK)
 			{
 				return Redirect($"/Collection/GetCollection/{response.Data.Id}");

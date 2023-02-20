@@ -3,6 +3,8 @@ using CourseWork.Service.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.IO;
+using System;
 using System.Threading.Tasks;
 
 namespace CourseWork.Controllers
@@ -40,9 +42,19 @@ namespace CourseWork.Controllers
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> Settings(ProfileViewModel model, IFormFile image)
+		public async Task<IActionResult> Settings(ProfileViewModel model, string image)
 		{
-			var response = await _profileService.Update(model, image);
+			IFormFile file = null;
+
+			if (!string.IsNullOrWhiteSpace(image))
+			{
+				image = image.Replace("data:image/jpeg;base64,", string.Empty);
+				var fileBytes = Convert.FromBase64String(image);
+				var ms = new MemoryStream(fileBytes);
+				file = new FormFile(ms, 0, fileBytes.Length, GetCurrentUsername(), GetCurrentUsername() + ".jpg");
+			}
+
+			var response = await _profileService.Update(model, file);
 			if (response.StatusCode == Domain.Enum.StatusCode.OK)
 			{
 				return RedirectToAction("Index");

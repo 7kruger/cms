@@ -6,29 +6,66 @@
 
 <h1 class="text-center">Создать айтем</h1>
 
-<div class="container text-center custom-group-form">
+<div class="container">
 	<form asp-action="CreateItem" asp-controller="Item" enctype="multipart/form-data" method="post">
 		<div class="validation" asp-validation-summary="All"></div>
 
-		<div class="mb-3">
-			<label asp-for="Name">Название айтема</label><br />
-			<input class="form-control" type="text" asp-for="Name" />
+		<div class="row m-0 mb-3">
+			<label asp-for="Name" class="col-12 col-md-4">Название айтема</label>
+			<div class="col-12 col-md-8">
+				<input class="form-control" type="text" asp-for="Name" placeholder="Название айтема" />
+			</div>
 		</div>
 
-		<div class="mb-3">
-			<label asp-for="Content">Содержание айтема</label><br />
-			<textarea class="form-control" asp-for="Content"></textarea>
+		<div class="row m-0 mb-3">
+			<label asp-for="Content" class="col-12 col-md-4">Содержание айтема</label>
+			<div class="col-12 col-md-8">
+				<textarea class="form-control" asp-for="Content" placeholder="Описание"></textarea>
+			</div>
 		</div>
 
-		<div class="mb-3">
-			<p>Обложка айтема</p>
-			<input type="file" class="form-control" name="image" /><br /><br />
+		<div class="row m-0 mb-3">
+			<label class="col-12 col-md-4">Обложка айтема</label>
+			<div class="col-12 col-md-8">
+				<div class='container-form'>
+					<input name="image" id="image" type="text" class="d-none" />
+					<input id='selectedFile' class="d-none" type='file' accept=".png, .jpg, .jpeg, .svg">
+					<a id="upload-aphoto" class="btn-primary btn">Выбрать изображение</a>
+				</div>
+				<div class='container-image'>
+					<img id='confirm-img' src=''>
+				</div>
+
+				<div class="modal fade" id="imageModalContainer" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+					<div class="modal-dialog modal-md modal-dialog-centered">
+						<div class="modal-content modal-content1 modal-content1">
+							<div class="modal-header">
+								<h5 class="modal-title" id="imageModal">Обрезка картинки</h5>
+								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+							</div>
+							<div class="modal-body modal-body1">
+								<div id='crop-image-container'>
+								</div>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+								<button type="button" class="btn btn-primary save-modal">Сохранить</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 
-		<div>
+		<div class="text-center mt-5">
 			<button class="btn btn-outline-primary">Добавить</button>
 		</div>
 	</form>
 </div>
 
+@section Scripts {
+	<link href="~/css/croppie.css" rel="stylesheet">
+	<script src="~/js/croppie.min.js"></script>
+	<script src="~/js/cropImage.js"></script>
+}
 

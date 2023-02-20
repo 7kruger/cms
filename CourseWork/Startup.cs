@@ -31,7 +31,7 @@ namespace CourseWork
 					options.AccessDeniedPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
 				});
 
-			services.AddRazorPages();
+			services.AddRazorPages().AddRazorRuntimeCompilation();
 			services.AddControllersWithViews();
 
 			services.AddMvc();

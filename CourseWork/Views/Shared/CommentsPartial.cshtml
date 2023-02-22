@@ -1,11 +1,11 @@
 ﻿<hr />
 @if (User.Identity.IsAuthenticated)
 {
-	<div class="row">
-		<div class="col-9 col-md-10">
+	<div class="d-flex">
+		<div class="d-flex justify-content-start me-1" style="width: 100%">
 			<input class="form-control" type="text" placeholder="Оставить коментарий" id="comment">
 		</div>
-		<div class="col-3 col-md-2">
+		<div class="d-flex justify-content-end ms-1">
 			<input class="btn btn-outline-primary" type="submit" value="Отправить" id="sendComment">
 		</div>
 	</div>
@@ -17,9 +17,11 @@ else
 	</div>
 }
 <hr />
-<div class="row">
-	<div class="list-group col-12 pl-3" id="comments"></div>
-</div>
-<div class="text-center">
-	<button class="btn btn-secondary" id="showMore" style="display: none;">Показать еще</button>
+<div>
+	<div class="row">
+		<div class="list-group col-12 ps-2 pe-2" id="comments"></div>
+	</div>
+	<div class="text-center">
+		<button class="btn btn-secondary" id="showMore" style="display: none;">Показать еще</button>
+	</div>
 </div>

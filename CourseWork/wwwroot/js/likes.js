@@ -4,7 +4,7 @@ $(document).ready(() => {
 	loadLikes();
 });
 
-$("#like").on("click", () => {
+$("#like-clickable").on("click", () => {
 	if (liked) {
 		removeLike();
 	} else {
@@ -24,16 +24,15 @@ const loadLikes = () => {
 		const obj = JSON.parse(data)
 		$("#likesCount").html(obj.likesCount);
 		if (obj.liked) {
-			$("#like").children().prop("class", "like fa-solid fa-heart pt-2");
+			$("#like").prop("class", "like fa-solid fa-heart pt-2");
 			liked = true;
 		} else {
-			$("#like").children().prop("class", "like-disabled fa-regular fa-heart pt-2");
+			$("#like").prop("class", "like-disabled fa-regular fa-heart pt-2");
 			liked = false;
 		}
 	}).fail((e) => {
-		Swal.fire({
-			html: "<h1>Не удалось загрузить лайки</h1>"
-		});
+		alert("Не удалось загрузить лайки");
+		console.log("err message: " + e.responseText);
 	});
 }
 
@@ -48,9 +47,8 @@ const setLike = () => {
 	}).done((data) => {
 		loadLikes();
 	}).fail((e) => {
-		Swal.fire({
-			html: "<h1>Не удалось поставить лайк</h1>"
-		});
+		alert("Не удалось поставить лайк");
+		console.log("err message: " + e.responseText);
 	});
 }
 
@@ -65,8 +63,7 @@ const removeLike = () => {
 	}).done((data) => {
 		loadLikes();
 	}).fail((e) => {
-		Swal.fire({
-			html: "<h1>Не удалось убрать лайк</h1>"
-		});
+		alert("Не удалось убрать лайк");
+		console.log("err message: " + e.responseText);
 	});
 }

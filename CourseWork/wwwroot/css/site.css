@@ -8,7 +8,7 @@
 .dark-mode h2, .dark-mode h3, .dark-mode h4, .dark-mode h5,
 .dark-mode h6, .dark-mode label, .dark-mode [scope="col"],
 .dark-mode option, .dark-mode td, .dark-mode tr,
-.dark-mode strong, .dark-mode .like {
+.dark-mode strong, .dark-mode .like, .dark-mode .readonly-input {
     color: #adb5bd;
 }
 
@@ -41,7 +41,7 @@ textarea {
 }
 
 .validation {
-    color: #9e0d00;
+    color: #9e0d00!important;
 }
 
 .my-cursor {
@@ -50,8 +50,14 @@ textarea {
 
 .readonly-input {
     border: 0px;
-    color: black;
+    background: transparent;
 }
+
+    .readonly-input:hover, .readonly-input:focus {
+        border: 0px;
+        background: transparent;
+        outline: none !important;
+    }
 
 fieldset {
     border: 1px solid #adb5bd;
@@ -60,6 +66,7 @@ fieldset {
 
 legend {
     width: inherit;
+    font-weight: bold;
 }
 
 .pagination-icon {
@@ -67,42 +74,9 @@ legend {
     height: 38px;
 }
 
-/* images */
-.object-fit .cover {
-    object-fit: cover;
-    object-position: center;
-    width: 100%;
-    background-image: url(data:image/gif;base64,R0lGODlhCgAIAIABAN3d3f///yH5BAEAAAEALAAAAAAKAAgAAAINjAOnyJv2oJOrVXrzKQA7);
-}
-
-.object-fit .collection-content-item-cover {
-    padding: 0;
-    object-fit: cover;
-    object-position: center;
-    width: 100%;
-    background-image: url(data:image/gif;base64,R0lGODlhCgAIAIABAN3d3f///yH5BAEAAAEALAAAAAAKAAgAAAINjAOnyJv2oJOrVXrzKQA7);
-}
-
-.object-fit .item-cover {
-    padding: 0;
-    object-fit: cover;
-    object-position: center;
-    width: 100%;
-    background-image: url(data:image/gif;base64,R0lGODlhCgAIAIABAN3d3f///yH5BAEAAAEALAAAAAAKAAgAAAINjAOnyJv2oJOrVXrzKQA7);
-}
-
-.object-fit .collection-cover {
-    object-fit: cover;
-    object-position: center;
-    width: 100%;
-    background-image: url(data:image/gif;base64,R0lGODlhCgAIAIABAN3d3f///yH5BAEAAAEALAAAAAAKAAgAAAINjAOnyJv2oJOrVXrzKQA7);
-}
-
-.object-fit .avatar {
+.avatar {
     height: 150px;
     width: 150px;
-    object-fit: cover;
-    object-position: center;
     border-radius: 100px;
     box-shadow: 0 0 17px #666;
 }
@@ -148,122 +122,10 @@ legend {
     padding: 0 7% 0 7%;
 }
 
-/* xxl */
-@media screen and (min-width: 1400px) {
-    .object-fit .collection-cover {
-        height: 398px;
-    }
-
-    .object-fit .item-cover {
-        height: 424px;
-    }
-
-    .object-fit .cover {
-        height: 526px;
-    }
-
-    .object-fit .collection-content-item-cover {
-        height: 363.52px;
-    }
-}
-
-/* xl */
-@media screen and (max-width: 1399px) {
-    .object-fit .collection-cover {
-        height: 338px;
-    }
-
-    .object-fit .item-cover {
-        height: 364px;
-    }
-
-    .object-fit .cover {
-        height: 451px;
-    }
-
-    .object-fit .collection-content-item-cover {
-        height: 311.93px;
-    }
-}
-
-/* lg */
-@media screen and (max-width: 1199px) {
-    .object-fit .collection-cover {
-        height: 277.99px;
-    }
-
-    .object-fit .item-cover {
-        height: 303.99px;
-    }
-
-    .object-fit .cover {
-        height: 376px;
-    }
-
-    .object-fit .collection-content-item-cover {
-        height: 260.32px;
-    }
-}
-
-/* md */
-@media screen and (max-width: 991px) {
-    .object-fit .collection-cover {
-        height: 318px;
-    }
-
-    .object-fit .item-cover {
-        height: 344px;
-    }
-
-    .object-fit .cover {
-        height: 336px;
-    }
-
-    .object-fit .collection-content-item-cover {
-        height: 295.29px;
-    }
-}
-
 /* sm */
 @media screen and (max-width: 767px) {
-    .object-fit .collection-cover {
-        height: 413px;
-    }
-
-    .object-fit .item-cover {
-        height: 256px;
-    }
-
-    .object-fit .cover {
-        height: 429px;
-    }
-
-    .row {
-        justify-content: center;
-    }
-
-    .object-fit .collection-content-item-cover {
-        height: 219.68px;
-    }
-
     .pagination-icon {
         width: 37px;
         height: 33.5px;
-    }
-}
-
-/* xs */
-@media screen and (max-width: 575px) {
-    .object-fit .collection-content-item-cover {
-        height: 250px;
-        width: 250px;
-    }
-
-    .object-fit .item-cover {
-        height: 420px;
-    }
-
-    .object-fit .cover {
-        height: 441.67px;
     }
 }

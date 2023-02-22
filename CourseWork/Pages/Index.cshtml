@@ -33,6 +33,7 @@
 						Искать среди:
 						<select class="form-control"
 								name="searchIn"
+								id="searchIn"
 								asp-for="@Model.IndexViewModel.SearchInFilterApplied">
 							<option value="Collections">Коллекций</option>
 							<option value="Items">Айтемов</option>
@@ -52,11 +53,11 @@
 						Тема:
 						<select class="form-control"
 								name="theme"
+								id="search-theme"
 								asp-for="@Model.IndexViewModel.ThemeFilterApplied"
 								asp-items="@Model.IndexViewModel.Themes">
 						</select>
 					</div>
-
 				</div>
 			</div>
 		</div>
@@ -68,11 +69,11 @@
 	<div class="row">
 		@foreach (var col in Model.IndexViewModel.Collections)
 		{
-			<partial name="_collectionPartial" for="@col" />
+			<partial name="CollectionPartial" for="@col" />
 		}
 	</div>
 	<div class="ms-2">
-		<partial name="_paginationPartial" for="@Model.IndexViewModel.Pagination" />
+		<partial name="PaginationPartial" for="@Model.IndexViewModel.Pagination" />
 	</div>
 }
 else if (Model.IndexViewModel.Items.Any())
@@ -80,43 +81,43 @@ else if (Model.IndexViewModel.Items.Any())
 	<div class="row">
 		@foreach (var item in Model.IndexViewModel.Items)
 		{
-			<div class="col-10 col-sm-6 col-md-6 col-lg-4 p-2">
-				<a href="/Item/GetItem/@item.Id">
-					<div class="gallery-item">
-						<div class="object-fit">
-							<img src="data:image/gif;base64,R0lGODlhBwAFAIAAAP///wAAACH5BAEAAAEALAAAAAAHAAUAAAIFjI+puwUAOw=="
-						 data-src="@item.ImgRef"
-						 alt="image"
-						 class="item-cover lazy">
-						</div>
-						<div class="gallery-item-info">
-							<ul>
-								<li class="gallery-item-likes">
-									<span class="visualy-hidden">Likes: <i class="fa-solid fa-heart"></i> @item.LikesCount</span>
-								</li>
-								<li class="gallery-items-comments">
-									<span class="visualy-hidden">Comments: <i class="fa-solid fa-comment"></i> @item.CommentsCount</span>
-								</li>
-							</ul>
-						</div>
-					</div>
-				</a>
-			</div>
+			<partial name="ItemPartial" for="@item" />
 		}
 	</div>
 	<div class="ms-2">
-		<partial name="_paginationPartial" for="@Model.IndexViewModel.Pagination" />
+		<partial name="PaginationPartial" for="@Model.IndexViewModel.Pagination" />
 	</div>
 }
 else
 {
-	<h3 class="text-center text-dark">Ничего не найдено</h3>
+	<h3 class="text-center">Ничего не найдено</h3>
 }
 
 @section Scripts {
 	<script>
 		var lazyLoadInstance = new LazyLoad({
 			elements_selector: ".lazy"
+		});
+	</script>
+	<script>
+		$(document).ready(function() {
+			let value = $("#searchIn").val();
+
+			if (value == "Items") {
+				$("#search-theme").parent().hide()
+			} else {
+				$("#search-theme").parent().show();
+			}
+		})
+
+		$("#searchIn").on("change", function() {			
+			let value = $("#searchIn").val();
+
+			if (value == "Items") {
+				$("#search-theme").parent().fadeOut()
+			} else {
+				$("#search-theme").parent().fadeIn();
+			}
 		});
 	</script>
 }

@@ -5,28 +5,29 @@
 }
 
 <div class="row">
-	<div class="col-10 col-sm-10 col-md-6 col-lg-5 text-center">
-		<div class="object-fit">
-			<img class="cover lazy"
-				 src="data:image/gif;base64,R0lGODlhBwAFAIAAAP///wAAACH5BAEAAAEALAAAAAAHAAUAAAIFjI+puwUAOw=="
+	<div class="col-12 col-sm-12 col-md-6 col-lg-5 text-center">
+		<div>
+			<img class="lazy"
+				 src="~/images/thumbnail.png"
 				 data-src="@Model.ImgRef"
 				 onError="this.src='/images/imgnotfound.jpg'"
-				 alt="" />
+				 alt="" 
+				 style="width: 100%" />
 		</div>
 
-		<div class="row m-3">
-			<div class="col-6 d-flex justify-content-end">
+		<div class="d-flex justify-content-center m-3">
+			<div class="d-flex justify-content-end me-1">
 
-				@{ 
-					string attr = User.Identity.IsAuthenticated ? "class=my-cursor id=like" : string.Empty; 
+				@{
+					string attr = User.Identity.IsAuthenticated ? "class=my-cursor id=like-clickable" : string.Empty;
 				}
 				<div @attr >
-					<i class="like"></i>
+					<i id="like" class="like"></i>
 				</div>
 
 			</div>
-			<div class="col-6 d-flex justify-content-start">
-				<h1 id="likesCount">0</h1>
+			<div class="d-flex justify-content-start ms-1">
+				<h1 class="mb-0" style="font-size: 43px;" id="likesCount">0</h1>
 			</div>
 		</div>
 
@@ -34,11 +35,11 @@
 		@if (Model.Author == User.Identity.Name || User.IsInRole("admin"))
 		{
 			<div class="text-center">
-				<a class="btn btn-outline-info" href="/Collection/EditCollection/@Model.Id">Редактиовать</a>
+				<a class="btn btn-outline-info" href="/Collection/EditCollection/@Model.Id">Редактировать</a>
 			</div>
 		}
 	</div>
-	<div class="col-xs-12 col-sm-12 col-md-6 col-lg-7 col-md-offset-6">
+	<div class="col-12 col-sm-12 col-md-6 col-lg-7">
 		<input type="hidden" id="srcId" value="@Model.Id" />
 		<p><h1>@Model.Name</h1></p>
 		<div class="mt-5">
@@ -63,32 +64,11 @@
 		<div class="row">
 			@foreach (var item in Model.Items)
 			{
-				<div class="col-10 col-sm-6 col-md-6 col-lg-4 p-2">
-					<a href="/Item/GetItem/@item.Id" >
-						<div class="gallery-item">
-							<div class="object-fit">
-								<img src="data:image/gif;base64,R0lGODlhBwAFAIAAAP///wAAACH5BAEAAAEALAAAAAAHAAUAAAIFjI+puwUAOw=="
-							 data-src="@item.ImgRef"
-							 alt="image"
-							 class="collection-content-item-cover lazy">
-							</div>
-							<div class="gallery-item-info">
-								<ul>
-									<li class="gallery-item-likes">
-										<span class="visualy-hidden">Likes: <i class="fa-solid fa-heart"></i> @item.LikesCount</span>
-									</li>
-									<li class="gallery-items-comments">
-										<span class="visualy-hidden">Comments: <i class="fa-solid fa-comment"></i> @item.CommentsCount</span>
-									</li>
-								</ul>
-							</div>
-						</div>
-					</a>
-				</div>
+				<partial name="ItemPartial" for="@item" />
 			}
 		</div>
 		<div>
-			<partial name="_paginationPartial" for="@Model.Pagination">
+			<partial name="PaginationPartial" for="@Model.Pagination">
 		</div>
 	}
 	else

@@ -21,11 +21,11 @@
 	<div class="row">
 		@foreach (var col in collections)
 		{
-			<partial name="_collectionPartial" for="@col" />
+			<partial name="CollectionPartial" for="@col" />
 		}
 	</div>
-	<div class="ml-2">
-		<partial name="_paginationPartial" for="@pagination" />
+	<div class="ms-2">
+		<partial name="PaginationPartial" for="@pagination" />
 	</div>
 }
 else

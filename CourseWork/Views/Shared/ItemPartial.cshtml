@@ -1,0 +1,24 @@
+﻿@model CourseWork.Domain.ViewModels.Item.ItemViewModel
+
+<div class="col-12 col-sm-6 col-md-6 col-lg-4 p-3">
+	<a href="/Item/GetItem/@Model.Id">
+		<div class="gallery-item">
+			<div>
+				<img src="~/images/thumbnail.png"
+	  data-src="@Model.ImgRef"
+	  alt="image"
+	  class="lazy card-img-top">
+			</div>
+			<div class="gallery-item-info">
+				<ul>
+					<li class="gallery-item-likes">
+						<span class="visualy-hidden">Likes: <i class="fa-solid fa-heart"></i> @Model.LikesCount</span>
+					</li>
+					<li class="gallery-items-comments">
+						<span class="visualy-hidden">Comments: <i class="fa-solid fa-comment"></i> @Model.CommentsCount</span>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</a>
+</div>

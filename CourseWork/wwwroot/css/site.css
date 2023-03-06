@@ -8,7 +8,8 @@
 .dark-mode h2, .dark-mode h3, .dark-mode h4, .dark-mode h5,
 .dark-mode h6, .dark-mode label, .dark-mode [scope="col"],
 .dark-mode option, .dark-mode td, .dark-mode tr,
-.dark-mode strong, .dark-mode .like, .dark-mode .readonly-input {
+.dark-mode strong, .dark-mode .like, .dark-mode .readonly-input,
+.dark-mode .jquery-comments ul.navigation li.active, .dark-mode .jquery-comments ul.navigation li:hover {
     color: #adb5bd;
 }
 
@@ -16,11 +17,15 @@
         color: white;
     }
 
-textarea {
-    height: 170px;
-    max-height: 170px;
-    width: 185px;
-}
+    .dark-mode .jquery-comments .textarea-wrapper .textarea, .dark-mode .jquery-comments .textarea-wrapper .textarea::placeholder {
+        color: black
+    }
+
+    textarea {
+        height: 170px;
+        max-height: 170px;
+        width: 185px;
+    }
 
 .custom-group-form {
     width: 300px;

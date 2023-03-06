@@ -1,6 +1,7 @@
 ﻿using CourseWork.DAL.Interfaces;
 using CourseWork.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -17,7 +18,9 @@ namespace CourseWork.DAL.Repositories
 
 		public IQueryable<Comment> GetAll()
 		{
-			return _db.Comments.Include(u => u.User);
+			return _db.Comments.Include(x => x.UpvotedUsers)
+				.Include(u => u.Creator)
+				.ThenInclude(x => x.Profile);
 		}
 		public async Task Create(Comment comment)
 		{
@@ -25,9 +28,21 @@ namespace CourseWork.DAL.Repositories
 			await _db.SaveChangesAsync();
 		}
 
-		public async Task Delete(Comment comment)
+        public async Task Update(Comment entity)
+        {
+			_db.Comments.Update(entity);
+			await _db.SaveChangesAsync();
+        }
+
+        public async Task Delete(Comment comment)
 		{
 			_db.Comments.Remove(comment);
+			await _db.SaveChangesAsync();
+		}
+
+		public async Task DeleteRange(IEnumerable<Comment> comments)
+		{
+			_db.Comments.RemoveRange(comments);
 			await _db.SaveChangesAsync();
 		}
 	}

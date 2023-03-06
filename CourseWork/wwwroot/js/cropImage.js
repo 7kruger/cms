@@ -71,7 +71,7 @@ $('#selectedAvatarFile').change(function () {
 $('#avatarModalContainer').on('shown.bs.modal', function () {
     let width = $('#crop-image-container')[0].offsetWidth - 20;
 
-    $('#crop-image-container').height((width - 80) + 'px');
+    $('#crop-image-container').height((width + 20) + 'px');
     croppi = $('#crop-image-container').croppie({
         viewport: {
             width: 300,

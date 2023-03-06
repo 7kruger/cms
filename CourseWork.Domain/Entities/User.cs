@@ -1,5 +1,6 @@
 ﻿using CourseWork.Domain.Enum;
 using System;
+using System.Collections.Generic;
 
 namespace CourseWork.Domain.Entities
 {
@@ -12,5 +13,6 @@ namespace CourseWork.Domain.Entities
 		public DateTime RegistrationDate { get; set; }
 		public Role Role { get; set; }
 		public Profile Profile { get; set; }
+		public List<Comment> UpvotedComments { get; set; }
 	}
 }

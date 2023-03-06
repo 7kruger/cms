@@ -32,7 +32,7 @@ namespace CourseWork.DAL
 			var profile = new Profile
 			{
 				Id = 1,
-				ImgRef = "avatar.png",
+				ImgRef = "/images/person.svg",
 				UserId = admin.Id,
 			};
 
@@ -61,6 +61,13 @@ namespace CourseWork.DAL
 				builder.Property(x => x.ImgRef).IsRequired(false);
 
 				builder.HasData(profile);
+			});
+
+			modelBuilder.Entity<Comment>(builder =>
+			{
+				builder.HasOne(x => x.Creator);
+				builder.HasMany(x => x.UpvotedUsers)
+					.WithMany(x => x.UpvotedComments);
 			});
 
 			base.OnModelCreating(modelBuilder);

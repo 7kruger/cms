@@ -7,8 +7,10 @@ namespace CourseWork.Service.Interfaces
 {
 	public interface ICommentService
 	{
-		Task<IBaseResponse<List<CommentModel>>> LoadComments(string id, string username, bool isAdmin);
-		Task<IBaseResponse<CommentModel>> AddComment(string id, string username, string content);
-		Task<IBaseResponse<bool>> DeleteComment(int id);
+		Task<IBaseResponse<List<CommentModel>>> LoadComments(string srcId, string username, bool isAdmin);
+		Task<IBaseResponse<CommentModel>> AddComment(CommentModel model, string username);
+		Task<IBaseResponse<bool>> UpdateComment(CommentModel model);
+		Task<IBaseResponse<bool>> DeleteComment(long id);
+		Task<IBaseResponse<bool>> Upvote(CommentModel model, string username);
 	}
 }

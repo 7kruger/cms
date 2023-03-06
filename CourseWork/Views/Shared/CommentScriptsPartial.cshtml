@@ -1,0 +1,101 @@
+﻿<link href="~/css/jquery-comments.css" rel="stylesheet" />
+<script src="~/js/jquery-comments.min.js"></script>
+<script>
+	$(function () {
+		$('#comments-container').comments({
+			roundProfilePictures: true,
+			textareaRows: 1,
+			enableAttachments: false,
+			enableHashtags: false,
+			enablePinging: false,
+			enableDeletingCommentWithReplies: true,
+			newestText: 'Новые',
+			oldestText: 'Старые',
+			popularText: 'Популярные',
+			textareaPlaceholderText: 'Добавить комментарий',
+			sendText: 'Отправить',
+			replyText: 'Ответить',
+			editText: 'Редактировать',
+			editedText: 'Отредактировано',
+			youText: 'Я',
+			saveText: 'Сохранить',
+			deleteText: 'Удалить',
+			viewAllRepliesText: 'Показать все (__replyCount__) ответов',
+			noCommentsText: 'Нет комментариев',
+			hideRepliesText: 'Спрятать ответы',
+			readOnly: @(User.Identity.IsAuthenticated ? "false" : "true"),
+			scrollContainer: $(window),
+			getComments: function (success, error) {
+				let commentsArray = [];
+
+				const id = $("#srcId").val();
+
+				$.ajax({
+					url: "/api/loadcomments",
+					type: "get",
+					async: false,
+					data: { id: id }
+				}).done(function (data) {
+					commentsArray = data;
+					success(commentsArray);
+				}).fail(function () {
+					error();
+				});
+			},
+			postComment: function (data, success, error) {
+				const id = $("#srcId").val();
+				data.srcId = id;
+
+				$.ajax({
+					url: "/api/addcomment",
+					type: "post",
+					async: false,
+					data: { model: data }
+				}).done(function (response) {
+					success(response);
+				}).fail(function (e) {
+					error(e);
+				})
+			},
+			putComment: function (data, success, error) {
+				const id = $("#srcId").val();
+				data.srcId = id;
+
+				$.ajax({
+					url: "/api/updatecomment",
+					type: "post",
+					data: { model: data }
+				}).done(function () {
+					success(data);
+				}).fail(function () {
+					error();
+				})
+			},
+			deleteComment: function (data, success, error) {
+				$.ajax({
+					url: "/api/deletecomment",
+					type: "post",
+					data: { id: data.id }
+				}).done(function () {
+					success(data);
+				}).fail(function () {
+					error();
+				})
+			},
+			upvoteComment: function (data, success, error) {
+				const id = $("#srcId").val();
+				data.srcId = id;
+
+				$.ajax({
+					url: "/api/upvote",
+					type: "post",
+					data: { model: data }
+				}).done(function () {
+					success(data);
+				}).fail(function () {
+					error();
+				})
+			},
+		});
+	});
+</script>

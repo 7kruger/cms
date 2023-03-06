@@ -1,5 +1,6 @@
 ﻿using CourseWork.DAL.Interfaces;
 using CourseWork.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -16,7 +17,8 @@ namespace CourseWork.DAL.Repositories
 
 		public IQueryable<User> GetAll()
 		{
-			return _db.Users;
+			return _db.Users.Include(x => x.Profile)
+				.Include(x => x.UpvotedComments);
 		}
 
 		public async Task Create(User entity)

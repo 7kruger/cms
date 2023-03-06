@@ -4,14 +4,16 @@ using CourseWork.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CourseWork.DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230303234655_UpdateComments")]
+    partial class UpdateComments
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -36,8 +38,8 @@ namespace CourseWork.DAL.Migrations
 
             modelBuilder.Entity("CommentUser", b =>
                 {
-                    b.Property<long>("UpvotedCommentsId")
-                        .HasColumnType("bigint");
+                    b.Property<string>("UpvotedCommentsId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("UpvotedUsersId")
                         .HasColumnType("int");
@@ -79,10 +81,8 @@ namespace CourseWork.DAL.Migrations
 
             modelBuilder.Entity("CourseWork.Domain.Entities.Comment", b =>
                 {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Content")
                         .HasColumnType("nvarchar(max)");
@@ -96,8 +96,8 @@ namespace CourseWork.DAL.Migrations
                     b.Property<DateTime>("Modified")
                         .HasColumnType("datetime2");
 
-                    b.Property<long?>("Parent")
-                        .HasColumnType("bigint");
+                    b.Property<string>("Parent")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SrcId")
                         .HasColumnType("nvarchar(max)");
@@ -184,7 +184,7 @@ namespace CourseWork.DAL.Migrations
                         new
                         {
                             Id = 1,
-                            ImgRef = "/images/person.svg",
+                            ImgRef = "avatar.png",
                             UserId = 1
                         });
                 });
@@ -240,7 +240,7 @@ namespace CourseWork.DAL.Migrations
                             IsBlocked = false,
                             Name = "admin",
                             Password = "fb001dfcffd1c899f3297871406242f097aecf1a5342ccf3ebcd116146188e4b",
-                            RegistrationDate = new DateTime(2023, 3, 6, 7, 31, 47, 466, DateTimeKind.Local).AddTicks(9492),
+                            RegistrationDate = new DateTime(2023, 3, 4, 4, 46, 54, 981, DateTimeKind.Local).AddTicks(3532),
                             Role = 1
                         });
                 });

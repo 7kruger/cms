@@ -25,15 +25,12 @@ namespace CourseWork.Service.Implementations
 			try
 			{
 				var likes = await _likeRepository.GetAll()
-					.Where(l => l.SrcId == id && l.UserName == username)
+					.Where(l => l.SrcId == id)
 					.ToListAsync();
 
-				bool isCurrentUserLiked = false;
-				if (likes.Any())
-				{
-					isCurrentUserLiked = likes.Where(l => l.UserName == username) == null ? false : true;
-				}
-				var count = likes.Count();
+				bool isCurrentUserLiked = likes.Any(l => l.UserName == username);
+
+                var count = likes.Count();
 
 				var json = JsonSerializer.Serialize(new
 				{

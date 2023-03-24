@@ -2,6 +2,7 @@
 using Dropbox.Api;
 using Dropbox.Api.Files;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.IO;
 using System.Linq;
@@ -10,12 +11,19 @@ using System.Threading.Tasks;
 namespace CourseWork.Service.Implementations
 {
 	public class DropboxService : ICloudStorageService
-	{
-		private const string imgnotfound = "/images/imgnotfound.jpg";
+    {
+        private const string imgnotfound = "/images/imgnotfound.jpg";
 
-		private const string refreshToken = "refresh_token";
-		private const string appKey = "app_key";
-		private const string appSecret = "app_secret";
+        private readonly string refreshToken;
+		private readonly string appKey;
+		private readonly string appSecret;
+
+        public DropboxService(IConfiguration configuration)
+		{
+			refreshToken = configuration["Dropbox:RefreshToken"];
+			appKey = configuration["Dropbox:AppKey"];
+			appSecret = configuration["Dropbox:AppSecret"];
+        }
 
 		public async Task<string> UploadAsync(IFormFile image, string folder, string srcId)
 		{

@@ -45,7 +45,7 @@
 		<div class="mt-5">
 			<small>Дата создания: @Model.Date</small>
 			<p><strong>Автор:</strong> <a class="my-cursor" id="showProfile">@Model.Author</a></p>
-			<p><strong>Описание:</strong> @Model.Content</p>
+			<p><strong>Описание:</strong> @Html.Raw(Markdig.Markdown.ToHtml(Model.Content))</p>
 		</div>
 	</div>
 

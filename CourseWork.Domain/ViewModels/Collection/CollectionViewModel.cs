@@ -31,8 +31,8 @@ namespace CourseWork.Domain.ViewModels.Collection
 
 		public List<CourseWork.Domain.Entities.Item> FreeItems { get; set; }
 
-		public List<Tag> Tags { get; set; }
-		public List<Tag> AllTags { get; set; }
+		public List<Tag> Tags { get; set; } = new();
+		public List<Tag> AllTags { get; set; } = new();
 		public Pagination Pagination { get; set; }
 	}
 }

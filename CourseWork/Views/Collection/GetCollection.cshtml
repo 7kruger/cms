@@ -46,14 +46,19 @@
 			<small>Дата создания: @Model.Date</small>
 			<p><strong>Автор:</strong> <a class="my-cursor" id="showProfile">@Model.Author</a></p>
 			<p><strong>Тема:</strong> <a style="text-decoration: none;" href="/?theme=@Model.Theme">@Model.Theme</a></p>
-			<p><strong>Описание:</strong> @Model.Description</p>
-			<div>
-				<strong>Теги:</strong>
-				@foreach (var item in Model.Tags)
-				{
-					<a href="/?hashtag=@item.Name">#@item.Name</a>
-				}
-			</div>
+			
+			@if (Model.Tags.Any())
+			{
+				<div class="mb-3">
+					<strong>Теги:</strong>
+					@foreach (var item in Model.Tags)
+					{
+						<a href="/?hashtag=@item.Name">#@item.Name</a>
+					}
+				</div>
+			}
+			
+			<p><strong>Описание:</strong> @Html.Raw(Markdig.Markdown.ToHtml(Model.Description))</p>
 		</div>
 	</div>
 </div>

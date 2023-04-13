@@ -20,7 +20,7 @@
 		<div class="row m-0 mb-3">
 			<label asp-for="Content" class="col-12 col-md-4">Содержание айтема</label>
 			<div class="col-12 col-md-8">
-				<textarea class="form-control" asp-for="Content" placeholder="Описание"></textarea>
+				<textarea asp-for="Content"></textarea>
 			</div>
 		</div>
 
@@ -67,5 +67,14 @@
 	<link href="~/css/croppie.css" rel="stylesheet">
 	<script src="~/js/croppie.min.js"></script>
 	<script src="~/js/cropImage.js"></script>
+	<script src="~/lib/simplemde/dist/js/simplemde.min.js"></script>
+	<link href="~/lib/simplemde/dist/css/simplemde.min.css" rel="stylesheet">
+
+	<script>
+		var simplemde = new SimpleMDE({
+			element: $("input[name=Description")[0],
+			toolbar: ["bold", "italic", "heading", "|", "quote", "unordered-list", "ordered-list", "|", "link", "image", "|", "preview", "guide"]
+		});
+	</script>
 }
 

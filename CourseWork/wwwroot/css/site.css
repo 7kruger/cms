@@ -9,8 +9,9 @@
 .dark-mode h6, .dark-mode label, .dark-mode [scope="col"],
 .dark-mode option, .dark-mode td, .dark-mode tr,
 .dark-mode strong, .dark-mode .like, .dark-mode .readonly-input,
-.dark-mode .jquery-comments ul.navigation li.active, .dark-mode .jquery-comments ul.navigation li:hover {
-    color: #adb5bd;
+.dark-mode .jquery-comments ul.navigation li.active, .dark-mode .jquery-comments ul.navigation li:hover,
+.dark-mode .editor-toolbar a {
+    color: #adb5bd !important;
 }
 
     .dark-mode .gallery-item-info, .dark-mode .gallery-item-info .icon-white {
@@ -21,11 +22,16 @@
         color: black
     }
 
-    textarea {
-        height: 170px;
-        max-height: 170px;
-        width: 185px;
+    .dark-mode .CodeMirror {
+        background: none !important;
+        caret-color: #adb5bd !important;
     }
+
+textarea {
+    height: 170px;
+    max-height: 170px;
+    width: 185px;
+}
 
 .custom-group-form {
     width: 300px;

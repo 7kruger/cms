@@ -12,7 +12,6 @@
 
         <div class="card-body">
             <h5 class="card-title">@Model.Name</h5>
-            <p class="card-text">@Model.Description.Substring(0, Math.Min(Model.Description.Length, 50))</p>
             <div class="d-flex align-items-end">
                 <a href="/Collection/GetCollection/@Model.Id" class="btn btn-primary">Посмотреть коллекцию</a>
             </div>

@@ -1,4 +1,6 @@
-﻿using CourseWork.DAL.Entities;
+﻿using CourseWork.DAL.Configurations;
+using CourseWork.DAL.Configurationsl;
+using CourseWork.DAL.Entities;
 using CourseWork.Domain.Helpers;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,56 +21,13 @@ public class ApplicationDbContext : DbContext
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
-		var admin = new User
-		{
-			Id = 1,
-			Name = "admin",
-			Password = HashPasswordHelper.HashPassword("admin"),
-			Role = Domain.Enum.Role.Admin,
-			RegistrationDate = System.DateTime.Now,
-			IsBlocked = false,
-		};
-
-		var profile = new Profile
-		{
-			Id = 1,
-			ImgRef = "/images/person.svg",
-			UserId = admin.Id,
-		};
-
-		modelBuilder.Entity<User>(builder =>
-		{
-			builder.ToTable("Users").HasKey(x => x.Id);
-
-			builder.HasData(admin);
-
-			builder.Property(x => x.Id).ValueGeneratedOnAdd();
-
-			builder.Property(x => x.Password).IsRequired();
-			builder.Property(x => x.Name).HasMaxLength(100).IsRequired();
-
-			builder.HasOne(x => x.Profile)
-				.WithOne(x => x.User)
-				.HasPrincipalKey<User>(x => x.Id)
-				.OnDelete(DeleteBehavior.Cascade);
-		});
-
-		modelBuilder.Entity<Profile>(builder =>
-		{
-			builder.ToTable("Profiles").HasKey(x => x.Id);
-
-			builder.Property(x => x.Id).ValueGeneratedOnAdd();
-			builder.Property(x => x.ImgRef).IsRequired(false);
-
-			builder.HasData(profile);
-		});
-
-		modelBuilder.Entity<Comment>(builder =>
-		{
-			builder.HasOne(x => x.Creator);
-			builder.HasMany(x => x.UpvotedUsers)
-				.WithMany(x => x.UpvotedComments);
-		});
+		modelBuilder.ApplyConfiguration(new CollectionConfiguration());
+		modelBuilder.ApplyConfiguration(new ItemConfiguration());
+		modelBuilder.ApplyConfiguration(new CommentConfiguration());
+		modelBuilder.ApplyConfiguration(new LikeConfiguration());
+		modelBuilder.ApplyConfiguration(new UserConfiguration());
+		modelBuilder.ApplyConfiguration(new ProfileConfiguration());
+		modelBuilder.ApplyConfiguration(new TagConfiguration());
 
 		base.OnModelCreating(modelBuilder);
 	}

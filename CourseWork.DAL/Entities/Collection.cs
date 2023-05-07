@@ -11,7 +11,7 @@ public class Collection
 	public string Author { get; set; }
 	public string Description { get; set; }
 	public Theme Theme { get; set; }
-	public string ImgRef { get; set; }
+	public string ImgUrl { get; set; }
 	public DateTime Date { get; set; }
 	public List<Item> Items { get; set; } = new();
 	public List<Tag> Tags { get; set; } = new();

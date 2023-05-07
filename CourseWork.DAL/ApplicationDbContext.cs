@@ -1,4 +1,4 @@
-﻿using CourseWork.Domain.Entities;
+﻿using CourseWork.DAL.Entities;
 using CourseWork.Domain.Helpers;
 using Microsoft.EntityFrameworkCore;
 

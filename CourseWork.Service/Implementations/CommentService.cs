@@ -42,7 +42,7 @@ namespace CourseWork.Service.Implementations
 					Content = x.Content,
 					Creator = x.Creator.Id,
 					Fullname = x.Creator.Name,
-					ProfilePictureUrl = x.Creator?.Profile?.ImgRef,
+					ProfilePictureUrl = x.Creator?.Profile?.ImgUrl,
 					UpvoteCount = x.UpvoteCount,
 					UserHasUpvoted = x.UpvotedUsers.Contains(user),
 					CreatedByAdmin = x.Creator.Role == Role.Admin ? true : false,

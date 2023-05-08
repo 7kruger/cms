@@ -1,5 +1,5 @@
 ﻿using CourseWork.DAL.Interfaces;
-using CourseWork.Domain.Entities;
+using CourseWork.DAL.Entities;
 using System.Linq;
 using System.Threading.Tasks;
 

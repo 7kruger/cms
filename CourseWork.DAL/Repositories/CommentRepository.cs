@@ -1,5 +1,5 @@
 ﻿using CourseWork.DAL.Interfaces;
-using CourseWork.Domain.Entities;
+using CourseWork.DAL.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;

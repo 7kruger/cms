@@ -1,30 +1,34 @@
-﻿using CourseWork.DAL.Interfaces;
-using CourseWork.Domain.Entities;
-using CourseWork.Domain.Enum;
-using CourseWork.Domain.Helpers;
-using CourseWork.Domain.Response;
-using CourseWork.Domain.ViewModels.Account;
-using CourseWork.Service.Interfaces;
-using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using AutoMapper;
+using CourseWork.DAL.Entities;
+using CourseWork.DAL.Interfaces;
+using CourseWork.Domain.Enum;
+using CourseWork.Domain.Helpers;
+using CourseWork.Service.Interfaces;
+using CourseWork.Service.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace CourseWork.Service.Implementations
 {
 	public class AccountService : IAccountService
 	{
+		private readonly IMapper _mapper;
 		private readonly IRepository<User> _userRepository;
 		private readonly IProfileService _profileService;
 
-		public AccountService(IRepository<User> userRepository, IProfileService profileService)
+		public AccountService(IRepository<User> userRepository, 
+			IProfileService profileService, 
+			IMapper mapper)
 		{
 			_userRepository = userRepository;
 			_profileService = profileService;
+			_mapper = mapper;
 		}
 
-		public async Task<IBaseResponse<ClaimsIdentity>> Register(RegisterViewModel model)
+		public async Task<IdentityResult> Register(UserModel model)
 		{
 			try
 			{
@@ -32,43 +36,43 @@ namespace CourseWork.Service.Implementations
 
 				if (user != null)
 				{
-					return new BaseResponse<ClaimsIdentity>
-					{
-						Description = "Пользователь с таким именем уже существует"
-					};
+					return new IdentityResult(
+						errors: new List<string>()
+						{
+							"Пользователь с таким именем уже существует"
+						},
+						succeeded: false,
+						claims: null);
 				}
 
-				user = new User
-				{
-					Name = model.Name,
-					Password = HashPasswordHelper.HashPassword(model.Password),
-					RegistrationDate = DateTime.Now,
-					Role = Role.User,
-					IsBlocked = false,
-				};
+				model.Password = HashPasswordHelper.HashPassword(model.Password);
+				model.RegistrationDate = DateTime.Now;
+				model.Role = Role.User;
+				model.IsBlocked = false;
 
-				await _userRepository.Create(user);
+				await _userRepository.Create(_mapper.Map<User>(model));
 				await _profileService.Create(user.Name);
 
 				var result = GetClaimsIdentity(user);
 
-				return new BaseResponse<ClaimsIdentity>
-				{
-					StatusCode = StatusCode.OK,
-					Data = result
-				};
+				return new IdentityResult(
+					errors: new List<string>(),
+					succeeded: true,
+					claims: result);
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
-				return new BaseResponse<ClaimsIdentity>
-				{
-					StatusCode = StatusCode.InternalServerError,
-					Description = $"[Register] : {ex.Message}"
-				};
+				return new IdentityResult(
+					errors: new List<string>
+					{
+						"Не удалось зарегистрировать пользователя, попробуйте позже"
+					},
+					succeeded: false,
+					claims: null);
 			}
 		}
 
-		public async Task<IBaseResponse<ClaimsIdentity>> Login(LoginViewModel model)
+		public async Task<IdentityResult> Login(UserModel model)
 		{
 			try
 			{
@@ -76,77 +80,73 @@ namespace CourseWork.Service.Implementations
 
 				if (user == null)
 				{
-					return new BaseResponse<ClaimsIdentity>
-					{
-						StatusCode = StatusCode.NotFound,
-						Description = "Пользователя с таким именем не существует"
-					};
+					return new IdentityResult(
+							errors: new List<string>
+							{
+								"Пользователя с таким именем не существует"
+							},
+							succeeded: false,
+							claims: null);
 				}
 				if (user.Password != HashPasswordHelper.HashPassword(model.Password))
 				{
-					return new BaseResponse<ClaimsIdentity>
-					{
-						Description = "Неверный логин или пароль"
-					};
+					return new IdentityResult(
+							errors: new List<string>
+							{
+								"Неверный логин или пароль"
+							},
+							succeeded: false,
+							claims: null);
 				}
 				if (user.IsBlocked)
 				{
-					return new BaseResponse<ClaimsIdentity>
-					{
-						Description = "Пользователь заблокирован"
-					};
+					return new IdentityResult(
+							errors: new List<string>
+							{
+								"Пользователь заблокирован"
+							},
+							succeeded: false,
+							claims: null);
 				}
 
 				var result = GetClaimsIdentity(user);
 
-				return new BaseResponse<ClaimsIdentity>
-				{
-					StatusCode = StatusCode.OK,
-					Data = result
-				};
+				return new IdentityResult(
+					errors: null,
+					succeeded: false,
+					claims: null);
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
-				return new BaseResponse<ClaimsIdentity>
-				{
-					StatusCode = StatusCode.InternalServerError,
-					Description = $"[Login] : {ex.Message}"
-				};
+				return new IdentityResult(
+					errors: new List<string>
+					{
+						"Не удалось войти в аккаунт, попробуйте позже"
+					},
+					succeeded: false,
+					claims: null);
 			}
 		}
 
-		public async Task<IBaseResponse<bool>> ChangePassword(ChangePasswordViewModel model)
+		public async Task<bool> ChangePassword(string username, string newPassword)
 		{
 			try
 			{
-				var user = await _userRepository.GetAll().FirstOrDefaultAsync(x => x.Name == model.Name);
+				var user = await _userRepository.GetAll().FirstOrDefaultAsync(x => x.Name == username);
+
 				if (user == null)
 				{
-					return new BaseResponse<bool>()
-					{
-						StatusCode = StatusCode.NotFound,
-						Description = "Пользователь не найден"
-					};
+					return false;
 				}
 
-				user.Password = HashPasswordHelper.HashPassword(model.NewPassword);
-
+				user.Password = HashPasswordHelper.HashPassword(newPassword);
 				await _userRepository.Update(user);
 
-				return new BaseResponse<bool>()
-				{
-					Data = true,
-					StatusCode = StatusCode.OK,
-					Description = "Пароль обновлен"
-				};
+				return true;
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
-				return new BaseResponse<bool>
-				{
-					Description = $"[ChangePassword] : {ex.Message}",
-					StatusCode = StatusCode.InternalServerError
-				};
+				return false;
 			}
 		}
 

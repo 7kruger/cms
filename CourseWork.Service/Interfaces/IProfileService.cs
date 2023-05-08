@@ -1,14 +1,13 @@
-﻿using CourseWork.Domain.Response;
-using CourseWork.Domain.ViewModels.Profile;
+﻿using System.Threading.Tasks;
+using CourseWork.Service.Models;
 using Microsoft.AspNetCore.Http;
-using System.Threading.Tasks;
 
 namespace CourseWork.Service.Interfaces
 {
 	public interface IProfileService
 	{
-		Task<IBaseResponse<ProfileViewModel>> Get(string name);
-		Task<IBaseResponse<bool>> Update(ProfileViewModel model, IFormFile image);
+		Task<ProfileModel> Get(string name);
+		Task<bool> Update(ProfileModel model, IFormFile image);
 		Task Create(string username);
 	}
 }

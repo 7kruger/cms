@@ -1,18 +1,16 @@
-﻿using CourseWork.Domain.Entities;
-using CourseWork.Domain.Response;
-using CourseWork.Domain.ViewModels.Item;
-using Microsoft.AspNetCore.Http;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using CourseWork.Service.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace CourseWork.Service.Interfaces
 {
 	public interface IItemService
 	{
-		Task<IBaseResponse<List<ItemViewModel>>> GetItems();
-		Task<IBaseResponse<ItemViewModel>> GetItem(string id);
-		Task<IBaseResponse<Item>> Create(CreateItemViewModel model, string username, IFormFile image);
-		Task<IBaseResponse<Item>> Edit(ItemViewModel model, IFormFile image);
-		Task<IBaseResponse<bool>> Delete(string id);
+		Task<IEnumerable<ItemModel>> GetItems();
+		Task<ItemModel> GetItem(string id);
+		Task<ItemModel> Create(ItemModel model, string username, IFormFile image);
+		Task<ItemModel> Edit(ItemModel model, IFormFile image);
+		Task<bool> Delete(string id);
 	}
 }

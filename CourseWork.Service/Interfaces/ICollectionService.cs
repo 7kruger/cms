@@ -1,20 +1,18 @@
-﻿using CourseWork.Domain.Entities;
-using CourseWork.Domain.Response;
-using CourseWork.Domain.ViewModels.Collection;
-using Microsoft.AspNetCore.Http;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using CourseWork.Service.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace CourseWork.Service.Interfaces
 {
 	public interface ICollectionService
 	{
-		Task<IBaseResponse<List<Collection>>> GetCollections();
-		Task<IBaseResponse<List<Collection>>> SearchByValue(string value);
-		Task<IBaseResponse<CollectionViewModel>> GetCollection(string id);
-		Task<IBaseResponse<CollectionViewModel>> GetCollection(string id, int itemsPageId);
-		Task<IBaseResponse<Collection>> Create(CreateCollectionViewModel model, string username, IFormFile image);
-		Task<IBaseResponse<Collection>> Edit(string id, CollectionViewModel model, string[] selectedItems, string[] tags, IFormFile image);
-		Task<IBaseResponse<bool>> Delete(string id);
+		Task<IEnumerable<CollectionModel>> GetCollections();
+		Task<IEnumerable<CollectionModel>> SearchByValue(string value);
+		Task<CollectionModel> GetCollection(string id);
+		Task<CollectionModel> GetCollection(string id, int itemsPageId);
+		Task<CollectionModel> Create(CollectionModel model, string username, IFormFile image);
+		Task<CollectionModel> Edit(string id, CollectionModel model, string[] selectedItems, string[] tags, IFormFile image);
+		Task<bool> Delete(string id);
 	}
 }

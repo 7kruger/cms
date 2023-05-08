@@ -1,53 +1,48 @@
-﻿using CourseWork.DAL.Interfaces;
-using CourseWork.Domain.Entities;
-using CourseWork.Domain.Enum;
-using CourseWork.Domain.Response;
-using CourseWork.Service.Interfaces;
-using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using CourseWork.DAL.Entities;
+using CourseWork.DAL.Interfaces;
+using CourseWork.Domain.Enum;
+using CourseWork.Service.Interfaces;
+using CourseWork.Service.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace CourseWork.Service.Implementations
 {
 	public class AdminService : IAdminService
 	{
+		private readonly IMapper _mapper;
 		private readonly IRepository<User> _userRepository;
 
-		public AdminService(IRepository<User> userRepository)
+		public AdminService(IRepository<User> userRepository, IMapper mapper)
 		{
 			_userRepository = userRepository;
+			_mapper = mapper;
 		}
 
-		public async Task<IBaseResponse<List<User>>> GetUsers()
+		public async Task<IEnumerable<UserModel>> GetUsers()
 		{
 			try
 			{
 				var users = await _userRepository.GetAll().ToListAsync();
 
-				return new BaseResponse<List<User>>
-				{
-					StatusCode = StatusCode.OK,
-					Data = users
-				};
+				return _mapper.Map<IEnumerable<UserModel>>(users);
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
-				return new BaseResponse<List<User>>
-				{
-					StatusCode = StatusCode.InternalServerError,
-					Description = $"{ex.Message}",
-				};
+				return new List<UserModel>();
 			}
 		}
 
-		public async Task<IBaseResponse<bool>> Do(ActionType type, int[] selectedUsers)
+		public async Task<bool> Do(ActionType type, int[] selectedUsers)
 		{
 			try
 			{
 				var users = await _userRepository.GetAll().Where(x => selectedUsers.Contains(x.Id)).ToListAsync();
-				
+
 				switch (type)
 				{
 					case ActionType.Block:
@@ -67,18 +62,11 @@ namespace CourseWork.Service.Implementations
 						break;
 				}
 
-				return new BaseResponse<bool>
-				{
-					StatusCode = StatusCode.OK,
-				};
+				return true;
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
-				return new BaseResponse<bool>
-				{
-					StatusCode = StatusCode.InternalServerError,
-					Description = $"{ex.Message}",
-				};
+				return false;
 			}
 		}
 

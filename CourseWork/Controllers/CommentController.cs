@@ -1,7 +1,6 @@
 ﻿using CourseWork.Domain.Models;
 using CourseWork.Service.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 
 namespace CourseWork.Controllers
 {
@@ -19,10 +18,10 @@ namespace CourseWork.Controllers
 		[Route("LoadComments")]
 		public async Task<IActionResult> LoadComments(string id)
 		{
-			var response = await _commentService.LoadComments(id, GetCurrentUsername(), IsAdmin());
-			if (response.StatusCode == Domain.Enum.StatusCode.OK)
+			var comments = await _commentService.LoadComments(id, GetCurrentUsername(), IsAdmin());
+			if (comments.Any())
 			{
-				return Ok(response.Data);
+				return Ok(comments);
 			}
 			return StatusCode(404);
 		}
@@ -31,10 +30,10 @@ namespace CourseWork.Controllers
 		[Route("AddComment")]
 		public async Task<IActionResult> AddComment(CommentModel model)
 		{
-			var response = await _commentService.AddComment(model, GetCurrentUsername());
-			if (response.StatusCode == Domain.Enum.StatusCode.OK)
+			var comment = await _commentService.AddComment(model, GetCurrentUsername());
+			if (comment != null)
 			{
-				return Ok(response.Data);
+				return Ok(comment);
 			}
 			return StatusCode(404);
 		}
@@ -43,8 +42,8 @@ namespace CourseWork.Controllers
 		[Route("UpdateComment")]
 		public async Task<IActionResult> UpdateComment(CommentModel model)
 		{
-			var response = await _commentService.UpdateComment(model);
-			if (response.StatusCode == Domain.Enum.StatusCode.OK)
+			var updated = await _commentService.UpdateComment(model);
+			if (updated)
 			{
 				return Ok();
 			}
@@ -55,8 +54,8 @@ namespace CourseWork.Controllers
 		[Route("DeleteComment")]
 		public async Task<IActionResult> DeleteComment(long id)
 		{
-			var response = await _commentService.DeleteComment(id);
-			if (response.StatusCode == Domain.Enum.StatusCode.OK)
+			var deleted = await _commentService.DeleteComment(id);
+			if (deleted)
 			{
 				return Ok();
 			}
@@ -67,8 +66,8 @@ namespace CourseWork.Controllers
 		[Route("Upvote")]
 		public async Task<IActionResult> Upvote(CommentModel model)
 		{
-			var response = await _commentService.Upvote(model, GetCurrentUsername());
-			if (response.StatusCode == Domain.Enum.StatusCode.OK)
+			var upvoted = await _commentService.Upvote(model, GetCurrentUsername());
+			if (upvoted)
 			{
 				return Ok();
 			}

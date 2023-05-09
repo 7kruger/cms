@@ -1,11 +1,10 @@
-﻿using CourseWork.DAL.Interfaces;
+﻿using CourseWork.DAL.Entities;
+using CourseWork.DAL.Interfaces;
 using CourseWork.DAL.Repositories;
-using CourseWork.Domain.Entities;
 using CourseWork.Service.Implementations;
 using CourseWork.Service.Interfaces;
 using CourseWork.Services.Implementations;
 using CourseWork.Services.Interfaces;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace CourseWork
 {

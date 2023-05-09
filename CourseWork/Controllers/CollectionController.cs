@@ -1,12 +1,9 @@
-﻿using CourseWork.Domain.ViewModels.Collection;
+﻿using AutoMapper;
 using CourseWork.Service.Interfaces;
+using CourseWork.Service.Models;
+using CourseWork.ViewModels.Collection;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace CourseWork.Controllers
 {
@@ -14,33 +11,47 @@ namespace CourseWork.Controllers
 	public class CollectionController : Controller
 	{
 		private readonly ICollectionService _collectionService;
+		private readonly IMapper _mapper;
 
-		public CollectionController(ICollectionService collectionService)
+		public CollectionController(ICollectionService collectionService, IMapper mapper)
 		{
 			_collectionService = collectionService;
+			_mapper = mapper;
 		}
 
 		[HttpGet]
 		[AllowAnonymous]
 		public async Task<IActionResult> GetCollection(string id, int? pageId)
 		{
-			var response = await _collectionService.GetCollection(id, pageId ?? 1);
-			if (response.StatusCode == Domain.Enum.StatusCode.OK)
+			var collection = await _collectionService.GetCollection(id);
+
+			if (collection == null)
 			{
-				return View(response.Data);
+				return View("Error", "Ошибка! Коллекция не найдена");
 			}
-			return View("Error", response.Description);
+
+			var page = pageId ?? 1;
+			collection.Items = collection.Items
+				.Skip((page - 1) * Constants.ITEMS_PER_PAGE)
+				.Take(Constants.ITEMS_PER_PAGE)
+				.ToList();
+
+			return View(_mapper.Map<CollectionViewModel>(collection));
 		}
 
 		[HttpGet]
 		public async Task<IActionResult> MyCollections(int? pageId)
 		{
-			var response = await _collectionService.GetCollections();
-			if (response.StatusCode == Domain.Enum.StatusCode.OK)
+			var collections = await _collectionService.GetCollections();
+			if (!collections.Any())
 			{
-				return View(response.Data.Where(x => x.Author == GetCurrentUsername()));
+				return View("Error");
 			}
-			return View("Error");
+
+			collections = collections.Where(x => x.Author == GetCurrentUsername());
+			var result = _mapper.Map<IEnumerable<CollectionViewModel>>(collections);
+
+			return View(result);
 		}
 
 		[HttpGet]
@@ -61,26 +72,26 @@ namespace CourseWork.Controllers
 				image = image.Replace("data:image/jpeg;base64,", string.Empty);
 				var fileBytes = Convert.FromBase64String(image);
 				var ms = new MemoryStream(fileBytes);
-				file = new FormFile(ms, 0,fileBytes.Length,GetCurrentUsername(), GetCurrentUsername()+".jpg");
+				file = new FormFile(ms, 0, fileBytes.Length, GetCurrentUsername(), GetCurrentUsername() + ".jpg");
 			}
 
-			var response = await _collectionService.Create(model, GetCurrentUsername(), file);
-			if (response.StatusCode == Domain.Enum.StatusCode.OK)
+			var result = await _collectionService.Create(_mapper.Map<CollectionModel>(model), GetCurrentUsername(), file);
+			if (result != null)
 			{
-				return Redirect($"/Collection/EditCollection/{response.Data.Id}");
+				return Redirect($"/Collection/EditCollection/{result.Id}");
 			}
-			return View("Error", response.Description);
+			return View("Error", "Не удалось создать коллекцию");
 		}
 
 		[HttpGet]
 		public async Task<IActionResult> EditCollection(string id)
 		{
-			var response = await _collectionService.GetCollection(id);
-			if (response.StatusCode == Domain.Enum.StatusCode.OK)
+			var collection = await _collectionService.GetCollection(id);
+			if (collection != null)
 			{
-				return View(response.Data);
+				return View(collection);
 			}
-			return View("Error", response.Description);
+			return View("Error", "Ошибка! Не удалось найти коллекцию");
 		}
 
 		[HttpPost]
@@ -101,26 +112,26 @@ namespace CourseWork.Controllers
 				file = new FormFile(ms, 0, fileBytes.Length, GetCurrentUsername(), GetCurrentUsername() + ".jpg");
 			}
 
-			var response = await _collectionService.Edit(model.Id, model, selectedItems, tags, file);
-			if (response.StatusCode == Domain.Enum.StatusCode.OK)
+			var result = await _collectionService.Edit(model.Id, _mapper.Map<CollectionModel>(model), selectedItems, tags, file);
+			if (result != null)
 			{
-				return Redirect($"/Collection/GetCollection/{response.Data.Id}");
+				return Redirect($"/Collection/GetCollection/{result.Id}");
 			}
 
-			return View("Error", model.Description);
+			return View("Error", "Ошибка при сохранении изменений");
 		}
 
 		[HttpGet]
 		public async Task<IActionResult> DeleteCollection(string id)
 		{
-			var response = await _collectionService.Delete(id);
+			var deleted = await _collectionService.Delete(id);
 
-			if (response.StatusCode == Domain.Enum.StatusCode.OK)
+			if (deleted)
 			{
 				return RedirectToAction("Index", "Home");
 			}
 
-			return View("Error", response.Description);
+			return View("Error", "Ошибка при удалении коллекции");
 		}
 
 		private string GetCurrentUsername() => User.Identity.Name;

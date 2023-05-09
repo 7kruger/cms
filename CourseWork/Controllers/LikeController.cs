@@ -1,7 +1,6 @@
 ﻿using CourseWork.Service.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 
 namespace CourseWork.Controllers
 {
@@ -21,10 +20,10 @@ namespace CourseWork.Controllers
 		[Route("LoadLikes")]
 		public async Task<IActionResult> LoadLikes(string id)
 		{
-			var response = await _likeService.LoadLikes(id, GetCurrentUsername());
-			if (response.StatusCode == Domain.Enum.StatusCode.OK)
+			var result = await _likeService.LoadLikes(id, GetCurrentUsername());
+			if (!string.IsNullOrWhiteSpace(result))
 			{
-				return Ok(response.Data);
+				return Ok(result);
 			}
 			return StatusCode(404);
 		}
@@ -33,20 +32,20 @@ namespace CourseWork.Controllers
 		[Route("AddLike")]
 		public async Task<IActionResult> AddLike(string id)
 		{
-			var response = await _likeService.AddLike(id, GetCurrentUsername());
-			if (response.StatusCode == Domain.Enum.StatusCode.OK)
+			var added = await _likeService.AddLike(id, GetCurrentUsername());
+			if (added)
 			{
 				return Ok();
 			}
-			return Ok(response.Description);
+			return Ok(404);
 		}
 
 		[HttpPost]
 		[Route("RemoveLike")]
 		public async Task<IActionResult> RemoveLike(string id)
 		{
-			var response = await _likeService.RemoveLike(id, GetCurrentUsername());
-			if (response.StatusCode == Domain.Enum.StatusCode.OK)
+			var removed = await _likeService.RemoveLike(id, GetCurrentUsername());
+			if (removed)
 			{
 				return Ok();
 			}

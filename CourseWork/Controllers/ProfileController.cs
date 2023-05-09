@@ -1,11 +1,9 @@
-﻿using CourseWork.Domain.ViewModels.Profile;
+﻿using AutoMapper;
 using CourseWork.Service.Interfaces;
+using CourseWork.Service.Models;
+using CourseWork.ViewModels.Profile;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.IO;
-using System;
-using System.Threading.Tasks;
 
 namespace CourseWork.Controllers
 {
@@ -13,32 +11,34 @@ namespace CourseWork.Controllers
 	public class ProfileController : Controller
 	{
 		private readonly IProfileService _profileService;
+		private readonly IMapper _mapper;
 
-		public ProfileController(IProfileService profileService)
+		public ProfileController(IProfileService profileService, IMapper mapper)
 		{
 			_profileService = profileService;
+			_mapper = mapper;
 		}
 
 		[HttpGet]
 		public async Task<IActionResult> Index()
 		{
-			var response = await _profileService.Get(GetCurrentUsername());
-			if (response.StatusCode == Domain.Enum.StatusCode.OK)
+			var profile = await _profileService.Get(GetCurrentUsername());
+			if (profile != null)
 			{
-				return View(response.Data);
+				return View(_mapper.Map<ProfileViewModel>(profile));
 			}
-			return View("Error", response.Description);
+			return View("Error", "Error");
 		}
 
 		[HttpGet]
 		public async Task<IActionResult> Settings()
 		{
-			var response = await _profileService.Get(GetCurrentUsername());
-			if (response.StatusCode == Domain.Enum.StatusCode.OK)
+			var profile = await _profileService.Get(GetCurrentUsername());
+			if (profile != null)
 			{
-				return View(response.Data);
+				return View(_mapper.Map<ProfileViewModel>(profile));
 			}
-			return View("Error", response.Description);
+			return View("Error", "Error");
 		}
 
 		[HttpPost]
@@ -54,22 +54,22 @@ namespace CourseWork.Controllers
 				file = new FormFile(ms, 0, fileBytes.Length, GetCurrentUsername(), GetCurrentUsername() + ".jpg");
 			}
 
-			var response = await _profileService.Update(model, file);
-			if (response.StatusCode == Domain.Enum.StatusCode.OK)
+			var updated = await _profileService.Update(_mapper.Map<ProfileModel>(model), file);
+			if (updated)
 			{
 				return RedirectToAction("Index");
 			}
-			return View("Error", response.Data);
+			return View("Error", "Error");
 		}
 
 		[HttpGet]
 		[AllowAnonymous]
 		public async Task<IActionResult> ShowProfile(string name)
 		{
-			var response = await _profileService.Get(name);
-			if (response.StatusCode == Domain.Enum.StatusCode.OK)
+			var profile = await _profileService.Get(name);
+			if (profile != null)
 			{
-				return Ok(response.Data);
+				return View(_mapper.Map<ProfileViewModel>(profile));
 			}
 			return Ok();
 		}

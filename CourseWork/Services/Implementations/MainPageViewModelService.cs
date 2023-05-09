@@ -1,16 +1,13 @@
-﻿using CourseWork.DAL.Interfaces;
-using CourseWork.Domain.Entities;
+﻿using CourseWork.DAL.Entities;
+using CourseWork.DAL.Interfaces;
 using CourseWork.Domain.Enum;
-using CourseWork.Domain.ViewModels.Item;
-using CourseWork.Domain.ViewModels.Shared;
 using CourseWork.Service.Interfaces;
 using CourseWork.Services.Interfaces;
 using CourseWork.ViewModels.Index;
+using CourseWork.ViewModels.Item;
+using CourseWork.ViewModels.Shared;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace CourseWork.Services.Implementations
 {
@@ -45,7 +42,7 @@ namespace CourseWork.Services.Implementations
 
 			if (!string.IsNullOrWhiteSpace(searchString))
 			{
-				collections = collections.Where(c => c.Name.Contains(searchString)
+				collections = collections.Where(c => c.Title.Contains(searchString)
 					|| c.Author.Contains(searchString) || c.Description.Contains(searchString));
 			}
 
@@ -57,10 +54,10 @@ namespace CourseWork.Services.Implementations
 			switch (sort)
 			{
 				case SortState.NameAsc:
-					collections = collections.OrderBy(c => c.Name);
+					collections = collections.OrderBy(c => c.Title);
 					break;
 				case SortState.NameDesc:
-					collections = collections.OrderByDescending(c => c.Name);
+					collections = collections.OrderByDescending(c => c.Title);
 					break;
 				case SortState.DateDesc:
 					collections = collections.OrderBy(c => c.Date);

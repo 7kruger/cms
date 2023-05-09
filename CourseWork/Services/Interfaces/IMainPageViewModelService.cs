@@ -1,6 +1,5 @@
 ﻿using CourseWork.Domain.Enum;
 using CourseWork.ViewModels.Index;
-using System.Threading.Tasks;
 
 namespace CourseWork.Services.Interfaces
 {

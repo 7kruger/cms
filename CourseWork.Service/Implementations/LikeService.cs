@@ -1,13 +1,11 @@
-﻿using CourseWork.DAL.Interfaces;
-using CourseWork.Domain.Entities;
-using CourseWork.Domain.Enum;
-using CourseWork.Domain.Response;
-using CourseWork.Service.Interfaces;
-using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using CourseWork.DAL.Entities;
+using CourseWork.DAL.Interfaces;
+using CourseWork.Service.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace CourseWork.Service.Implementations
 {
@@ -20,7 +18,7 @@ namespace CourseWork.Service.Implementations
 			_likeRepository = likeRepository;
 		}
 
-		public async Task<IBaseResponse<string>> LoadLikes(string id, string username)
+		public async Task<string> LoadLikes(string id, string username)
 		{
 			try
 			{
@@ -30,7 +28,7 @@ namespace CourseWork.Service.Implementations
 
 				bool isCurrentUserLiked = likes.Any(l => l.UserName == username);
 
-                var count = likes.Count();
+				var count = likes.Count();
 
 				var json = JsonSerializer.Serialize(new
 				{
@@ -38,33 +36,21 @@ namespace CourseWork.Service.Implementations
 					liked = isCurrentUserLiked
 				});
 
-				return new BaseResponse<string>
-				{
-					StatusCode = StatusCode.OK,
-					Data = json
-				};
+				return json;
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
-				return new BaseResponse<string>
-				{
-					StatusCode = StatusCode.InternalServerError,
-					Description = $"[LoadLikes] : {ex.Message}"
-				};
+				return string.Empty;
 			}
 		}
 
-		public async Task<IBaseResponse<bool>> AddLike(string id, string username)
+		public async Task<bool> AddLike(string id, string username)
 		{
 			try
 			{
 				if (string.IsNullOrWhiteSpace(id))
 				{
-					return new BaseResponse<bool>
-					{
-						StatusCode = StatusCode.InternalServerError,
-						Description = "id null"
-					};
+					return false;
 				}
 
 				var like = new Like
@@ -75,23 +61,15 @@ namespace CourseWork.Service.Implementations
 
 				await _likeRepository.Create(like);
 
-				return new BaseResponse<bool>
-				{
-					StatusCode = StatusCode.OK,
-					Data = true
-				};
+				return true;
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
-				return new BaseResponse<bool>
-				{
-					StatusCode = StatusCode.InternalServerError,
-					Description = $"[SetLikes] : {ex.Message}"
-				};
+				return false;
 			}
 		}
 
-		public async Task<IBaseResponse<bool>> RemoveLike(string id, string username)
+		public async Task<bool> RemoveLike(string id, string username)
 		{
 			try
 			{
@@ -100,28 +78,16 @@ namespace CourseWork.Service.Implementations
 
 				if (like == null)
 				{
-					return new BaseResponse<bool>
-					{
-						StatusCode = StatusCode.NotFound,
-						Description = "Can not remove like"
-					};
+					return false;
 				}
 
 				await _likeRepository.Delete(like);
 
-				return new BaseResponse<bool>
-				{
-					StatusCode = StatusCode.OK,
-					Data = true
-				};
+				return true;
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
-				return new BaseResponse<bool>
-				{
-					StatusCode = StatusCode.InternalServerError,
-					Description = $"[RemoveLikes] : {ex.Message}"
-				};
+				return false;
 			}
 		}
 	}

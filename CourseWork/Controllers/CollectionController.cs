@@ -89,13 +89,13 @@ namespace CourseWork.Controllers
 			var collection = await _collectionService.GetCollection(id);
 			if (collection != null)
 			{
-				return View(collection);
+				return View(_mapper.Map<EditCollectionViewModel>(collection));
 			}
 			return View("Error", "Ошибка! Не удалось найти коллекцию");
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> EditCollection(CollectionViewModel model, string[] selectedItems, string image, string[] tags)
+		public async Task<IActionResult> EditCollection(EditCollectionViewModel model, string[] selectedItems, string image, string[] tags)
 		{
 			if (!ModelState.IsValid)
 			{

@@ -1,12 +1,9 @@
-﻿using CourseWork.Domain.ViewModels.Item;
+﻿using AutoMapper;
 using CourseWork.Service.Interfaces;
+using CourseWork.Service.Models;
+using CourseWork.ViewModels.Item;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.IO;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace CourseWork.Controllers
 {
@@ -14,43 +11,46 @@ namespace CourseWork.Controllers
 	public class ItemController : Controller
 	{
 		private readonly IItemService _itemService;
+		private readonly IMapper _mapper;
 
-		public ItemController(IItemService itemService)
+		public ItemController(IItemService itemService, IMapper mapper)
 		{
 			_itemService = itemService;
+			_mapper = mapper;
 		}
 
 		[HttpGet]
 		[AllowAnonymous]
 		public async Task<IActionResult> Items()
 		{
-			var response = await _itemService.GetItems();
-			if (response.StatusCode == Domain.Enum.StatusCode.OK)
+			var items = await _itemService.GetItems();
+			if (items.Any())
 			{
-				return View(response.Data);
+				return View(items);
 			}
-			return View("Error", response.Description);
+			return View("Error", "Ошибка");
 		}
 
 		[HttpGet]
 		[AllowAnonymous]
 		public async Task<IActionResult> GetItem(string id)
 		{
-			var response = await _itemService.GetItem(id);
-			if (response.StatusCode == Domain.Enum.StatusCode.OK)
+			var item = await _itemService.GetItem(id);
+			if (item != null)
 			{
-				return View(response.Data);
+				return View(item);
 			}
-			return View("Error", response.Description);
+			return View("Error", "Ошибка");
 		}
 
 		[HttpGet]
 		public async Task<IActionResult> MyItems(int? pageId)
 		{
-			var response = await _itemService.GetItems();
-			if (response.StatusCode == Domain.Enum.StatusCode.OK)
+			var items = await _itemService.GetItems();
+			if (items.Any())
 			{
-				return View(response.Data.Where(x => x.Author == GetCurrentUsername()));
+				items = items.Where(x => x.Author == GetCurrentUsername());
+				return View(_mapper.Map<IEnumerable<ItemViewModel>>(items));
 			}
 			return View("Error");
 		}
@@ -76,27 +76,27 @@ namespace CourseWork.Controllers
 				file = new FormFile(ms, 0, fileBytes.Length, GetCurrentUsername(), GetCurrentUsername() + ".jpg");
 			}
 
-			var response = await _itemService.Create(model, GetCurrentUsername(), file);
-			if (response.StatusCode == Domain.Enum.StatusCode.OK)
+			var item = await _itemService.Create(_mapper.Map<ItemModel>(model), GetCurrentUsername(), file);
+			if (item != null)
 			{
-				return Redirect($"/Item/GetItem/{response.Data.Id}");
+				return Redirect($"/Item/GetItem/{item.Id}");
 			}
-			return View("Error", response.Description);
+			return View("Error", "Error");
 		}
 
 		[HttpGet]
 		public async Task<IActionResult> EditItem(string id)
 		{
-			var response = await _itemService.GetItem(id);
-			if (response.StatusCode == Domain.Enum.StatusCode.OK)
+			var item = await _itemService.GetItem(id);
+			if (item != null)
 			{
-				return View(response.Data);
+				return View(_mapper.Map<EditItemViewModel>(item));
 			}
-			return View("Error", response.Description);
+			return View("Error", "Error");
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> EditItem(ItemViewModel model, string image)
+		public async Task<IActionResult> EditItem(EditItemViewModel model, string image)
 		{
 			if (!ModelState.IsValid)
 			{
@@ -113,23 +113,23 @@ namespace CourseWork.Controllers
 				file = new FormFile(ms, 0, fileBytes.Length, GetCurrentUsername(), GetCurrentUsername() + ".jpg");
 			}
 
-			var response = await _itemService.Edit(model, file);
-			if (response.StatusCode == Domain.Enum.StatusCode.OK)
+			var item = await _itemService.Edit(_mapper.Map<ItemModel>(model), file);
+			if (item != null)
 			{
-				return Redirect($"/Item/GetItem/{response.Data.Id}");
+				return Redirect($"/Item/GetItem/{item.Id}");
 			}
-			return View("Error", response.Description);
+			return View("Error","Error");
 		}
 
 		[HttpGet]
 		public async Task<IActionResult> DeleteItem(string id)
 		{
-			var response = await _itemService.Delete(id);
-			if (response.StatusCode == Domain.Enum.StatusCode.OK)
+			var deleted = await _itemService.Delete(id);
+			if (deleted)
 			{
 				return Redirect("/");
 			}
-			return View("Error", response.Description);
+			return View("Error", "Error");
 		}
 
 		private string GetCurrentUsername() => User.Identity.Name;

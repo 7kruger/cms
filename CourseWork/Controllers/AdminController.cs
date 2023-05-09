@@ -1,8 +1,9 @@
-﻿using CourseWork.Domain.Enum;
+﻿using AutoMapper;
+using CourseWork.Domain.Enum;
 using CourseWork.Service.Interfaces;
+using CourseWork.ViewModels.Admin;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 
 namespace CourseWork.Controllers
 {
@@ -10,20 +11,24 @@ namespace CourseWork.Controllers
 	public class AdminController : Controller
 	{
 		private readonly IAdminService _adminService;
+		private readonly IMapper _mapper;
 
-		public AdminController(IAdminService adminService)
+		public AdminController(IAdminService adminService, IMapper mapper)
 		{
 			_adminService = adminService;
+			_mapper = mapper;
 		}
 
 		public async Task<IActionResult> Index()
 		{
-			var response = await _adminService.GetUsers();
-			if (response.StatusCode == Domain.Enum.StatusCode.OK)
+			var users = await _adminService.GetUsers();
+
+			if (users == null)
 			{
-				return View(response.Data);
+				return View("Error", "Ошибка");
 			}
-			return View("Error", response.Data);
+
+			return View(_mapper.Map<UserViewModel>(users));
 		}
 
 		[HttpPost]

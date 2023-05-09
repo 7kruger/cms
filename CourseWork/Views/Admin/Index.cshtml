@@ -1,5 +1,4 @@
-﻿@using CourseWork.Domain.Entities;
-@model List<User>
+﻿@model IEnumerable<CourseWork.ViewModels.Admin.UserViewModel>
 
 @{
 	ViewData["Title"] = "AdminPage";
@@ -29,34 +28,15 @@
 					</tr>
 				</thead>
 				<tbody>
-					@foreach (User user in Model)
+					@foreach (var user in Model)
 					{
 						<tr>
 							<td><input type="checkbox" class="form-check-input" name="selectedUsers" value="@user.Id" /></td>
 							<td><p>@user.Id</p></td>
 							<td><p>@user.Name</p></td>
 							<td><p>@user.RegistrationDate.ToString()</p></td>
-							<td>
-								@if (!user.IsBlocked)
-								{
-									<p>Активный</p>
-								}
-								else
-								{
-									<p>Заблокирован</p>
-								}
-
-							</td>
-							<td>
-								@if (user.Role == CourseWork.Domain.Enum.Role.Admin)
-								{
-									<p>Админ</p>
-								}
-								else
-								{
-									<p>Пользователь</p>
-								}
-							</td>
+							<td><p>@(user.IsBlocked ? "Заблокирован" : "Активный")</p></td>
+							<td><p>@user.Role.ToString()</p></td>
 						</tr>
 					}
 				</tbody>

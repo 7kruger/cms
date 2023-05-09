@@ -1,4 +1,5 @@
-﻿using CourseWork.DAL.Entities;
+﻿using AutoMapper;
+using CourseWork.DAL.Entities;
 using CourseWork.DAL.Interfaces;
 using CourseWork.Domain.Enum;
 using CourseWork.Service.Interfaces;
@@ -16,14 +17,17 @@ namespace CourseWork.Services.Implementations
 		private readonly IRepository<Collection> _collectionRepository;
 		private readonly IRepository<Tag> _tagRepository;
 		private readonly IItemService _itemService;
+		private readonly IMapper _mapper;
 
 		public MainPageViewModelService(IRepository<Collection> collectionRepository,
 										IRepository<Tag> tagRepository,
-										IItemService itemService)
+										IItemService itemService,
+										IMapper mapper)
 		{
 			_collectionRepository = collectionRepository;
 			_tagRepository = tagRepository;
 			_itemService = itemService;
+			_mapper = mapper;
 		}
 
 		public async Task<IndexViewModel> GetIndexViewModel(int page, string searchString, Theme? theme, SortState? sort, SearchIn? searchIn, string? hashtag)
@@ -96,21 +100,21 @@ namespace CourseWork.Services.Implementations
 		private async Task<IndexViewModel> ItemIndexViewModel(int page, string searchString, Theme? theme, SortState? sort, SearchIn? searchIn, string? hashtag)
 		{
 			var pageSize = Constants.ITEMS_PER_PAGE;
-			var items = (await _itemService.GetItems())?.Data.AsEnumerable();
+			var items = (await _itemService.GetItems())?.AsEnumerable();
 
 			if (!string.IsNullOrWhiteSpace(searchString))
 			{
-				items = items.Where(c => c.Name.Contains(searchString)
-					|| c.Author.Contains(searchString) || c.Content.Contains(searchString));
+				items = items.Where(c => c.Title.Contains(searchString)
+					|| c.Author.Contains(searchString) || c.Description.Contains(searchString));
 			}
 
 			switch (sort)
 			{
 				case SortState.NameAsc:
-					items = items.OrderBy(c => c.Name);
+					items = items.OrderBy(c => c.Title);
 					break;
 				case SortState.NameDesc:
-					items = items.OrderByDescending(c => c.Name);
+					items = items.OrderByDescending(c => c.Title);
 					break;
 				case SortState.DateDesc:
 					items = items.OrderBy(c => c.Date);
@@ -118,12 +122,6 @@ namespace CourseWork.Services.Implementations
 				default:
 					items = items.OrderByDescending(c => c.Date);
 					break;
-			}
-
-			if (!string.IsNullOrWhiteSpace(hashtag))
-			{
-				var t = await _tagRepository.GetAll().FirstOrDefaultAsync(t => t.Name == hashtag);
-				items = items.Where(c => c.Tags.Contains(t));
 			}
 
 			var count = items.Count();
@@ -136,7 +134,7 @@ namespace CourseWork.Services.Implementations
 			{
 				Pagination = pagination,
 				Collections = new List<Collection>(),
-				Items = result,
+				Items = _mapper.Map<List<ItemViewModel>>(result),
 				Themes = GetThemes().ToList(),
 				SortStates = GetSortStates().ToList(),
 				SortFilterApplied = sort ?? null,

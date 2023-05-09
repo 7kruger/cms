@@ -29,5 +29,7 @@ public class AppMappingProfile : AutoMapper.Profile
 		CreateMap<ItemViewModel, EditItemViewModel>().ReverseMap();
 
 		CreateMap<ProfileModel, DAL.Entities.Profile>().ReverseMap();
+
+		CreateMap<TagModel, Tag>().ReverseMap();
 	}
 }

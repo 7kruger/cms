@@ -1,14 +1,13 @@
-﻿using CourseWork.DAL.Interfaces;
-using CourseWork.Domain.Entities;
-using CourseWork.Domain.Enum;
-using CourseWork.Domain.Models;
-using CourseWork.Domain.Response;
-using CourseWork.Service.Interfaces;
-using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CourseWork.DAL.Entities;
+using CourseWork.DAL.Interfaces;
+using CourseWork.Domain.Enum;
+using CourseWork.Domain.Models;
+using CourseWork.Service.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace CourseWork.Service.Implementations
 {
@@ -23,7 +22,7 @@ namespace CourseWork.Service.Implementations
 			_userRepository = userRepository;
 		}
 
-		public async Task<IBaseResponse<List<CommentModel>>> LoadComments(string srcId, string username, bool isAdmin)
+		public async Task<List<CommentModel>> LoadComments(string srcId, string username, bool isAdmin)
 		{
 			try
 			{
@@ -49,23 +48,15 @@ namespace CourseWork.Service.Implementations
 					CreatedByCurrentUser = x.Creator.Name == username ? true : false
 				}).ToList();
 
-				return new BaseResponse<List<CommentModel>>
-				{
-					StatusCode = StatusCode.OK,
-					Data = comments
-                };
+				return comments;
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
-				return new BaseResponse<List<CommentModel>>
-				{
-					StatusCode = StatusCode.InternalServerError,
-					Description = $"[LoadComments] : {ex.Message}"
-				};
+				return null;
 			}
 		}
-		
-		public async Task<IBaseResponse<CommentModel>> AddComment(CommentModel model, string username)
+
+		public async Task<CommentModel> AddComment(CommentModel model, string username)
 		{
 			try
 			{
@@ -89,23 +80,15 @@ namespace CourseWork.Service.Implementations
 				model.Created = comment.Created;
 				model.Creator = comment.Creator.Id;
 
-				return new BaseResponse<CommentModel>
-				{
-					StatusCode = StatusCode.OK,
-					Data = model
-				};
+				return model;
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
-				return new BaseResponse<CommentModel>
-				{
-					StatusCode = StatusCode.InternalServerError,
-					Description = $"[AddComment] : {ex.Message}"
-				};
+				return null;
 			}
 		}
 
-		public async Task<IBaseResponse<bool>> UpdateComment(CommentModel model)
+		public async Task<bool> UpdateComment(CommentModel model)
 		{
 			try
 			{
@@ -113,10 +96,7 @@ namespace CourseWork.Service.Implementations
 
 				if (comment == null)
 				{
-					return new BaseResponse<bool>
-					{
-						StatusCode = StatusCode.NotFound
-					};
+					return false;
 				}
 
 				comment.Content = model.Content;
@@ -124,63 +104,46 @@ namespace CourseWork.Service.Implementations
 
 				await _commentRepository.Update(comment);
 
-				return new BaseResponse<bool>
-				{
-					StatusCode = StatusCode.OK
-				};
+				return true;
 			}
 			catch (Exception)
 			{
-				return new BaseResponse<bool>
-				{
-					StatusCode = StatusCode.InternalServerError
-				};
+				return false;
 			}
 		}
 
-		public async Task<IBaseResponse<bool>> DeleteComment(long id)
+		public async Task<bool> DeleteComment(long id)
 		{
 			try
 			{
 				var parent = await _commentRepository.GetAll().FirstOrDefaultAsync(c => c.Id == id);
 				var comments = await _commentRepository.GetAll().Where(x => x.Parent == parent.Id).ToListAsync();
-				
+
 				if (parent == null)
 				{
-					return new BaseResponse<bool>
-					{
-						StatusCode = StatusCode.NotFound,
-						Description = "Не удалось удалить коммент"
-					};
+					return false;
 				}
 
 				await _commentRepository.DeleteRange(comments);
 				await _commentRepository.Delete(parent);
 
-				return new BaseResponse<bool>
-				{
-					StatusCode = StatusCode.OK
-				};
+				return true;
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
-				return new BaseResponse<bool>
-				{
-					StatusCode = StatusCode.InternalServerError,
-					Description = $"[DeleteComment] : {ex.Message}"
-				};
+				return false;
 			}
 		}
 
-        public async Task<IBaseResponse<bool>> Upvote(CommentModel model, string username)
-        {
+		public async Task<bool> Upvote(CommentModel model, string username)
+		{
 			try
 			{
 				var comment = await _commentRepository.GetAll().FirstOrDefaultAsync(x => x.Id == model.Id);
 
 				comment.UpvoteCount = model.UpvoteCount;
 
-                var user = await _userRepository.GetAll().FirstOrDefaultAsync(x => x.Name == username);
+				var user = await _userRepository.GetAll().FirstOrDefaultAsync(x => x.Name == username);
 
 				if (comment.UpvotedUsers.Contains(user))
 				{
@@ -193,19 +156,12 @@ namespace CourseWork.Service.Implementations
 
 				await _commentRepository.Update(comment);
 
-                return new BaseResponse<bool>
-                {
-                    StatusCode = StatusCode.OK
-                };
-            }
+				return true;
+			}
 			catch (Exception ex)
 			{
-                return new BaseResponse<bool>
-                {
-                    StatusCode = StatusCode.InternalServerError,
-                    Description = $"[DeleteComment] : {ex.Message}"
-                };
-            }
-        }
-    }
+				return false;
+			}
+		}
+	}
 }

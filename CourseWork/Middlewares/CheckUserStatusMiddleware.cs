@@ -1,9 +1,7 @@
-﻿using CourseWork.DAL.Interfaces;
-using CourseWork.Domain.Entities;
+﻿using CourseWork.DAL.Entities;
+using CourseWork.DAL.Interfaces;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
 
 namespace CourseWork.Middlewares
 {

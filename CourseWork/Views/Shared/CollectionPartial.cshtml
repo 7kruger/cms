@@ -1,17 +1,17 @@
-﻿@model CourseWork.Domain.Entities.Collection
+﻿@model CourseWork.ViewModels.Collection.CollectionViewModel
 
 <div class="col-12 col-sm-12 col-md-6 col-lg-4">
     <div class="card m-2">
         <div>
             <img class="lazy card-img-top"
                  src="~/images/thumbnail.png"
-                 data-src="@Model.ImgRef"
+                 data-src="@Model.ImgUrl"
                  onError="this.src='/images/imgnotfound.jpg'"
                  alt="Image">
         </div>
 
         <div class="card-body">
-            <h5 class="card-title">@Model.Name</h5>
+            <h5 class="card-title">@Model.Title</h5>
             <div class="d-flex align-items-end">
                 <a href="/Collection/GetCollection/@Model.Id" class="btn btn-primary">Посмотреть коллекцию</a>
             </div>

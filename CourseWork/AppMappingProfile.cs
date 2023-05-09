@@ -17,6 +17,8 @@ public class AppMappingProfile : AutoMapper.Profile
 		CreateMap<ChangePasswordViewModel, UserModel>()
 			.ForMember(dest => dest.Name, opt => opt.MapFrom(x => x.Name))
 			.ForMember(dest => dest.Password, opt => opt.MapFrom(x => x.NewPassword));
+		CreateMap<UserModel, RegisterViewModel>().ReverseMap();
+		CreateMap<UserModel, LoginViewModel>().ReverseMap();
 
 		CreateMap<CollectionModel, Collection>().ReverseMap();
 		CreateMap<CollectionModel, CollectionViewModel>().ReverseMap();

@@ -1,15 +1,15 @@
-﻿using CourseWork.DAL.Interfaces;
-using CourseWork.Domain.Entities;
-using CourseWork.Domain.Enum;
-using CourseWork.Domain.Response;
-using CourseWork.Domain.ViewModels.Item;
-using CourseWork.Service.Interfaces;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using CourseWork.DAL.Entities;
+using CourseWork.DAL.Interfaces;
+using CourseWork.Domain.Response;
+using CourseWork.Service.Interfaces;
+using CourseWork.Service.Models;
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 
 namespace CourseWork.Service.Implementations
 {
@@ -20,21 +20,24 @@ namespace CourseWork.Service.Implementations
 		private readonly ICloudStorageService _cloudStorageService;
 		private readonly ILikeRepository _likeRepository;
 		private readonly ICommentRepository _commentRepository;
+		private readonly IMapper _mapper;
 
 		public ItemService(IRepository<Item> itemRepository,
 						   IRepository<Collection> collectionRepository,
 						   ICloudStorageService cloudStorageService,
 						   ILikeRepository likeRepository,
-						   ICommentRepository commentRepository)
+						   ICommentRepository commentRepository,
+						   IMapper mapper)
 		{
 			_itemRepository = itemRepository;
 			_collectionRepository = collectionRepository;
 			_cloudStorageService = cloudStorageService;
 			_likeRepository = likeRepository;
 			_commentRepository = commentRepository;
+			_mapper = mapper;
 		}
 
-		public async Task<IBaseResponse<List<ItemViewModel>>> GetItems()
+		public async Task<IEnumerable<ItemModel>> GetItems()
 		{
 			try
 			{
@@ -42,48 +45,29 @@ namespace CourseWork.Service.Implementations
 
 				if (items == null)
 				{
-					return new BaseResponse<List<ItemViewModel>>
-					{
-						StatusCode = StatusCode.NotFound,
-						Description = "Найдено 0 элементов"
-					};
+					return null;
 				}
 
-				var data = items.Select(x =>
-				{
-					return new ItemViewModel()
-					{
-						Id = x.Id,
-						Name = x.Name,
-						Author = x.Author,
-						Content = x.Content,
-						Date = x.Date,
-						ImgRef = x.ImgRef,
-						Tags = x.Tags,
-						CollectionId = x.CollectionId,
-						LikesCount = _likeRepository.GetAll().Where(l => l.SrcId == x.Id).Count(),
-						CommentsCount = _commentRepository.GetAll().Where(c => c.SrcId == x.Id).Count(),
-					};
-				}).OrderByDescending(i => i.Date)
-				  .ToList();
+				var model = _mapper.Map<List<ItemModel>>(items);
 
-				return new BaseResponse<List<ItemViewModel>>
+				var likes = await _likeRepository.GetAll().ToListAsync();
+				var comments = await _commentRepository.GetAll().ToListAsync();
+
+				model.ForEach(item =>
 				{
-					StatusCode = StatusCode.OK,
-					Data = data
-				};
+					item.LikesCount = likes.Where(l => l.SrcId == item.Id).Count();
+					item.CommentsCount = comments.Where(c => c.SrcId == item.Id).Count();
+				});
+
+				return model;
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
-				return new BaseResponse<List<ItemViewModel>>
-				{
-					StatusCode = StatusCode.InternalServerError,
-					Description = $"[GetItems] : {ex.Message}"
-				};
+				return null;
 			}
 		}
 
-		public async Task<IBaseResponse<ItemViewModel>> GetItem(string id)
+		public async Task<ItemModel> GetItem(string id)
 		{
 			try
 			{
@@ -91,78 +75,50 @@ namespace CourseWork.Service.Implementations
 
 				if (item == null)
 				{
-					return new BaseResponse<ItemViewModel>
-					{
-						StatusCode = StatusCode.NotFound,
-						Description = "Item not found"
-					};
+					return null;
 				}
 
-				var collectionName = (await _collectionRepository.GetAll().FirstOrDefaultAsync(c => c.Id == item.CollectionId))?.Name;
+				var collectionTitle = (await _collectionRepository.GetAll().FirstOrDefaultAsync(c => c.Id == item.CollectionId))?.Title;
 
-				var data = new ItemViewModel
-				{
-					Id = item.Id,
-					CollectionId = item.CollectionId,
-					Name = item.Name,
-					Author = item.Author,
-					Content = item.Content,
-					Date = item.Date,
-					ImgRef = item.ImgRef,
-					CollectionName = collectionName,
-					LikesCount = _likeRepository.GetAll().Where(l => l.SrcId == item.Id).Count()
-				};
+				var model = _mapper.Map<ItemModel>(item);
 
-				return new BaseResponse<ItemViewModel>
-				{
-					StatusCode = StatusCode.OK,
-					Data = data
-				};
+				var likes = await _likeRepository.GetAll().ToListAsync();
+				var comments = await _commentRepository.GetAll().ToListAsync();
+
+				model.LikesCount = likes.Where(l => l.SrcId == item.Id).Count();
+				model.CommentsCount = comments.Where(c => c.SrcId == item.Id).Count();
+
+				return model;
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
-				return new BaseResponse<ItemViewModel>
-				{
-					StatusCode = StatusCode.InternalServerError,
-					Description = $"[GetItem] : {ex.Message}"
-				};
+				return null;
 			}
 		}
 
-		public async Task<IBaseResponse<Item>> Create(CreateItemViewModel model, string username, IFormFile image)
+		public async Task<ItemModel> Create(ItemModel model, string username, IFormFile image)
 		{
 			try
 			{
-				var item = new Item
-				{
-					Id = Guid.NewGuid().ToString(),
-					Name = model.Name,
-					Content = model.Content,
-					Author = username,
-					Date = DateTime.Now,
-				};
+				model.Id = Guid.NewGuid().ToString();
+				model.Author = username;
+				model.Date = DateTime.Now;
 
-				item.ImgRef = await _cloudStorageService.UploadAsync(image, "/items", item.Id);
+				model.ImgUrl = await _cloudStorageService.UploadAsync(image, "/items", model.Id);
+
+				var item = _mapper.Map<Item>(model);
 
 				await _itemRepository.Create(item);
 
-				return new BaseResponse<Item>
-				{
-					StatusCode = StatusCode.OK,
-					Data = item
-				};
+				return _mapper.Map<ItemModel>(item);
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
-				return new BaseResponse<Item>
-				{
-					StatusCode = StatusCode.InternalServerError,
-					Description = $"[CreateItem] : {ex.Message}"
-				};
+				return null;
 			}
 		}
 
-		public async Task<IBaseResponse<Item>> Edit(ItemViewModel model, IFormFile image)
+		public async Task<ItemModel> Edit(ItemModel model, IFormFile image)
 		{
 			try
 			{
@@ -170,40 +126,28 @@ namespace CourseWork.Service.Implementations
 
 				if (item == null)
 				{
-					return new BaseResponse<Item>
-					{
-						StatusCode = StatusCode.NotFound,
-						Description = "Item not found"
-					};
+					return null;
 				}
 
-				item.Name = model.Name;
-				item.Content = model.Content;
+				item.Title = model.Title;
+				item.Description = model.Description;
 
 				if (image != null)
 				{
-					item.ImgRef = await _cloudStorageService.UpdateAsync(image, "/items", item.Id);
+					item.ImgUrl = await _cloudStorageService.UpdateAsync(image, "/items", item.Id);
 				}
 
 				await _itemRepository.Update(item);
 
-				return new BaseResponse<Item>
-				{
-					StatusCode = StatusCode.OK,
-					Data = item
-				};
+				return _mapper.Map<ItemModel>(item);
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
-				return new BaseResponse<Item>
-				{
-					StatusCode = StatusCode.InternalServerError,
-					Description = $"[EditItem] : {ex.Message}"
-				};
+				return null;
 			}
 		}
 
-		public async Task<IBaseResponse<bool>> Delete(string id)
+		public async Task<bool> Delete(string id)
 		{
 			try
 			{
@@ -211,29 +155,17 @@ namespace CourseWork.Service.Implementations
 
 				if (item == null)
 				{
-					return new BaseResponse<bool>
-					{
-						StatusCode = StatusCode.NotFound,
-						Description = "Item not found"
-					};
+					return false;
 				}
 
 				await _cloudStorageService.DeleteAsync("/items", item.Id);
 				await _itemRepository.Delete(item);
 
-				return new BaseResponse<bool>
-				{
-					StatusCode = StatusCode.OK,
-					Data = true
-				};
+				return true;
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
-				return new BaseResponse<bool>
-				{
-					StatusCode = StatusCode.InternalServerError,
-					Description = $"[DeleteItem] : {ex.Message}"
-				};
+				return false;
 			}
 		}
 	}

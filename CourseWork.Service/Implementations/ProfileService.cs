@@ -1,32 +1,34 @@
-﻿using CourseWork.DAL.Interfaces;
-using CourseWork.Domain.Entities;
-using CourseWork.Domain.Enum;
-using CourseWork.Domain.Response;
-using CourseWork.Domain.ViewModels.Profile;
-using CourseWork.Service.Interfaces;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using CourseWork.DAL.Entities;
+using CourseWork.DAL.Interfaces;
+using CourseWork.Domain.Response;
+using CourseWork.Service.Interfaces;
+using CourseWork.Service.Models;
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 
 namespace CourseWork.Service.Implementations
 {
 	public class ProfileService : IProfileService
 	{
-		private readonly IRepository<Profile> _profileRepository;
+		private readonly IRepository<DAL.Entities.Profile> _profileRepository;
 		private readonly IRepository<Collection> _collectionRepository;
 		private readonly IRepository<Item> _itemRepository;
 		private readonly ILikeRepository _likeRepository;
 		private readonly IRepository<User> _userRepository;
 		private readonly ICloudStorageService _cloudStorageService;
+		private readonly IMapper _mapper;
 
-		public ProfileService(IRepository<Profile> profileRepository,
+		public ProfileService(IRepository<DAL.Entities.Profile> profileRepository,
 							  IRepository<Collection> collectionRepository,
 							  IRepository<Item> itemRepository,
 							  ILikeRepository likeRepository,
 							  IRepository<User> userRepository,
-							  ICloudStorageService cloudStorageService)
+							  ICloudStorageService cloudStorageService,
+							  IMapper mapper)
 		{
 			_profileRepository = profileRepository;
 			_collectionRepository = collectionRepository;
@@ -34,9 +36,10 @@ namespace CourseWork.Service.Implementations
 			_likeRepository = likeRepository;
 			_userRepository = userRepository;
 			_cloudStorageService = cloudStorageService;
+			_mapper = mapper;
 		}
 
-		public async Task<IBaseResponse<ProfileViewModel>> Get(string name)
+		public async Task<ProfileModel> Get(string name)
 		{
 			try
 			{
@@ -45,45 +48,32 @@ namespace CourseWork.Service.Implementations
 
 				if (profile == null)
 				{
-					return new BaseResponse<ProfileViewModel>
-					{
-						StatusCode = StatusCode.NotFound,
-						Description = "Профиль не найден"
-					};
+					return null;
 				}
 
 				var collectionsCount = _collectionRepository.GetAll().Where(c => c.Author == name).Count();
 				var itemsCount = _itemRepository.GetAll().Where(i => i.Author == name).Count();
 				var likesCount = _likeRepository.GetAll().Where(l => l.UserName == name).Count();
 
-				var profileViewModel = new ProfileViewModel
+				var profileViewModel = new ProfileModel
 				{
 					Id = profile.Id,
 					Username = profile.User.Name,
-					ImgRef = profile.ImgRef,
-					RegistrationDate = profile.User.RegistrationDate,
-					CollectionsCount = collectionsCount,
-					ItemsCount = itemsCount,
+					ImgUrl = profile.ImgUrl,
+					CollectionsCreated = collectionsCount,
+					ItemsCreated = itemsCount,
 					LikesCount = likesCount
 				};
 
-				return new BaseResponse<ProfileViewModel>
-				{
-					StatusCode = StatusCode.OK,
-					Data = profileViewModel
-				};
+				return profileViewModel;
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
-				return new BaseResponse<ProfileViewModel>
-				{
-					StatusCode = StatusCode.InternalServerError,
-					Description = $"[ProfileService] : {ex.Message}"
-				};
+				return null;
 			}
 		}
 
-		public async Task<IBaseResponse<bool>> Update(ProfileViewModel model, IFormFile image)
+		public async Task<bool> Update(ProfileModel model, IFormFile image)
 		{
 			try
 			{
@@ -91,33 +81,21 @@ namespace CourseWork.Service.Implementations
 
 				if (profile == null)
 				{
-					return new BaseResponse<bool>
-					{
-						StatusCode = StatusCode.OK,
-						Description = "Профиль не найден"
-					};
+					return false;
 				}
 
 				if (image != null)
 				{
-					profile.ImgRef = await _cloudStorageService.UpdateAsync(image, "/profiles", model.Id.ToString());
+					profile.ImgUrl = await _cloudStorageService.UpdateAsync(image, "/profiles", model.Id.ToString());
 				}
 
 				await _profileRepository.Update(profile);
 
-				return new BaseResponse<bool>
-				{
-					StatusCode = StatusCode.OK,
-					Data = true
-				};
+				return true;
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
-				return new BaseResponse<bool>
-				{
-					StatusCode = StatusCode.InternalServerError,
-					Description = $"[ProfileService] : {ex.Message}"
-				};
+				return false;
 			}
 		}
 
@@ -127,9 +105,9 @@ namespace CourseWork.Service.Implementations
 
 			if (user != null)
 			{
-				var profile = new Profile
+				var profile = new DAL.Entities.Profile
 				{
-					ImgRef = "/images/person.svg",
+					ImgUrl = "/images/person.svg",
 					UserId = user.Id,
 				};
 

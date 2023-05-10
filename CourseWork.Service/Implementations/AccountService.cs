@@ -113,8 +113,8 @@ namespace CourseWork.Service.Implementations
 
 				return new IdentityResult(
 					errors: null,
-					succeeded: false,
-					claims: null);
+					succeeded: true,
+					claims: result);
 			}
 			catch (Exception)
 			{

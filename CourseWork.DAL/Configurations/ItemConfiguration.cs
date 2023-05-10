@@ -9,7 +9,7 @@ namespace CourseWork.DAL.Configurations
 	{
 		public void Configure(EntityTypeBuilder<Item> builder)
 		{
-			builder.ToTable("Collections");
+			builder.ToTable("Items");
 
 			builder.HasKey(x => x.Id);
 

@@ -4,6 +4,7 @@ using CourseWork.Service.Models;
 using CourseWork.ViewModels.Account;
 using CourseWork.ViewModels.Collection;
 using CourseWork.ViewModels.Item;
+using CourseWork.ViewModels.Profile;
 
 namespace CourseWork;
 
@@ -31,6 +32,7 @@ public class AppMappingProfile : AutoMapper.Profile
 		CreateMap<ItemViewModel, EditItemViewModel>().ReverseMap();
 
 		CreateMap<ProfileModel, DAL.Entities.Profile>().ReverseMap();
+		CreateMap<ProfileModel, ProfileViewModel>().ReverseMap();
 
 		CreateMap<TagModel, Tag>().ReverseMap();
 	}

@@ -11,7 +11,7 @@
 		<div>
 			<img class="avatar lazy"
 				 src="~/images/thumbnail.png"
-				 data-src="@Model.ImgRef"
+				 data-src="@Model.ImgUrl"
 				 onError="this.src='/images/person.svg'"
 				 alt="avatar_logo">
 		</div>
@@ -24,7 +24,7 @@
 		</div>
 
 		<div class="mb-5">
-			<label asp-for="ImgRef">Загрузить свой аватар</label>
+			<label asp-for="ImgUrl">Загрузить свой аватар</label>
 			<div class="mt-1">
 				<div class='container-form'>
 					<input name="image" id="image" type="text" class="d-none" />

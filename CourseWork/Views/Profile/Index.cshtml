@@ -24,14 +24,14 @@
 			<div>
 				<img class="avatar lazy"
 					 src="~/images/thumbnail.png"
-					 data-src="@Model.ImgRef"
+					 data-src="@Model.ImgUrl"
 					 onError="this.src='/images/person.svg'"
 					 alt="avatar_logo">
 			</div>
 		</div>
 		<h3>@Model.Username</h3>
-		<p>Создано коллекций: @Model.CollectionsCount</p>
-		<p>Создано айтемов: @Model.ItemsCount</p>
+		<p>Создано коллекций: @Model.CollectionsCreated</p>
+		<p>Создано айтемов: @Model.ItemsCreated</p>
 		<p>Получено лайков: @Model.LikesCount</p>
 	</div>
 </div>

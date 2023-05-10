@@ -4,9 +4,8 @@ public class ProfileViewModel
 {
 	public int Id { get; set; }
 	public string Username { get; set; }
-	public string ImgRef { get; set; }
-	public DateTime RegistrationDate { get; set; }
-	public int CollectionsCount { get; set; }
-	public int ItemsCount { get; set; }
+	public string ImgUrl { get; set; }
+	public int CollectionsCreated { get; set; }
+	public int ItemsCreated { get; set; }
 	public int LikesCount { get; set; }
 }

@@ -23,6 +23,8 @@ builder.Services.AddMvc();
 builder.Services.InitializeRepositories();
 builder.Services.InitializeServices();
 
+builder.Services.AddAutoMapper(typeof(AppMappingProfile));
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())

@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using AutoMapper;
 using CourseWork.DAL.Entities;
 using CourseWork.DAL.Interfaces;
-using CourseWork.Domain.Response;
 using CourseWork.Service.Interfaces;
 using CourseWork.Service.Models;
 using Microsoft.AspNetCore.Http;
@@ -45,7 +44,7 @@ namespace CourseWork.Service.Implementations
 
 				if (items == null)
 				{
-					return null;
+					return new List<ItemModel>();
 				}
 
 				var model = _mapper.Map<List<ItemModel>>(items);
@@ -63,7 +62,7 @@ namespace CourseWork.Service.Implementations
 			}
 			catch (Exception)
 			{
-				return null;
+				return new List<ItemModel>();
 			}
 		}
 

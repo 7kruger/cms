@@ -50,14 +50,14 @@ public class CollectionService : ICollectionService
 
 			if (!collections.Any())
 			{
-				return null;
+				return new List<CollectionModel>();
 			}
 
 			return _mapper.Map<IEnumerable<CollectionModel>>(collections.OrderByDescending(c => c.Date));
 		}
 		catch (Exception)
 		{
-			return null;
+			return new List<CollectionModel>();
 		}
 	}
 

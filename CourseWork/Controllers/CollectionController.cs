@@ -95,7 +95,7 @@ namespace CourseWork.Controllers
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> EditCollection(EditCollectionViewModel model, string[] selectedItems, string image, string[] tags)
+		public async Task<IActionResult> EditCollection(EditCollectionViewModel model, string[] selectedItems, string? image, string[] tags)
 		{
 			if (!ModelState.IsValid)
 			{

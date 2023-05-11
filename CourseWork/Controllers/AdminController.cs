@@ -28,7 +28,7 @@ namespace CourseWork.Controllers
 				return View("Error", "Ошибка");
 			}
 
-			return View(_mapper.Map<UserViewModel>(users));
+			return View(_mapper.Map<IEnumerable<UserViewModel>>(users));
 		}
 
 		[HttpPost]

@@ -2,6 +2,7 @@
 using CourseWork.DAL.Entities;
 using CourseWork.Service.Models;
 using CourseWork.ViewModels.Account;
+using CourseWork.ViewModels.Admin;
 using CourseWork.ViewModels.Collection;
 using CourseWork.ViewModels.Item;
 using CourseWork.ViewModels.Profile;
@@ -22,7 +23,9 @@ public class AppMappingProfile : AutoMapper.Profile
 		CreateMap<UserModel, LoginViewModel>().ReverseMap();
 
 		CreateMap<CollectionModel, Collection>().ReverseMap();
-		CreateMap<CollectionModel, CollectionViewModel>().ReverseMap();
+		CreateMap<CollectionModel, CollectionViewModel>()
+			.ForMember(dest => dest.Tags, opt => opt.MapFrom(src => src.Tags.Select(tag => tag.Name)))
+			.ReverseMap();
 		CreateMap<CollectionModel, CreateCollectionViewModel>().ReverseMap();
 		CreateMap<CollectionModel, EditCollectionViewModel>().ReverseMap();
 		CreateMap<CollectionViewModel, Collection>().ReverseMap();
@@ -36,5 +39,7 @@ public class AppMappingProfile : AutoMapper.Profile
 		CreateMap<ProfileModel, ProfileViewModel>().ReverseMap();
 
 		CreateMap<TagModel, Tag>().ReverseMap();
+
+		CreateMap<UserModel, UserViewModel>().ReverseMap();
 	}
 }

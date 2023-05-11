@@ -34,7 +34,7 @@
 							<td><input type="checkbox" class="form-check-input" name="selectedUsers" value="@user.Id" /></td>
 							<td><p>@user.Id</p></td>
 							<td><p>@user.Name</p></td>
-							<td><p>@user.RegistrationDate.ToString()</p></td>
+							<td><p>@user.RegistrationDate.ToShortDateString()</p></td>
 							<td><p>@(user.IsBlocked ? "Заблокирован" : "Активный")</p></td>
 							<td><p>@user.Role.ToString()</p></td>
 						</tr>

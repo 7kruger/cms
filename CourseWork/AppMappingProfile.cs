@@ -29,8 +29,8 @@ public class AppMappingProfile : AutoMapper.Profile
 
 		CreateMap<ItemModel, Item>().ReverseMap();
 		CreateMap<ItemModel, ItemViewModel>().ReverseMap();
-		CreateMap<ItemViewModel, CreateItemViewModel>().ReverseMap();
-		CreateMap<ItemViewModel, EditItemViewModel>().ReverseMap();
+		CreateMap<ItemModel, CreateItemViewModel>().ReverseMap();
+		CreateMap<ItemModel, EditItemViewModel>().ReverseMap();
 
 		CreateMap<ProfileModel, DAL.Entities.Profile>().ReverseMap();
 		CreateMap<ProfileModel, ProfileViewModel>().ReverseMap();

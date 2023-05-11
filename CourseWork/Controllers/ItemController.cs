@@ -38,7 +38,7 @@ namespace CourseWork.Controllers
 			var item = await _itemService.GetItem(id);
 			if (item != null)
 			{
-				return View(item);
+				return View(_mapper.Map<ItemViewModel>(item));
 			}
 			return View("Error", "Ошибка");
 		}
@@ -59,7 +59,7 @@ namespace CourseWork.Controllers
 		public IActionResult CreateItem() => View();
 
 		[HttpPost]
-		public async Task<IActionResult> CreateItem(CreateItemViewModel model, string image)
+		public async Task<IActionResult> CreateItem(CreateItemViewModel model, string? image)
 		{
 			if (!ModelState.IsValid)
 			{
@@ -96,7 +96,7 @@ namespace CourseWork.Controllers
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> EditItem(EditItemViewModel model, string image)
+		public async Task<IActionResult> EditItem(EditItemViewModel model, string? image)
 		{
 			if (!ModelState.IsValid)
 			{

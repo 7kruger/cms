@@ -1,4 +1,5 @@
 ﻿using CourseWork.Domain.Enum;
+using CourseWork.ViewModels.Collection;
 using CourseWork.ViewModels.Item;
 using CourseWork.ViewModels.Shared;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -7,7 +8,7 @@ namespace CourseWork.ViewModels.Index
 {
 	public class IndexViewModel
 	{
-		public List<DAL.Entities.Collection> Collections { get; set; }
+		public List<CollectionViewModel> Collections { get; set; }
 		public List<ItemViewModel> Items { get; set; }
 		public Pagination Pagination { get; set; }
 		public List<SelectListItem> Themes { get; set; }

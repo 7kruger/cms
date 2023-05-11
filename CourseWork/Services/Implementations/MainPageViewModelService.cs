@@ -4,6 +4,7 @@ using CourseWork.DAL.Interfaces;
 using CourseWork.Domain.Enum;
 using CourseWork.Service.Interfaces;
 using CourseWork.Services.Interfaces;
+using CourseWork.ViewModels.Collection;
 using CourseWork.ViewModels.Index;
 using CourseWork.ViewModels.Item;
 using CourseWork.ViewModels.Shared;
@@ -84,7 +85,7 @@ namespace CourseWork.Services.Implementations
 			var indexViewModel = new IndexViewModel()
 			{
 				Pagination = pagination,
-				Collections = result,
+				Collections = _mapper.Map<List<CollectionViewModel>>(result),
 				Items = new List<ItemViewModel>(),
 				Themes = GetThemes().ToList(),
 				ThemeFilterApplied = theme != null ? theme : null,
@@ -133,7 +134,7 @@ namespace CourseWork.Services.Implementations
 			var indexViewModel = new IndexViewModel()
 			{
 				Pagination = pagination,
-				Collections = new List<Collection>(),
+				Collections = new List<CollectionViewModel>(),
 				Items = _mapper.Map<List<ItemViewModel>>(result),
 				Themes = GetThemes().ToList(),
 				SortStates = GetSortStates().ToList(),

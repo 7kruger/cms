@@ -25,6 +25,7 @@ public class AppMappingProfile : AutoMapper.Profile
 		CreateMap<CollectionModel, CollectionViewModel>().ReverseMap();
 		CreateMap<CollectionModel, CreateCollectionViewModel>().ReverseMap();
 		CreateMap<CollectionModel, EditCollectionViewModel>().ReverseMap();
+		CreateMap<CollectionViewModel, Collection>().ReverseMap();
 
 		CreateMap<ItemModel, Item>().ReverseMap();
 		CreateMap<ItemModel, ItemViewModel>().ReverseMap();

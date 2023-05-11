@@ -80,7 +80,7 @@ namespace CourseWork.Controllers
 		[HttpPost]
 		public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
 		{
-			if (ModelState.IsValid)
+			if (!ModelState.IsValid)
 			{
 				return View(model);
 			}

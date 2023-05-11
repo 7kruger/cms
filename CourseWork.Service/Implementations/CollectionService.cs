@@ -119,6 +119,7 @@ public class CollectionService : ICollectionService
 		try
 		{
 			model.Id = Guid.NewGuid().ToString();
+			model.Author = username;
 			model.Date = DateTime.Now;
 
 			model.ImgUrl = await _cloudStorageService.UploadAsync(image, "/collections", model.Id);

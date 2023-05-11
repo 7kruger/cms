@@ -58,7 +58,7 @@ namespace CourseWork.Controllers
 		public IActionResult CreateCollection() => View();
 
 		[HttpPost]
-		public async Task<IActionResult> CreateCollection(CreateCollectionViewModel model, string image)
+		public async Task<IActionResult> CreateCollection(CreateCollectionViewModel model, string? image)
 		{
 			if (!ModelState.IsValid)
 			{

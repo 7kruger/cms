@@ -19,8 +19,8 @@ namespace CourseWork.Service.Implementations
 		private readonly IRepository<User> _userRepository;
 		private readonly IProfileService _profileService;
 
-		public AccountService(IRepository<User> userRepository, 
-			IProfileService profileService, 
+		public AccountService(IRepository<User> userRepository,
+			IProfileService profileService,
 			IMapper mapper)
 		{
 			_userRepository = userRepository;
@@ -51,9 +51,9 @@ namespace CourseWork.Service.Implementations
 				model.IsBlocked = false;
 
 				await _userRepository.Create(_mapper.Map<User>(model));
-				await _profileService.Create(user.Name);
+				await _profileService.Create(model.Name);
 
-				var result = GetClaimsIdentity(user);
+				var result = GetClaimsIdentity(model);
 
 				return new IdentityResult(
 					errors: new List<string>(),
@@ -109,7 +109,7 @@ namespace CourseWork.Service.Implementations
 							claims: null);
 				}
 
-				var result = GetClaimsIdentity(user);
+				var result = GetClaimsIdentity(model);
 
 				return new IdentityResult(
 					errors: null,
@@ -150,7 +150,7 @@ namespace CourseWork.Service.Implementations
 			}
 		}
 
-		private ClaimsIdentity GetClaimsIdentity(User user)
+		private ClaimsIdentity GetClaimsIdentity(UserModel user)
 		{
 			var claims = new List<Claim>
 			{

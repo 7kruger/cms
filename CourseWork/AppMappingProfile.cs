@@ -41,5 +41,6 @@ public class AppMappingProfile : AutoMapper.Profile
 		CreateMap<TagModel, Tag>().ReverseMap();
 
 		CreateMap<UserModel, UserViewModel>().ReverseMap();
+		CreateMap<UserModel, User>().ReverseMap();
 	}
 }

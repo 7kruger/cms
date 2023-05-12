@@ -19,12 +19,9 @@ namespace CourseWork.Controllers
 		public async Task<IActionResult> LoadComments(string id)
 		{
 			var comments = await _commentService.LoadComments(id, GetCurrentUsername(), IsAdmin());
-			if (comments.Any())
-			{
-				return Ok(comments);
-			}
-			return StatusCode(404);
-		}
+
+            return Ok(comments);
+        }
 
 		[HttpPost]
 		[Route("AddComment")]

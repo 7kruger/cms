@@ -2,6 +2,8 @@
 using CourseWork.Service.Interfaces;
 using CourseWork.Service.Models;
 using CourseWork.ViewModels.Collection;
+using CourseWork.ViewModels.Item;
+using CourseWork.ViewModels.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,11 +12,13 @@ namespace CourseWork.Controllers
 	[Authorize]
 	public class CollectionController : Controller
 	{
+		private readonly IItemService _itemService;
 		private readonly ICollectionService _collectionService;
 		private readonly IMapper _mapper;
 
-		public CollectionController(ICollectionService collectionService, IMapper mapper)
+		public CollectionController(ICollectionService collectionService, IItemService itemService, IMapper mapper)
 		{
+			_itemService = itemService;
 			_collectionService = collectionService;
 			_mapper = mapper;
 		}
@@ -36,7 +40,13 @@ namespace CourseWork.Controllers
 				.Take(Constants.ITEMS_PER_PAGE)
 				.ToList();
 
-			return View(_mapper.Map<CollectionViewModel>(collection));
+			var count = collection.Items.Count;
+			var pagination = new Pagination(count, page, Constants.ITEMS_PER_PAGE);
+
+			var collectionVM = _mapper.Map<CollectionViewModel>(collection);
+			collectionVM.Pagination = pagination;
+
+			return View(collectionVM);
 		}
 
 		[HttpGet]
@@ -89,16 +99,20 @@ namespace CourseWork.Controllers
 			var collection = await _collectionService.GetCollection(id);
 			if (collection != null)
 			{
+				var items = (await _itemService.GetItems()).Where(x => x.CollectionId == collection.Id || string.IsNullOrWhiteSpace(x.CollectionId));
+				ViewData["Items"] = _mapper.Map<IEnumerable<ItemViewModel>>(items);
 				return View(_mapper.Map<EditCollectionViewModel>(collection));
 			}
 			return View("Error", "Ошибка! Не удалось найти коллекцию");
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> EditCollection(EditCollectionViewModel model, string[] selectedItems, string? image, string[] tags)
+		public async Task<IActionResult> EditCollection(EditCollectionViewModel model, string[] selectedItems, string? image, string[] includedTags)
 		{
 			if (!ModelState.IsValid)
 			{
+				var items = (await _itemService.GetItems()).Where(x => x.CollectionId == model.Id || string.IsNullOrWhiteSpace(x.CollectionId));
+				ViewData["Items"] = _mapper.Map<IEnumerable<ItemViewModel>>(items);
 				return View(model);
 			}
 
@@ -112,7 +126,7 @@ namespace CourseWork.Controllers
 				file = new FormFile(ms, 0, fileBytes.Length, GetCurrentUsername(), GetCurrentUsername() + ".jpg");
 			}
 
-			var result = await _collectionService.Edit(model.Id, _mapper.Map<CollectionModel>(model), selectedItems, tags, file);
+			var result = await _collectionService.Edit(model.Id, _mapper.Map<CollectionModel>(model), selectedItems, includedTags, file);
 			if (result != null)
 			{
 				return Redirect($"/Collection/GetCollection/{result.Id}");

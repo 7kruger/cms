@@ -27,13 +27,16 @@ public class AppMappingProfile : AutoMapper.Profile
 			.ForMember(dest => dest.Tags, opt => opt.MapFrom(src => src.Tags.Select(tag => tag.Name)))
 			.ReverseMap();
 		CreateMap<CollectionModel, CreateCollectionViewModel>().ReverseMap();
-		CreateMap<CollectionModel, EditCollectionViewModel>().ReverseMap();
+		CreateMap<CollectionModel, EditCollectionViewModel>()
+            .ForMember(dest => dest.Tags, opt => opt.MapFrom(src => src.Tags.Select(tag => tag.Name)))
+			.ReverseMap();
 		CreateMap<CollectionViewModel, Collection>().ReverseMap();
 
 		CreateMap<ItemModel, Item>().ReverseMap();
 		CreateMap<ItemModel, ItemViewModel>().ReverseMap();
 		CreateMap<ItemModel, CreateItemViewModel>().ReverseMap();
 		CreateMap<ItemModel, EditItemViewModel>().ReverseMap();
+		CreateMap<Item, ItemViewModel>().ReverseMap();
 
 		CreateMap<ProfileModel, DAL.Entities.Profile>().ReverseMap();
 		CreateMap<ProfileModel, ProfileViewModel>().ReverseMap();

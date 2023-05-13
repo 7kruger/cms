@@ -13,7 +13,7 @@ public class ItemViewModel
 	public string Author { get; set; }
 	public DateTime Date { get; set; }
 	public string ImgUrl { get; set; }
-	public string CollectionName { get; set; }
+	public string CollectionTitle { get; set; }
 	public long LikesCount { get; set; }
 	public long CommentsCount { get; set; }
 	public IEnumerable<string> Tags { get; set; } = Enumerable.Empty<string>();

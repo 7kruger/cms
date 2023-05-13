@@ -109,7 +109,7 @@ namespace CourseWork.Service.Implementations
 							claims: null);
 				}
 
-				var result = GetClaimsIdentity(model);
+				var result = GetClaimsIdentity(_mapper.Map<UserModel>(user));
 
 				return new IdentityResult(
 					errors: null,

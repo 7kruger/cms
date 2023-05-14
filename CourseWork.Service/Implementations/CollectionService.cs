@@ -151,15 +151,13 @@ public class CollectionService : ICollectionService
 				.Where(i => selectedItems.Contains(i.Id))
 				.ToListAsync();
 
-			var tagList = await GetTags(tags);
-
 			collection.Title = model.Title;
 			collection.Description = model.Description;
 			collection.Theme = model.Theme;
 			collection.Items.Clear();
 			collection.Items.AddRange(items);
-			collection.Tags.Clear();
-			collection.Tags.AddRange(_mapper.Map<IEnumerable<Tag>>(tagList));
+
+			await SetTags(tags, collection);
 
 			// если картинка не пустая то обновить, а если пустая то останется старая картинка
 			if (image != null)
@@ -199,11 +197,11 @@ public class CollectionService : ICollectionService
 		}
 	}
 
-	private async Task<IEnumerable<TagModel>> GetTags(string[] selectedTags)
+	private async Task SetTags(string[] selectedTags, Collection collection)
 	{
 		if (selectedTags == null)
 		{
-			return new List<TagModel>();
+			return;
 		}
 
 		var tags = selectedTags.Select(x =>
@@ -219,12 +217,13 @@ public class CollectionService : ICollectionService
 
 		tags.ForEach(x =>
 		{
-			if (!allTags.Any(t => t.Name == x))
+			if (allTags.FirstOrDefault(t => t.Name == x) == null)
 			{
 				result.Add(new Tag() { Name = x });
 			}
 		});
 
-		return _mapper.Map<IEnumerable<TagModel>>(result);
+		collection.Tags.Clear();
+		collection.Tags.AddRange(result);
 	}
 }

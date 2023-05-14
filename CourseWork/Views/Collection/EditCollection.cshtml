@@ -86,7 +86,7 @@
 				<div class="container">
 					<div class="d-flex justify-content-center pt-3">
 						<div class="d-flex m-0 mb-2">
-							<input class="form-control me-2" type="text" id="tagInput" list="help" placeholder="введите тег" />
+							<input class="form-control me-2" type="text" id="tagInput" placeholder="введите тег" />
 							<div class="btn btn-primary ms-2 my-cursor" id="addTag">add</div>
 						</div>
 					</div>
@@ -102,15 +102,7 @@
 								}
 							</div>
 						</div>
-					</div>		
-
-					<datalist id="help">
-						@foreach (var item in Model.Tags)
-						{
-							<option value="@item"></option>
-						}
-					</datalist>
-
+					</div>
 				</div>
 			</fieldset>
 		</div>

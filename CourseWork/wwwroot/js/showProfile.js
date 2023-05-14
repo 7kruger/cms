@@ -12,9 +12,9 @@ const showProfile = (name) => {
 		data: { name: name },
 	}).done((data) => {
 		$("#username").text(data.username);
-		$("#avatar").prop("src", data.imgRef);
-		$("#collectionsCount").text("Создано коллекций: " + data.collectionsCount);
-		$("#itemsCount").text("Создано айтемов: " + data.itemsCount);
+		$("#avatar").prop("src", data.imgUrl);
+		$("#collectionsCount").text("Создано коллекций: " + data.collectionsCreated);
+		$("#itemsCount").text("Создано айтемов: " + data.itemsCreated);
 		showUserInfoModal.show();
 	}).fail(e => {
 		alert("something went wrong")

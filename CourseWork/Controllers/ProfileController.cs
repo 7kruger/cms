@@ -69,7 +69,7 @@ namespace CourseWork.Controllers
 			var profile = await _profileService.Get(name);
 			if (profile != null)
 			{
-				return View(_mapper.Map<ProfileViewModel>(profile));
+				return Ok(_mapper.Map<ProfileViewModel>(profile));
 			}
 			return Ok();
 		}

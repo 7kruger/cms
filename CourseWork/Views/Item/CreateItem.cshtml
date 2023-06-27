@@ -1,36 +1,36 @@
 ﻿@model CourseWork.ViewModels.Item.CreateItemViewModel
 
 @{
-	ViewData["Title"] = "CreateItem";
+	ViewData["Title"] = @Localizer["CreateItem"];
 }
 
-<h1 class="text-center">Создать айтем</h1>
+<h1 class="text-center">@Localizer["CreateItem"]</h1>
 
 <div class="container">
 	<form asp-action="CreateItem" asp-controller="Item" enctype="multipart/form-data" method="post">
 		<div class="validation" asp-validation-summary="All"></div>
 
 		<div class="row m-0 mb-3">
-			<label asp-for="Title" class="col-12 col-md-4">Название айтема</label>
+			<label asp-for="Title" class="col-12 col-md-4">@Localizer["ItemName"]</label>
 			<div class="col-12 col-md-8">
-				<input class="form-control" type="text" asp-for="Title" placeholder="Название айтема" />
+				<input class="form-control" type="text" asp-for="Title" placeholder="@Localizer["ItemName"]" />
 			</div>
 		</div>
 
 		<div class="row m-0 mb-3">
-			<label asp-for="Description" class="col-12 col-md-4">Содержание айтема</label>
+			<label asp-for="Description" class="col-12 col-md-4">@Localizer["ItemDescription"]</label>
 			<div class="col-12 col-md-8">
 				<textarea asp-for="Description"></textarea>
 			</div>
 		</div>
 
 		<div class="row m-0 mb-3">
-			<label class="col-12 col-md-4">Обложка айтема</label>
+			<label class="col-12 col-md-4">@Localizer["ItemCover"]</label>
 			<div class="col-12 col-md-8">
 				<div class='container-form'>
 					<input name="image" id="image" type="text" class="d-none" />
 					<input id='selectedFile' class="d-none" type='file' accept=".png, .jpg, .jpeg, .svg">
-					<a id="upload-aphoto" class="btn-primary btn">Выбрать изображение</a>
+					<a id="upload-aphoto" class="btn-primary btn">@SharedLocalizer["UploadImage"]</a>
 				</div>
 				<div class='container-image'>
 					<img id='confirm-img' src=''>
@@ -40,7 +40,7 @@
 					<div class="modal-dialog modal-md modal-dialog-centered">
 						<div class="modal-content modal-content1 modal-content1">
 							<div class="modal-header">
-								<h5 class="modal-title" id="imageModal">Обрезка картинки</h5>
+								<h5 class="modal-title" id="imageModal">@SharedLocalizer["CutImage"]</h5>
 								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 							</div>
 							<div class="modal-body modal-body1">
@@ -48,8 +48,8 @@
 								</div>
 							</div>
 							<div class="modal-footer">
-								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
-								<button type="button" class="btn btn-primary save-modal">Сохранить</button>
+								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">@SharedLocalizer["Cancel"]</button>
+								<button type="button" class="btn btn-primary save-modal">@SharedLocalizer["Save"]</button>
 							</div>
 						</div>
 					</div>
@@ -58,7 +58,7 @@
 		</div>
 
 		<div class="text-center mt-5">
-			<button class="btn btn-outline-primary">Добавить</button>
+			<button class="btn btn-outline-primary">@SharedLocalizer["Add"]</button>
 		</div>
 	</form>
 </div>

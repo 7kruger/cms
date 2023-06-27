@@ -9,7 +9,7 @@
 		<div class="text-center d-flex">
 			<input class="form-control me-2 m-2"
 				   type="text"
-				   placeholder="Поиск"
+				   placeholder="@Localizer["Search"]"
 				   aria-label="Search"
 				   name="search"
 				   asp-for="@Model.IndexViewModel.SearchString"
@@ -20,9 +20,9 @@
 			   role="button"
 			   aria-expanded="false"
 			   aria-controls="collapseExample">
-				Фильтры
+				@Localizer["Filters"]
 			</a>
-			<button class="btn btn-outline-primary m-2" type="submit">Искать</button>
+			<button class="btn btn-outline-primary m-2" type="submit">@Localizer["Search"]</button>
 		</div>
 
 		<div class="collapse" id="collapseExample">
@@ -30,18 +30,18 @@
 				<div class="d-flex flex-column flex-sm-row justify-content-start">
 
 					<div class="m-2">
-						Искать среди:
+						@Localizer["SearchIn"]:
 						<select class="form-control"
 								name="searchIn"
 								id="searchIn"
 								asp-for="@Model.IndexViewModel.SearchInFilterApplied">
-							<option value="Collections">Коллекций</option>
-							<option value="Items">Айтемов</option>
+							<option value="Collections">@Localizer["SearchInCollections"]</option>
+							<option value="Items">@Localizer["SearchInItems"]</option>
 						</select>
 					</div>
 
 					<div class="m-2">
-						Сортировка:
+						@Localizer["Sort"]:
 						<select class="form-control"
 								name="sortState"
 								asp-for="@Model.IndexViewModel.SortFilterApplied"
@@ -50,7 +50,7 @@
 					</div>
 
 					<div class="m-2">
-						Тема:
+						@Localizer["Theme"]:
 						<select class="form-control"
 								name="theme"
 								id="search-theme"
@@ -90,7 +90,7 @@ else if (Model.IndexViewModel.Items.Any())
 }
 else
 {
-	<h3 class="text-center">Ничего не найдено</h3>
+	<h3 class="text-center">@SharedLocalizer["NothingFound"]</h3>
 }
 
 @section Scripts {

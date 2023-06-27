@@ -1,7 +1,7 @@
 ﻿@model CourseWork.ViewModels.Profile.ProfileViewModel
 
 @{
-	ViewData["Title"] = "Профиль";
+	ViewData["Title"] = User.Identity?.Name;
 }
 
 <div class="row">
@@ -9,14 +9,14 @@
 		<div class="list-group">
 			@if (User.IsInRole("admin"))
 			{
-				<a class="list-group-item list-group-item-action list-group-item-danger" href="/Admin">Админка</a>
+				<a class="list-group-item list-group-item-action list-group-item-danger" href="/Admin">@Localizer["AdminPage"]</a>
 			}
-			<a class="list-group-item list-group-item-action list-group-item-light" href="/Collection/CreateCollection">Создать коллекцию</a>
-			<a class="list-group-item list-group-item-action list-group-item-light" href="/Collection/MyCollections">Мои коллекции</a>
-			<a class="list-group-item list-group-item-action list-group-item-light" href="/Item/CreateItem">Создать айтем</a>
-			<a class="list-group-item list-group-item-action list-group-item-light" href="/Item/MyItems">Мои айтемы</a>
-			<a class="list-group-item list-group-item-action list-group-item-light" href="/Account/ChangePassword">Поменять пароль</a>
-			<a class="list-group-item list-group-item-action list-group-item-light" href="/Profile/Settings/@Model.Id">Редактирование профиля</a>
+			<a class="list-group-item list-group-item-action list-group-item-light" href="/Collection/CreateCollection">@Localizer["CreateCollection"]</a>
+			<a class="list-group-item list-group-item-action list-group-item-light" href="/Collection/MyCollections">@Localizer["MyCollections"]</a>
+			<a class="list-group-item list-group-item-action list-group-item-light" href="/Item/CreateItem">@Localizer["CreateItem"]</a>
+			<a class="list-group-item list-group-item-action list-group-item-light" href="/Item/MyItems">@Localizer["MyItems"]</a>
+			<a class="list-group-item list-group-item-action list-group-item-light" href="/Account/ChangePassword">@Localizer["ChangePassword"]</a>
+			<a class="list-group-item list-group-item-action list-group-item-light" href="/Profile/Settings/@Model.Id">@Localizer["ProfileSettings"]</a>
 		</div>
 	</div>
 	<div class="col-md-6  text-center">
@@ -30,9 +30,9 @@
 			</div>
 		</div>
 		<h3>@Model.Username</h3>
-		<p>Создано коллекций: @Model.CollectionsCreated</p>
-		<p>Создано айтемов: @Model.ItemsCreated</p>
-		<p>Получено лайков: @Model.LikesCount</p>
+		<p>@Localizer["CollectionsCreated"]: @Model.CollectionsCreated</p>
+		<p>@Localizer["ItemsCreated"]: @Model.ItemsCreated</p>
+		<p>@Localizer["LikesCount"]: @Model.LikesCount</p>
 	</div>
 </div>
 

@@ -1,7 +1,7 @@
 ﻿@model CourseWork.ViewModels.Collection.CollectionViewModel;
 
 @{
-	ViewData["Title"] = "Collection";
+	ViewData["Title"] = Model.Title;
 }
 
 <div class="row">
@@ -35,7 +35,7 @@
 		@if (Model.Author == User.Identity.Name || User.IsInRole("admin"))
 		{
 			<div class="text-center">
-				<a class="btn btn-outline-info" href="/Collection/EditCollection/@Model.Id">Редактировать</a>
+				<a class="btn btn-outline-info" href="/Collection/EditCollection/@Model.Id">@Localizer["Edit"]</a>
 			</div>
 		}
 	</div>
@@ -43,9 +43,9 @@
 		<input type="hidden" id="srcId" value="@Model.Id" />
 		<p><h1>@Model.Title</h1></p>
 		<div class="mt-5">
-			<small>Дата создания: @Model.Date</small>
-			<p><strong>Автор:</strong> <a class="my-cursor" id="showProfile">@Model.Author</a></p>
-			<p><strong>Тема:</strong> <a style="text-decoration: none;" href="/?theme=@Model.Theme">@Model.Theme</a></p>
+			<small>@Localizer["CreationDate"]: @Model.Date</small>
+			<p><strong>@Localizer["Author"]:</strong> <a class="my-cursor" id="showProfile">@Model.Author</a></p>
+			<p><strong>@Localizer["Theme"]:</strong> <a style="text-decoration: none;" href="/?theme=@Model.Theme">@Model.Theme</a></p>
 			
 			@if (Model.Tags.Any())
 			{
@@ -58,14 +58,14 @@
 				</div>
 			}
 			
-			<p><strong>Описание:</strong> @Html.Raw(Markdig.Markdown.ToHtml(Model.Description))</p>
+			<p><strong>@Localizer["Description"]:</strong> @Html.Raw(Markdig.Markdown.ToHtml(Model.Description))</p>
 		</div>
 	</div>
 </div>
 <div class="mt-5 mb-lg-3 collection-content-container">
 	@if (Model.Items.Any())
 	{
-		<h3 class="text-center">Содержимое колллекции</h3>
+		<h3 class="text-center">@Localizer["CollectionContent"]</h3>
 		<div class="row">
 			@foreach (var item in Model.Items)
 			{
@@ -78,7 +78,7 @@
 	}
 	else
 	{
-		<h3 class="text-center mb-5">Коллекция пустая</h3>
+		<h3 class="text-center mb-5">@Localizer["CollectionIsEmpty"]</h3>
 	}
 </div>
 
@@ -86,7 +86,7 @@
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h1 class="modal-title fs-5" id="exampleModalLabel">Информация о пользователе</h1>
+				<h1 class="modal-title fs-5" id="exampleModalLabel">@Localizer["UserInfo"]</h1>
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			<div class="modal-body text-center">
@@ -100,7 +100,7 @@
 				</div>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">@SharedLocalizer["Close"]</button>
 			</div>
 		</div>
 	</div>

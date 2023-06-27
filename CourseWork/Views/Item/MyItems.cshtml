@@ -2,7 +2,7 @@
 @model IEnumerable<CourseWork.ViewModels.Item.ItemViewModel>
 
 @{
-    ViewData["Title"] = "MyItems";
+	ViewData["Title"] = @Localizer["MyItems"];
 }
 
 @{
@@ -17,7 +17,7 @@
 
 @if (Model.Any())
 {
-	<h1 class="text-center m-4">Мои айтемы</h1>
+	<h1 class="text-center m-4">@Localizer["MyItems"]</h1>
 	<div class="row">
 		@foreach (var item in Model)
 		{
@@ -30,7 +30,7 @@
 }
 else
 {
-	<h3 class="text-center">Ничего не найдено</h3>
+	<h3 class="text-center">@SharedLocalizer["NothingFound"]</h3>
 }
 
 @section Scripts {

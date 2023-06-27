@@ -1,30 +1,30 @@
 ﻿@model CourseWork.ViewModels.Collection.CreateCollectionViewModel
 
 @{
-	ViewData["Title"] = "Создание коллекции";
+	ViewData["Title"] = @Localizer["CreateCollection"];
 }
 
-<h1 class="text-center m-5">Создать коллекцию</h1>
+<h1 class="text-center m-5">@Localizer["CreateCollection"]</h1>
 <div class="container">
 	<form asp-action="CreateCollection" asp-controller="Collection" enctype="multipart/form-data" method="post">
 		<div class="validation" asp-validation-summary="All"></div>
 
 		<div class="row m-0 mb-3">
-			<label asp-for="Title" class="col-12 col-md-4">Название коллекции</label>
+			<label asp-for="Title" class="col-12 col-md-4">@Localizer["CollectionName"]</label>
 			<div class="col-12 col-md-8">
-				<input class="form-control" type="text" asp-for="Title" placeholder="Название коллекции" />
+				<input class="form-control" type="text" asp-for="Title" placeholder="@Localizer["CollectionName"]" />
 			</div>
 		</div>
 
 		<div class="row m-0 mb-3">
-			<label asp-for="Description" class="col-12 col-md-4">Описание коллекции</label>
+			<label asp-for="Description" class="col-12 col-md-4">@Localizer["CollectionDescription"]</label>
 			<div class="col-12 col-md-8">
 				<textarea asp-for="Description"></textarea>
 			</div>
 		</div>
 
 		<div class="row m-0 mb-3">
-			<label asp-for="Theme" class="col-12 col-md-4">Тема коллекции</label><br />
+			<label asp-for="Theme" class="col-12 col-md-4">@Localizer["CollectionTheme"]</label><br />
 			<div class="col-12 col-md-8">
 				<select class="form-control" asp-for="Theme">
 					<option value="Books">Books</option>
@@ -38,12 +38,12 @@
 		</div>
 
 		<div class="row m-0 mb-3">
-			<label class="col-12 col-md-4">Обложка коллекции</label>
+			<label class="col-12 col-md-4">@Localizer["CollectionCover"]</label>
 			<div class="col-12 col-md-8">
 				<div class='container-form'>
 					<input name="image" id="image" type="text" class="d-none" />
 					<input id='selectedFile' class="d-none" type='file' accept=".png, .jpg, .jpeg, .svg">
-					<a id="upload-aphoto" class="btn-primary btn">Выбрать изображение</a>
+					<a id="upload-aphoto" class="btn-primary btn">@SharedLocalizer["UploadImage"]</a>
 				</div>
 				<div class='container-image'>
 					<img id='confirm-img' src=''>
@@ -53,7 +53,7 @@
 					<div class="modal-dialog modal-md modal-dialog-centered">
 						<div class="modal-content modal-content1 modal-content1">
 							<div class="modal-header">
-								<h5 class="modal-title" id="imageModal">Обрезка картинки</h5>
+								<h5 class="modal-title" id="imageModal">@SharedLocalizer["CutImage"]</h5>
 								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 							</div>
 							<div class="modal-body modal-body1">
@@ -61,8 +61,8 @@
 								</div>
 							</div>
 							<div class="modal-footer">
-								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
-								<button type="button" class="btn btn-primary save-modal">Сохранить</button>
+								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">@SharedLocalizer["Cancel"]</button>
+								<button type="button" class="btn btn-primary save-modal">@SharedLocalizer["Save"]</button>
 							</div>
 						</div>
 					</div>
@@ -72,7 +72,7 @@
 
 
 		<div class="text-center mt-5">
-			<button class="btn btn-outline-primary">Добавить</button>
+			<button class="btn btn-outline-primary">@SharedLocalizer["Add"]</button>
 		</div>
 	</form>
 </div>

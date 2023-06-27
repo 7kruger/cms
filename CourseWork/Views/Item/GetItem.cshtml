@@ -1,7 +1,7 @@
 ﻿@model CourseWork.ViewModels.Item.ItemViewModel
 
 @{
-    ViewData["Title"] = "GetItem";
+	ViewData["Title"] = Model.Title;
 }
 
 <div class="row">
@@ -35,7 +35,7 @@
 		@if (Model.Author == User.Identity.Name || User.IsInRole("admin"))
 		{
 			<div class="text-center">
-				<a class="btn btn-outline-info" href="/Item/EditItem/@Model.Id">Редактировать</a>
+				<a class="btn btn-outline-info" href="/Item/EditItem/@Model.Id">@Localizer["Edit"]</a>
 			</div>
 		}
 	</div>
@@ -43,16 +43,16 @@
 		<input type="hidden" id="srcId" value="@Model.Id" />
 		<p><h1>@Model.Title</h1></p>
 		<div class="mt-5">
-			<small>Дата создания: @Model.Date</small>
-			<p><strong>Автор:</strong> <a class="my-cursor" id="showProfile">@Model.Author</a></p>
-			<p><strong>Описание:</strong> @Html.Raw(Markdig.Markdown.ToHtml(Model.Description))</p>
+			<small>@Localizer["CreationDate"]: @Model.Date</small>
+			<p><strong>@Localizer["Author"]:</strong> <a class="my-cursor" id="showProfile">@Model.Author</a></p>
+			<p><strong>@Localizer["Description"]:</strong> @Html.Raw(Markdig.Markdown.ToHtml(Model.Description))</p>
 		</div>
 	</div>
 
 	<div class="container mt-4 mb-4">
 		@if (!string.IsNullOrWhiteSpace(Model.CollectionId))
 		{
-			<h4>Айтем находится в коллекции <a href="/Collection/GetCollection/@Model.CollectionId">@Model.CollectionTitle</a></h4>
+			<h4>@Localizer["ItemIsInTheCollection"] <a href="/Collection/GetCollection/@Model.CollectionId">@Model.CollectionTitle</a></h4>
 		}
 	</div>
 
@@ -62,7 +62,7 @@
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h1 class="modal-title fs-5" id="exampleModalLabel">Информация о пользователе</h1>
+				<h1 class="modal-title fs-5" id="exampleModalLabel">@Localizer["UserInfo"]</h1>
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			<div class="modal-body text-center">
@@ -76,7 +76,7 @@
 				</div>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">@SharedLocalizer["Close"]</button>
 			</div>
 		</div>
 	</div>

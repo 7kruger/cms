@@ -17,6 +17,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Service", "Service", "{63AF
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CourseWork.Service", "CourseWork.Service\CourseWork.Service.csproj", "{5139B105-9F44-4DA4-A89C-985D8A90D418}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{EF8DA64C-9E33-475E-9F05-B522B4F7730D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CourseWork.Tests", "CourseWork.Tests\CourseWork.Tests.csproj", "{9E434749-82FD-4AE1-8CAF-BB00B81DBA2F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +43,10 @@ Global
 		{5139B105-9F44-4DA4-A89C-985D8A90D418}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5139B105-9F44-4DA4-A89C-985D8A90D418}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5139B105-9F44-4DA4-A89C-985D8A90D418}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E434749-82FD-4AE1-8CAF-BB00B81DBA2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E434749-82FD-4AE1-8CAF-BB00B81DBA2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E434749-82FD-4AE1-8CAF-BB00B81DBA2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E434749-82FD-4AE1-8CAF-BB00B81DBA2F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -47,6 +55,7 @@ Global
 		{84E72FFA-54C6-40C3-8E9F-D3FCC666C30C} = {6DB65AF2-27C1-47D3-9E47-0CB3CB8978C8}
 		{1CE30D97-CB84-42C0-9FD2-54E0B5B63E54} = {B4F002A9-FF29-445A-AB5C-4FDA9573B817}
 		{5139B105-9F44-4DA4-A89C-985D8A90D418} = {63AF8055-4319-48F7-91DB-21096AEB1BE6}
+		{9E434749-82FD-4AE1-8CAF-BB00B81DBA2F} = {EF8DA64C-9E33-475E-9F05-B522B4F7730D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {78B4C698-EAAB-4761-825D-F7FADE1E054D}

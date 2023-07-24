@@ -24,7 +24,10 @@ builder.Services.Configure<RequestLocalizationOptions>(options =>
 
 var connection = builder.Configuration.GetConnectionString("LocalDB");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-	options.UseSqlServer(connection));
+options.UseSqlServer(connection));
+
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+		options.UseInMemoryDatabase(databaseName: "UnitTestsDatabase"));
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
 	.AddCookie(options =>

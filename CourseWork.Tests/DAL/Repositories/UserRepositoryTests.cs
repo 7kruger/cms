@@ -59,7 +59,6 @@ public class UserRepositoryTests
 		var builder = new DbContextOptionsBuilder<ApplicationDbContext>();
 		builder.UseInMemoryDatabase("UnitTestsDatabase");
 		var dbcontext = new ApplicationDbContext(builder.Options);
-		dbcontext.Database.EnsureDeleted();
 		dbcontext.Database.EnsureCreated();
 		return new UserRepository(dbcontext);
 	}

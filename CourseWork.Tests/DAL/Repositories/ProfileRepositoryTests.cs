@@ -49,7 +49,6 @@ public class ProfileRepositoryTests
 		var builder = new DbContextOptionsBuilder<ApplicationDbContext>();
 		builder.UseInMemoryDatabase("UnitTestsDatabase");
 		var dbcontext = new ApplicationDbContext(builder.Options);
-		dbcontext.Database.EnsureDeleted();
 		dbcontext.Database.EnsureCreated();
 		return new ProfileRepository(dbcontext);
 	}

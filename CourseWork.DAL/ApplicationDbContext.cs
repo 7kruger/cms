@@ -8,7 +8,7 @@ namespace CourseWork.DAL;
 public class ApplicationDbContext : DbContext
 {
 	public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-		: base(options) { }
+		: base(options) { Database.EnsureCreated(); }
 
 	public DbSet<Collection> Collections { get; set; }
 	public DbSet<Item> Items { get; set; }

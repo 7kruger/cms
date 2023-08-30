@@ -22,9 +22,11 @@ builder.Services.Configure<RequestLocalizationOptions>(options =>
 	options.SupportedUICultures = supportedCultures;
 });
 
-var connection = builder.Configuration.GetConnectionString("LocalDB");
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
+var connection = builder.Configuration.GetConnectionString("DockerDB");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-	options.UseSqlServer(connection));
+	options.UseNpgsql(connection));
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
 	.AddCookie(options =>

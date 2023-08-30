@@ -1,0 +1,29 @@
+version: '3.4'
+
+networks:
+  courseworkappnetwork:
+
+services:
+  db:
+    container_name: 'coursework-postgres-db'
+    image: postgres:latest
+    ports:
+      - 54321:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 12345
+      POSTGRES_DB: courseworkdb
+    networks:
+      - courseworkappnetwork
+  courseworkapp:
+    container_name: 'coursework-app'
+    image: 7kruger/coursework
+    build:
+      context: .
+      dockerfile: CourseWork/Dockerfile
+    ports:
+      - 8080:80
+    depends_on:
+      - db
+    networks:
+      - courseworkappnetwork

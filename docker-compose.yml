@@ -7,8 +7,6 @@ services:
   db:
     container_name: 'coursework-postgres-db'
     image: postgres:latest
-    ports:
-      - 54321:5432
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 12345
@@ -21,9 +19,18 @@ services:
     build:
       context: .
       dockerfile: CourseWork/Dockerfile
-    ports:
-      - 8080:80
     depends_on:
       - db
+    networks:
+      - courseworkappnetwork
+  proxy:
+    container_name: 'proxy'
+    image: nginx:mainline
+    ports:
+      - 80:80
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - courseworkapp
     networks:
       - courseworkappnetwork
